@@ -5,9 +5,12 @@ Project for RSWW
 ## Requirements
 - Node
 - Docker
+- Angular
 
 ## How to use
 ### Running in docker
-- build svc using ```maven compile -Dmaven.test.skip```
-- frontend using ```npm install``` ```npm build```.
+- build svc using ```maven package -Dmaven.test.skip```
+- frontend using ```npm install``` ```npm run build```.
 - run docker compose up -d in the main directory
+### Adding new service
+- 
