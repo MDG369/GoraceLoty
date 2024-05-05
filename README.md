@@ -18,8 +18,22 @@ Project for RSWW
 - run services and frontend locally from your IDE
 ### Adding new service
 - Specify the service address in frontends proxy-conf, this is temporary, as frontend will only communicate with a gateway/orchestrator/something later on
-- Add the location in nginx.conf (also temporary) 
+- Add the location in nginx.conf (also temporary, example given below) 
 - In docker compose for db_postgres add the name of the new db for the service and rebuild the database
 ### Additional info
 - Push your changes to a new branch and create a pull request. There won't be a code review so lets hope the code works. 
 
+### Adding new location in nginx.conf
+```
+location /api/hotel/ {
+    rewrite ^/api/hotel(/.*)$ $1 break;
+    proxy_pass http://localhost:8080;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_read_timeout 300;
+    proxy_connect_timeout 300;
+    proxy_send_timeout 300;
+  }
+```
+Change localhost to docker container name for docker deployment
