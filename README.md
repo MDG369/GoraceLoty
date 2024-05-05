@@ -12,9 +12,9 @@ Project for RSWW
 - build svc using ```maven package -Dmaven.test.skip```
 - frontend using ```npm install``` ```npm run build```.
 - Change line endings in create_databases.sh to LF
-- run docker compose up -d in the main directory
+- run ```docker compose up -d``` in the main directory
 ### Running locally
-- run db_postgres in docker: docker compose up -d db_postgres
+- run db_postgres in docker: ```docker compose up -d db_postgres```
 - run services and frontend locally from your IDE
 ### Adding new service
 - Specify the service address in frontends proxy-conf, this is temporary, as frontend will only communicate with a gateway/orchestrator/something later on
