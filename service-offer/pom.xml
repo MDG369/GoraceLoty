@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.goraceloty</groupId>
-	<artifactId>hotel-service</artifactId>
+	<artifactId>offer-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hotel-service</name>
-	<description>Hotel service for GoraceLoty</description>
+	<name>offer-service</name>
+	<description>Offer service for GoraceLoty</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>

@@ -1,4 +1,4 @@
-package com.goraceloty.hotelservice.hotel.boundary.controllers;
+package com.goraceloty.offerservice.offer.boundary.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/offers")
 @RequiredArgsConstructor
-public class HotelController {
+public class OfferController {
 
     @GetMapping
     ResponseEntity<String> getEx() {
