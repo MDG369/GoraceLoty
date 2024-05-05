@@ -13,6 +13,9 @@ Project for RSWW
 - frontend using ```npm install``` ```npm run build```.
 - Change line endings in create_databases.sh to LF
 - run docker compose up -d in the main directory
+### Running locally
+- run db_postgres in docker: docker compose up -d db_postgres
+- run services and frontend locally from your IDE
 ### Adding new service
 - Specify the service address in frontends proxy-conf, this is temporary, as frontend will only communicate with a gateway/orchestrator/something later on
 - In docker compose for db_postgres add the name of the new db for the service and rebuild the database
