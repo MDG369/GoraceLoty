@@ -10,4 +10,10 @@ public class Hotel {
     @Id
     private Long id;
     private String name;
+    private String country;
+    private String city;
+    private Integer numOfSingleRooms;
+    private Integer numOfDoubleRooms;
+    private Integer numOfTripleRooms;
+    private Integer stars;
 }
