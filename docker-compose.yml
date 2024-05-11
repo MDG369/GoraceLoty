@@ -49,6 +49,14 @@ services:
     networks:
       - goraceloty_net
 
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - goraceloty_net
+
 networks:
   goraceloty_net:
     name: rsww_184372_net
