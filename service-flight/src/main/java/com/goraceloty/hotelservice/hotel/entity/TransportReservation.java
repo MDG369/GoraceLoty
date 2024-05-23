@@ -10,21 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "transports")
+@Table(name = "TransportReservation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Transport {
+public class TransportReservation {
     @Id
     private Long transportID;
-    private String typeOfTransport;
-    private Integer numTotalSeats;
-    private Integer numAvailableSeats;
-    private Integer numBasePrice;
-    private String cityDeparture;
-    private String cityArrival;
-    private LocalDateTime dateDeparture;
-    private LocalDateTime dateArrival;
-
+    private LocalDateTime bookingTime;
+    private Integer seatsNumBookedID;
 }

@@ -2,9 +2,11 @@ package com.goraceloty.hotelservice.hotel.control;
 
 //import com.goraceloty.hotelservice.hotel.entity.Hotel;
 import com.goraceloty.hotelservice.hotel.entity.Transport;
-import com.goraceloty.hotelservice.hotel.control.TransportRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+
 
 import java.util.List;
 @AllArgsConstructor
@@ -25,11 +27,17 @@ public class TransportService {
         transportRepository.delete(transportRepository.findById(id).orElseThrow());
     }
 
-//    public Transport saveTransport(Transport transport) {
-//        return transportRepository.save(transport);
-//    }
+    public List<Transport> getTransportByExample(Transport transport) {
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        final Example<Transport> example = Example.of(transport, matcher);
+        List<Transport> results;
+        results = transportRepository.findAll(example);
+        return results;
+    }
 
-//    public Transport getHotelByStars(Integer stars) {
-//        return transportRepository.saveTransport(stars).orElseThrow();
-//    }
 }
+
+
+
+
+

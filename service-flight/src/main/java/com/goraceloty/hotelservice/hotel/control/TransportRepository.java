@@ -13,6 +13,8 @@ public interface TransportRepository extends JpaRepository<Transport, Long> {
     //public Optional<Transport> getHotelByName(String name);
 
     //public Optional<Transport> saveTransport(Transport transport);
+
 }
+
 
 
