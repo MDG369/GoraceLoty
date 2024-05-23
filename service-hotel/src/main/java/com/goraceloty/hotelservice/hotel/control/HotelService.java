@@ -2,6 +2,8 @@ package com.goraceloty.hotelservice.hotel.control;
 
 import com.goraceloty.hotelservice.hotel.entity.Hotel;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,5 +27,14 @@ public class HotelService {
 
     public Hotel getHotelByStars(Integer stars) {
         return hotelRepository.getHotelByStars(stars).orElseThrow();
+    }
+
+    public List<Hotel> getHotelsByExample(Hotel hotel) {
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        final Example<Hotel> example = Example.of(hotel, matcher);
+        List<Hotel> results;
+        results = hotelRepository.findAll(example);
+
+        return results;
     }
 }
