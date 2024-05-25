@@ -10,22 +10,22 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("/transports")
+@RequestMapping("/transports")
 @RequiredArgsConstructor
 public class TransportController {
     private final TransportService transportService;
 
-    @GetMapping("/connections")
-    ResponseEntity<String> getEx() {
-        return ResponseEntity.ok().body("\"Connection to hotel service works!\"");
-    }
+    //@GetMapping("/connections")
+    //ResponseEntity<String> getEx() {
+    //    return ResponseEntity.ok().body("\"Connection to hotel service works!\"");
+    //}
     @GetMapping("/matching")
     public List<Transport> getTransportByExample(Transport transport) {
         return transportService.getTransportByExample(transport);
     }
-    @GetMapping("/transport")
-    public List<Transport> getTransport(Transport transport) {
-        return transportService.getTransport();
+    @GetMapping
+    public List<Transport> getAllTransports(Transport transport) {
+        return transportService.getAllTransports();
     }
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {

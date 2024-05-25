@@ -33,4 +33,9 @@ public class HotelController {
     public Hotel getHotelsByStars(@RequestBody int stars) {
         return hotelService.getHotelByStars(stars);
     }
+
+    @GetMapping("/matching")
+    public List<Hotel> getHotelByExample(Hotel hotel) {
+        return hotelService.getHotelsByExample(hotel);
+    }
 }

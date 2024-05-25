@@ -15,7 +15,7 @@ import java.util.List;
 public class TransportService {
     private final TransportRepository transportRepository;
 
-    public List<Transport> getTransport() {
+    public List<Transport> getAllTransports() {
         return transportRepository.findAll();
     }
 

@@ -16,14 +16,14 @@ public class JsonProcessingHotels {
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
         String filePath = "C:\\Users\\Lenovo\\Desktop\\GoraceLoty\\data\\hotels_final_clean.json";
-        String sql = "INSERT INTO hotels(HotelID, hotelName, standard, country, city, childrenAllowed, address ) " +
+        String sql = "INSERT INTO hotels(hotelid, hotel_name, standard, country, city, children_allowed, address ) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (HotelID) DO UPDATE SET " +
-                "hotelName = EXCLUDED.hotelName, " +
+                "hotel_name = EXCLUDED.hotel_name, " +
                 "standard = EXCLUDED.standard, " +
                 "country = EXCLUDED.country, " +
                 "city = EXCLUDED.city, " +
-                "childrenAllowed = EXCLUDED.childrenAllowed, " +
+                "children_allowed = EXCLUDED.children_allowed, " +
                 "address = EXCLUDED.address;";
 
 
@@ -35,7 +35,7 @@ public class JsonProcessingHotels {
             ObjectMapper mapper = new ObjectMapper();
             File jsonFile = new File(filePath);
             JsonNode transportsArray = mapper.readTree(jsonFile);
-            //System.out.println(transportsArray.toString());
+            System.out.println(transportsArray.toString());
 
 
             // Establish database connection
