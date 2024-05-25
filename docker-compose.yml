@@ -41,7 +41,7 @@ services:
     volumes:
       - ./pg-init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_MULTIPLE_DATABASES: svc_offer, svc_hotel, svc_travel
+      POSTGRES_MULTIPLE_DATABASES: svc_hotel, svc_travel, svc_flight, svc_offer
       POSTGRES_USER: gl_pg_user
       POSTGRES_PASSWORD: g0r4c3_l0ty
     ports:
