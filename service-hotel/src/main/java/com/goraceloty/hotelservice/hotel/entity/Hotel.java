@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "hotels")
 public class Hotel {
+    // HotelID, hotelName, standard, country, city, childrenAllowed, address
     @Id
     private Long id;
     private String name;

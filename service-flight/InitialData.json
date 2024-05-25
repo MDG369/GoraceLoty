@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "name": "TransCity Express",
+        "numTotalSeats": 120,
+        "numAvailableSeats": 100,
+        "numBasePrice": 150,
+        "departureLocation": "New York",
+        "arrivalLocation": "Washington D.C.",
+        "dateDeparture": "2024-05-15T11:53:30.894506",
+        "dateArrival": "2024-05-15T14:53:30.894515"
+    },
+    {
+        "id": 2,
+        "name": "SkyHigh Airlines",
+        "numTotalSeats": 180,
+        "numAvailableSeats": 150,
+        "numBasePrice": 300,
+        "departureLocation": "San Francisco",
+        "arrivalLocation": "Los Angeles",
+        "dateDeparture": "2024-05-16T11:53:30.894525",
+        "dateArrival": "2024-05-16T12:53:30.894528"
+    },
+    {
+        "id": 3,
+        "name": "OceanLine Cruises",
+        "numTotalSeats": 500,
+        "numAvailableSeats": 350,
+        "numBasePrice": 700,
+        "departureLocation": "Miami",
+        "arrivalLocation": "Bahamas",
+        "dateDeparture": "2024-05-17T11:53:30.894533",
+        "dateArrival": "2024-05-18T11:53:30.894536"
+    },
+    {
+        "id": 4,
+        "name": "Rapid Rail",
+        "numTotalSeats": 200,
+        "numAvailableSeats": 180,
+        "numBasePrice": 80,
+        "departureLocation": "Chicago",
+        "arrivalLocation": "Detroit",
+        "dateDeparture": "2024-05-15T16:53:30.894539",
+        "dateArrival": "2024-05-15T18:53:30.894542"
+    },
+    {
+        "id": 5,
+        "name": "Metro Shuttle Gdansk",
+        "numTotalSeats": 40,
+        "numAvailableSeats": 30,
+        "numBasePrice": 20,
+        "departureLocation": "Boston",
+        "arrivalLocation": "Providence",
+        "dateDeparture": "2024-05-15T21:53:30.894546",
+        "dateArrival": "2024-05-15T22:53:30.894549"
+    }
+]
