@@ -3,9 +3,12 @@ package com.goraceloty.hotelservice.hotel.control;
 //import com.goraceloty.hotelservice.hotel.entity.Hotel;
 import com.goraceloty.hotelservice.hotel.entity.Transport;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.web.client.RestTemplate;
 
 
 import java.util.List;
@@ -34,6 +37,23 @@ public class TransportService {
         results = transportRepository.findAll(example);
         return results;
     }
+//    public List<Transport> getSeatsByExample(Transport transport) {
+//        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+//        final Example<Transport> example = Example.of(transport, matcher);
+//        List<Transport> results;
+//        results = transportRepository.findById(example);
+//        return results;
+//    }
+
+   // @Autowired
+    //private RestTemplate restTemplate;
+
+//    public void sendData(Transport data) {
+//        String url = "http://localhost:8380/api/data";
+//        ResponseEntity<String> response = restTemplate.postForEntity(url, "test", String.class);
+//        System.out.println("Response from server: " + response.getBody());
+//    }
+
 
 }
 
