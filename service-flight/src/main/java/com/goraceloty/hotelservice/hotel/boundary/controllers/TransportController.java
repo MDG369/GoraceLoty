@@ -24,7 +24,7 @@ public class TransportController {
         return transportService.getTransportByExample(transport);
     }
     @GetMapping
-    public List<Transport> getAllTransports(Transport transport) {
+    public List<Transport> getAllTransports() {
         return transportService.getAllTransports();
     }
 //    @PostMapping

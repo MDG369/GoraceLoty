@@ -21,7 +21,8 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - goraceloty_net
+      goraceloty_net:
+        ipv4_address: 10.10.1.1
 
   service-offer:
     build: ./service-offer
@@ -47,7 +48,8 @@ services:
     ports:
       - "8082:8080"
     networks:
-      - goraceloty_net
+      goraceloty_net:
+        ipv4_address: 10.10.1.3
 
   db_postgres:
     image: postgres:14
