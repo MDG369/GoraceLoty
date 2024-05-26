@@ -23,10 +23,10 @@ public class TransportController {
     public List<Transport> getTransportByExample(Transport transport) {
         return transportService.getTransportByExample(transport);
     }
-    @GetMapping("/matching/totalSeats")
+   /* @GetMapping("/matching/totalSeats")
     public List<Transport> getSeatsByExample(Transport transport) {
         return transportService.getSeatsByExample(transport);
-    }
+    }*/
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {
 //        Transport savedTransport = transportService.saveTransport(transport);
