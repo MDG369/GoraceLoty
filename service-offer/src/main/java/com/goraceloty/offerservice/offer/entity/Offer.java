@@ -17,5 +17,5 @@ import lombok.Setter;
 public class Offer {
     @Id
     private Long id;
-    private String name;
+    private String country;
 }
