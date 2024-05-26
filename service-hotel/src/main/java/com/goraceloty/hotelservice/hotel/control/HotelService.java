@@ -48,7 +48,7 @@ public class HotelService {
     public String generateHotelAvailability() {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("uuuu-MM-dd");
-        Availability tmpAv = new Availability();
+        Availability tmpAv;
         List<Hotel> hotels = hotelRepository.findAll();
 
         if (hotels.isEmpty()) {
@@ -65,11 +65,10 @@ public class HotelService {
                 tmpAv.setDate(LocalDateTime.now().plusDays(i).format(formatter));
                 tmpAv.setNumOfAvSingleRooms(15);
                 tmpAv.setNumOfAvDoubleRooms(10);
-                tmpAv.setNumOfAvTripleRooms(10);
-                tmpAv.setNumOfAvApartments(10);
-                tmpAv.setNumOfAvStudios(10);
+                tmpAv.setNumOfAvTripleRooms(0);
+                tmpAv.setNumOfAvApartments(5);
+                tmpAv.setNumOfAvStudios(5);
                 availabilityRepository.save(tmpAv);
-                System.out.println("Saving object " + hotel.getHotelID() + " " + tmpAv.getDate());
             }
         }
         return "Update successful!";

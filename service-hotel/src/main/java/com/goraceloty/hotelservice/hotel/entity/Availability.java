@@ -15,11 +15,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Availability {
-    // HotelID, hotelName, standard, country, city, childrenAllowed, address
     @Id
     @GeneratedValue( strategy=GenerationType.AUTO )
     private Long availabilityID;
-    //@ManyToOne(targetEntity = Hotel.class)
     private Long hotelID;
     private String date;
     private Integer numOfAvSingleRooms;
