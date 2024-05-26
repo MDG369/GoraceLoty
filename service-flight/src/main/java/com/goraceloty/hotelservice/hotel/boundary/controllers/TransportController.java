@@ -1,6 +1,7 @@
 package com.goraceloty.hotelservice.hotel.boundary.controllers;
 
 import com.goraceloty.hotelservice.hotel.control.TransportService;
+import com.goraceloty.hotelservice.hotel.entity.SeatDataDTO;
 import com.goraceloty.hotelservice.hotel.entity.Transport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,23 @@ public class TransportController {
     @GetMapping("/matching")
     public List<Transport> getTransportByExample(Transport transport) {
         return transportService.getTransportByExample(transport);
+    }
+
+    @GetMapping("/{id}/seats")
+    public ResponseEntity<Integer> getSeatData(@PathVariable Long id) {
+        System.out.println("Zaczęto budować" + id);
+        Transport transport = transportService.findTransportByID(id);
+        System.out.println(transport);
+        if (transport == null) {
+            return ResponseEntity.notFound().build();
+        }
+        int seatsDifference = transport.getNumTotalSeats() - transport.getNumAvailableSeats();
+        System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
+
+        return ResponseEntity.ok(seatsDifference);
+//        System.out.println(transport.getNumTotalSeats());
+//        SeatDataDTO seatDetails = new SeatDataDTO(transport.getNumTotalSeats(), transport.getNumAvailableSeats());
+//        return ResponseEntity.ok(seatDetails);
     }
    /* @GetMapping("/matching/totalSeats")
     public List<Transport> getSeatsByExample(Transport transport) {

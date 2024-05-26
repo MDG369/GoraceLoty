@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.util.List;
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 
@@ -36,6 +38,11 @@ public class TransportService {
         List<Transport> results;
         results = transportRepository.findAll(example);
         return results;
+    }
+
+    public Transport findTransportByID(Long id) {
+        Optional<Transport> transport = transportRepository.findById(id);
+        return transport.orElse(null);
     }
 //    public List<Transport> getSeatsByExample(Transport transport) {
 //        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
