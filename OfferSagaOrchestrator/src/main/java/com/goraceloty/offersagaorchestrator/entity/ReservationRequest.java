@@ -1,5 +1,10 @@
 package com.goraceloty.offersagaorchestrator.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ReservationRequest {
     Offer offer;
     Integer numOfSingleRooms;
