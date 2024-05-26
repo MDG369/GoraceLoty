@@ -12,7 +12,6 @@ public class SagaOrchestratorController {
     private final OfferPurchaseSaga offerPurchaseSaga;
     @GetMapping
     public String bookOffer() {
-
         offerPurchaseSaga.execute(); return "Booked!";
     }
 

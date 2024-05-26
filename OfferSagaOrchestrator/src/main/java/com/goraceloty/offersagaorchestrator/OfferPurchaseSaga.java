@@ -10,10 +10,13 @@ public class OfferPurchaseSaga{
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void execute() {
+    public void execute(Integer offerId, Integer hotelId, Integer transportId) {
         try {
+
+            //
+
             // Step 1: Reserve hotel
-            rabbitTemplate.convertAndSend("hotel_exchange", "foo.bar.baz", "ReserveHotel");
+            rabbitTemplate.convertAndSend("hotel_exchange", "foo.bar.baz", hotelId);
 
 //            // Step 2: Reserve flight
 //            rabbitTemplate.convertAndSend("flight_exchange", "reserve_queue", "ReserveFlight");
@@ -24,5 +27,9 @@ public class OfferPurchaseSaga{
             // Handle failure, initiate compensation
             // Example: send compensating messages to cancel previous reservations
         }
+    }
+
+    public void getHotelsError() {
+
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class HotelService {
@@ -30,6 +31,47 @@ public class HotelService {
 
     public void removeHotelById(Long id) {
         hotelRepository.delete(hotelRepository.findById(id).orElseThrow());
+    }
+
+    public void bookHotelRooms(Long id, Integer numberOfSingleRooms,
+                               Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
+                               Integer numberOfStudios, Integer numberOfApartments,
+                               List<String> dates) throws IllegalArgumentException {
+        /*
+            Book hotel rooms, if there are not enough available rooms throws IllegalArgumentException
+        */
+        for (var date : dates) {
+            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date);
+            availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() - numberOfSingleRooms);
+            availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() - numberOfDoubleRooms);
+            availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() - numberOfTripleRooms);
+            availability.setNumOfAvApartments(availability.getNumOfAvApartments() - numberOfApartments);
+            availability.setNumOfAvStudios(availability.getNumOfAvStudios() - numberOfStudios);
+            if (availability.getNumOfAvSingleRooms() < 0 || availability.getNumOfAvDoubleRooms() < 0 ||
+                    availability.getNumOfAvTripleRooms() < 0 || availability.getNumOfAvApartments() < 0 ||
+                    availability.getNumOfAvStudios() < 0) {
+                throw new IllegalArgumentException("Number of booked rooms exceeds the number of available rooms");
+            }
+            availabilityRepository.save(availability);
+        }
+    }
+
+    public void cancelBookingHotelRooms(Long id, Integer numberOfSingleRooms,
+                               Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
+                               Integer numberOfStudios, Integer numberOfApartments,
+                               List<String> dates) throws IllegalArgumentException {
+        /*
+            Cancel the booking of hotel rooms
+        */
+        for (var date : dates) {
+            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date);
+            availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() + numberOfSingleRooms);
+            availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() + numberOfDoubleRooms);
+            availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() + numberOfTripleRooms);
+            availability.setNumOfAvApartments(availability.getNumOfAvApartments() + numberOfApartments);
+            availability.setNumOfAvStudios(availability.getNumOfAvStudios() + numberOfStudios);
+            availabilityRepository.save(availability);
+        }
     }
 
     public Hotel getHotelByStars(Integer stars) {
@@ -55,11 +97,11 @@ public class HotelService {
             return "No hotels found!";
         }
 
-        for(Hotel hotel : hotels) {
+        for (Hotel hotel : hotels) {
             if (hotel.getHotelID() == null) {
                 return "Hotel ID is null!";
             }
-            for(int i = 0; i < 30; i++) {
+            for (int i = 0; i < 30; i++) {
                 tmpAv = new Availability();
                 tmpAv.setHotelID(hotel.getHotelID());
                 tmpAv.setDate(LocalDateTime.now().plusDays(i).format(formatter));
