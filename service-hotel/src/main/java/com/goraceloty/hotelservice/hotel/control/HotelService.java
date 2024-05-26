@@ -1,17 +1,24 @@
 package com.goraceloty.hotelservice.hotel.control;
 
+import com.goraceloty.hotelservice.hotel.entity.Availability;
 import com.goraceloty.hotelservice.hotel.entity.Hotel;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 @AllArgsConstructor
 @Service
 public class HotelService {
 
+    @Autowired
     private final HotelRepository hotelRepository;
+    @Autowired
+    private final AvailabilityRepository availabilityRepository;
 
     public List<Hotel> getHotels() {
         return hotelRepository.findAll();
@@ -36,5 +43,35 @@ public class HotelService {
         results = hotelRepository.findAll(example);
 
         return results;
+    }
+
+    public String generateHotelAvailability() {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("uuuu-MM-dd");
+        Availability tmpAv = new Availability();
+        List<Hotel> hotels = hotelRepository.findAll();
+
+        if (hotels.isEmpty()) {
+            return "No hotels found!";
+        }
+
+        for(Hotel hotel : hotels) {
+            if (hotel.getHotelID() == null) {
+                return "Hotel ID is null!";
+            }
+            for(int i = 0; i < 30; i++) {
+                tmpAv = new Availability();
+                tmpAv.setHotelID(hotel.getHotelID());
+                tmpAv.setDate(LocalDateTime.now().plusDays(i).format(formatter));
+                tmpAv.setNumOfAvSingleRooms(15);
+                tmpAv.setNumOfAvDoubleRooms(10);
+                tmpAv.setNumOfAvTripleRooms(10);
+                tmpAv.setNumOfAvApartments(10);
+                tmpAv.setNumOfAvStudios(10);
+                availabilityRepository.save(tmpAv);
+                System.out.println("Saving object " + hotel.getHotelID() + " " + tmpAv.getDate());
+            }
+        }
+        return "Update successful!";
     }
 }

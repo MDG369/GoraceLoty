@@ -38,4 +38,9 @@ public class HotelController {
     public List<Hotel> getHotelByExample(Hotel hotel) {
         return hotelService.getHotelsByExample(hotel);
     }
+
+    @PutMapping("/availability")
+    public String generateHotelAvailability() {
+        return hotelService.generateHotelAvailability();
+    }
 }
