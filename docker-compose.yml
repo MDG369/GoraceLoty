@@ -32,7 +32,7 @@ services:
       - DATASOURCE_USERNAME=gl_pg_user
       - DATASOURCE_PASSWORD=g0r4c3_l0ty
     ports:
-      - "8081:8080"
+      - "8081:8081"
     networks:
       - goraceloty_net
 
@@ -45,7 +45,7 @@ services:
       - DATASOURCE_USERNAME=gl_pg_user
       - DATASOURCE_PASSWORD=g0r4c3_l0ty
     ports:
-      - "8082:8080"
+      - "8082:8082"
     networks:
       - goraceloty_net
 
@@ -58,7 +58,20 @@ services:
       - DATASOURCE_USERNAME=gl_pg_user
       - DATASOURCE_PASSWORD=g0r4c3_l0ty
     ports:
-      - "8083:8080"
+      - "8083:8083"
+    networks:
+      - goraceloty_net
+
+  saga-orchestrator:
+    build: ./service-travel_agency
+    depends_on:
+      - db_postgres
+    environment:
+      - DATASOURCE_URL=db_postgres:5432/svc_travel_agency
+      - DATASOURCE_USERNAME=gl_pg_user
+      - DATASOURCE_PASSWORD=g0r4c3_l0ty
+    ports:
+      - "8084:8084"
     networks:
       - goraceloty_net
 

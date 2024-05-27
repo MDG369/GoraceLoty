@@ -1,13 +1,13 @@
 package com.goraceloty.offerservice.offer.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class ReservationRequest {
     Long offerID;
     Long hotelID;
     Long transportID;
     Long clientID;
-    LocalDateTime startDate;
+    LocalDate startDate;
     Integer numOfDays;
     Integer numOfSingleRooms;
     Integer numOfDoubleRooms;

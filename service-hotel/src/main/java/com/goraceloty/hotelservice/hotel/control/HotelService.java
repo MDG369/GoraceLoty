@@ -10,7 +10,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -58,12 +58,12 @@ public class HotelService {
     public void bookHotelRooms(Long id, Integer numberOfSingleRooms,
                                Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
                                Integer numberOfStudios, Integer numberOfApartments,
-                               List<String> dates) throws IllegalArgumentException, NoSuchElementException {
+                               LocalDate startDate, Integer numOfDays) throws IllegalArgumentException, NoSuchElementException {
         /*
             Book hotel rooms, if there are not enough available rooms throws IllegalArgumentException
         */
-        for (var date : dates) {
-            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date).orElseThrow();
+        for (int i = 0; i < numOfDays; i++) {
+            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, startDate).orElseThrow();
             availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() - numberOfSingleRooms);
             availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() - numberOfDoubleRooms);
             availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() - numberOfTripleRooms);
@@ -82,12 +82,12 @@ public class HotelService {
     public void cancelBookingHotelRooms(Long id, Integer numberOfSingleRooms,
                                         Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
                                         Integer numberOfStudios, Integer numberOfApartments,
-                                        List<String> dates) throws IllegalArgumentException, NoSuchElementException {
+                                        LocalDate startDate, Integer numOfDays) throws IllegalArgumentException, NoSuchElementException {
         /*
             Cancel the booking of hotel rooms
         */
-        for (var date : dates) {
-            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date).orElseThrow();
+        for (int i = 0; i < numOfDays; i++) {
+            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, startDate.plusDays(i)).orElseThrow();
             availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() + numberOfSingleRooms);
             availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() + numberOfDoubleRooms);
             availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() + numberOfTripleRooms);
@@ -114,7 +114,7 @@ public class HotelService {
             for (int i = 0; i < 30; i++) {
                 tmpAv = new Availability();
                 tmpAv.setHotelID(hotel.getHotelID());
-                tmpAv.setDate(LocalDateTime.now().plusDays(i).format(formatter));
+                tmpAv.setDate(LocalDate.now().plusDays(i));
                 tmpAv.setNumOfAvSingleRooms(15);
                 tmpAv.setNumOfAvDoubleRooms(10);
                 tmpAv.setNumOfAvTripleRooms(0);
