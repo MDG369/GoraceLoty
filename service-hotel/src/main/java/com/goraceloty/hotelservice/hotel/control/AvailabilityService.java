@@ -37,8 +37,8 @@ public class AvailabilityService {
         Optional<Availability> end;
 
         System.out.println(filter.getHotelID() + " " + filter.getDateStart() + " " + filter.getDateEnd());
-        start = availabilityRepository.getAvailabilitiesByHotelIDAndDate(filter.getHotelID(), filter.getDateStart());
-        end = availabilityRepository.getAvailabilitiesByHotelIDAndDate(filter.getHotelID(), filter.getDateEnd());
+        start = availabilityRepository.getAvailabilityByHotelIDAndDate(filter.getHotelID(), filter.getDateStart());
+        end = availabilityRepository.getAvailabilityByHotelIDAndDate(filter.getHotelID(), filter.getDateEnd());
 
         if(start.isPresent() && end.isPresent()) {
             System.out.println("start id: " + start.get().getAvailabilityID() + " end id: " + end.get().getAvailabilityID());

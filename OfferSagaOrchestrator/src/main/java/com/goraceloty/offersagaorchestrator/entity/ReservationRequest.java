@@ -2,11 +2,17 @@ package com.goraceloty.offersagaorchestrator.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class ReservationRequest {
-    Offer offer;
+    UUID id = null;
+    Long offerID;
+    Long hotelID;
+    Long transportID;
+    List<String> dates;
     Integer numOfSingleRooms;
     Integer numOfDoubleRooms;
     Integer numOfTripleRooms;

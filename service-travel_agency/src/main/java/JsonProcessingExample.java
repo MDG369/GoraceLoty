@@ -13,7 +13,7 @@ import static java.lang.System.*;
 public class JsonProcessingExample {
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/svc_offers";
+        String url = "jdbc:postgresql://db_postgres:5432/svc_offers";
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
         //String filePath = "C:\\Users\\Admin\\Documents\\GitHub\\GoraceLoty\\service-flight\\InitialData.json";

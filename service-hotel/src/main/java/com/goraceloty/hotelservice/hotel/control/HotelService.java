@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -34,51 +35,9 @@ public class HotelService {
         hotelRepository.delete(hotelRepository.findById(id).orElseThrow());
     }
 
-//    public Hotel getHotelByStars(Integer stars) {
-//        return hotelRepository.getHotelByStars(stars).orElseThrow();
-//    }
-    public void bookHotelRooms(Long id, Integer numberOfSingleRooms,
-                               Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
-                               Integer numberOfStudios, Integer numberOfApartments,
-                               List<String> dates) throws IllegalArgumentException {
-        /*
-            Book hotel rooms, if there are not enough available rooms throws IllegalArgumentException
-        */
-        for (var date : dates) {
-            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date);
-            availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() - numberOfSingleRooms);
-            availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() - numberOfDoubleRooms);
-            availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() - numberOfTripleRooms);
-            availability.setNumOfAvApartments(availability.getNumOfAvApartments() - numberOfApartments);
-            availability.setNumOfAvStudios(availability.getNumOfAvStudios() - numberOfStudios);
-            if (availability.getNumOfAvSingleRooms() < 0 || availability.getNumOfAvDoubleRooms() < 0 ||
-                    availability.getNumOfAvTripleRooms() < 0 || availability.getNumOfAvApartments() < 0 ||
-                    availability.getNumOfAvStudios() < 0) {
-                throw new IllegalArgumentException("Number of booked rooms exceeds the number of available rooms");
-            }
-            availabilityRepository.save(availability);
-        }
-    }
-
     public Hotel findHotelByID(Long id) {
         Optional<Hotel> transport = hotelRepository.findById(id);
         return transport.orElse(null);
-    public void cancelBookingHotelRooms(Long id, Integer numberOfSingleRooms,
-                               Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
-                               Integer numberOfStudios, Integer numberOfApartments,
-                               List<String> dates) throws IllegalArgumentException {
-        /*
-            Cancel the booking of hotel rooms
-        */
-        for (var date : dates) {
-            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date);
-            availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() + numberOfSingleRooms);
-            availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() + numberOfDoubleRooms);
-            availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() + numberOfTripleRooms);
-            availability.setNumOfAvApartments(availability.getNumOfAvApartments() + numberOfApartments);
-            availability.setNumOfAvStudios(availability.getNumOfAvStudios() + numberOfStudios);
-            availabilityRepository.save(availability);
-        }
     }
 
     public Hotel getHotelByStars(Integer stars) {
@@ -93,7 +52,47 @@ public class HotelService {
 
         return results;
     }
-}
+
+    public void bookHotelRooms(Long id, Integer numberOfSingleRooms,
+                               Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
+                               Integer numberOfStudios, Integer numberOfApartments,
+                               List<String> dates) throws IllegalArgumentException, NoSuchElementException {
+        /*
+            Book hotel rooms, if there are not enough available rooms throws IllegalArgumentException
+        */
+        for (var date : dates) {
+            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date).orElseThrow();
+            availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() - numberOfSingleRooms);
+            availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() - numberOfDoubleRooms);
+            availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() - numberOfTripleRooms);
+            availability.setNumOfAvApartments(availability.getNumOfAvApartments() - numberOfApartments);
+            availability.setNumOfAvStudios(availability.getNumOfAvStudios() - numberOfStudios);
+            if (availability.getNumOfAvSingleRooms() < 0 || availability.getNumOfAvDoubleRooms() < 0 ||
+                    availability.getNumOfAvTripleRooms() < 0 || availability.getNumOfAvApartments() < 0 ||
+                    availability.getNumOfAvStudios() < 0) {
+                    throw new IllegalArgumentException("Number of booked rooms exceeds the number of available rooms");
+            }
+            availabilityRepository.save(availability);
+        }
+    }
+
+    public void cancelBookingHotelRooms(Long id, Integer numberOfSingleRooms,
+                                        Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
+                                        Integer numberOfStudios, Integer numberOfApartments,
+                                        List<String> dates) throws IllegalArgumentException, NoSuchElementException {
+        /*
+            Cancel the booking of hotel rooms
+        */
+        for (var date : dates) {
+            Availability availability = availabilityRepository.getAvailabilityByHotelIDAndDate(id, date).orElseThrow();
+            availability.setNumOfAvSingleRooms(availability.getNumOfAvSingleRooms() + numberOfSingleRooms);
+            availability.setNumOfAvDoubleRooms(availability.getNumOfAvDoubleRooms() + numberOfDoubleRooms);
+            availability.setNumOfAvTripleRooms(availability.getNumOfAvTripleRooms() + numberOfTripleRooms);
+            availability.setNumOfAvApartments(availability.getNumOfAvApartments() + numberOfApartments);
+            availability.setNumOfAvStudios(availability.getNumOfAvStudios() + numberOfStudios);
+            availabilityRepository.save(availability);
+        }
+    }
 
     public String generateHotelAvailability() {
         DateTimeFormatter formatter =
@@ -124,3 +123,4 @@ public class HotelService {
         return "Update successful!";
     }
 }
+

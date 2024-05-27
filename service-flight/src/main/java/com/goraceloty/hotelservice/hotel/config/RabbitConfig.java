@@ -1,4 +1,4 @@
-package com.goraceloty.hotelservice.config;
+package com.goraceloty.hotelservice.hotel.config;
 
 
 import com.goraceloty.hotelservice.saga.control.SagaService;
@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
-    static final String topicExchangeName = "hotel_exchange";
+    static final String topicExchangeName = "transport_exchange";
 
-    static final String actionQueueName = "hotel_action_queue";
-    static final String compensationQueueName = "hotel_compensation_queue";
+    static final String actionQueueName = "transport_action_queue";
+    static final String compensationQueueName = "transport_compensation_queue";
 
     @Bean
     Queue actionQueue() {
@@ -36,12 +36,12 @@ public class RabbitConfig {
 
     @Bean
     Binding actionBinding(Queue actionQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(actionQueue).to(exchange).with("hotel.action.#");
+        return BindingBuilder.bind(actionQueue).to(exchange).with("transport.action.#");
     }
 
     @Bean
     Binding compensationBinding(Queue compensationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(compensationQueue).to(exchange).with("hotel.compensation.#");
+        return BindingBuilder.bind(compensationQueue).to(exchange).with("transport.compensation.#");
     }
 
     @Bean

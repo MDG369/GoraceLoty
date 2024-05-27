@@ -1,7 +1,6 @@
-package com.goraceloty.hotelservice.config;
+package com.goraceloty.travel_agency_service.travel_agency.config;
 
 
-import com.goraceloty.hotelservice.saga.control.SagaService;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -14,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
-    static final String topicExchangeName = "hotel_exchange";
+    static final String topicExchangeName = "reservation_exchange";
 
-    static final String actionQueueName = "hotel_action_queue";
-    static final String compensationQueueName = "hotel_compensation_queue";
+    static final String actionQueueName = "reservation_action_queue";
+    static final String compensationQueueName = "reservation_compensation_queue";
 
     @Bean
     Queue actionQueue() {
@@ -36,12 +35,12 @@ public class RabbitConfig {
 
     @Bean
     Binding actionBinding(Queue actionQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(actionQueue).to(exchange).with("hotel.action.#");
+        return BindingBuilder.bind(actionQueue).to(exchange).with("reservation.creation.#");
     }
 
     @Bean
     Binding compensationBinding(Queue compensationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(compensationQueue).to(exchange).with("hotel.compensation.#");
+        return BindingBuilder.bind(compensationQueue).to(exchange).with("reservation.compensation.#");
     }
 
     @Bean
@@ -73,4 +72,5 @@ public class RabbitConfig {
     MessageListenerAdapter compensationListenerAdapter(SagaService sagaService) {
         return new MessageListenerAdapter(sagaService, "handleCompensation");
     }
+}
 }

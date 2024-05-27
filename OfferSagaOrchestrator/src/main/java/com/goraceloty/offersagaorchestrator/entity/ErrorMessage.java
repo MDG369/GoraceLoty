@@ -1,9 +1,13 @@
 package com.goraceloty.offersagaorchestrator.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
+@Setter
+@Getter
 public class ErrorMessage {
-    private Long offerId;
+    private ReservationRequest reservationRequest;
     private ErrorType errorType;
 }

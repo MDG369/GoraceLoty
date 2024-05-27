@@ -1,9 +1,9 @@
-package com.goraceloty.hotelservice.saga.entity;
+package com.goraceloty.travel_agency_service.travel_agency.entity;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ErrorMessage {
-    private ReservationRequest reservationRequest;
+    private Long offerId;
     private ErrorType errorType;
 }

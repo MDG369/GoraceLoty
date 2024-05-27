@@ -14,10 +14,10 @@ import java.time.format.DateTimeFormatter;
 public class JsonProcessingHotels {
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/svc_hotel";
+        String url = "jdbc:postgresql://db_postgres:5432/svc_hotel";
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
-        String filePath = "C:\\Users\\Admin\\Documents\\GitHub\\GoraceLoty\\data\\hotels_final_clean.json";
+        String filePath = "..\\data\\hotels_final_clean.json";
         String sql = "INSERT INTO hotels(hotelid, hotel_name, standard, country, city, children_allowed, address ) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (hotelid) DO UPDATE SET " +

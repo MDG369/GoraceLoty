@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
-    public Optional<Availability> getAvailabilitiesByHotelIDAndDate(Long id, String date);
+    public Optional<Availability> getAvailabilityByHotelIDAndDate(Long id, String date);
     public Optional<Availability> getAvailabilityByAvailabilityID(Long id);
     public Optional<Availability> getAvailabilityByDate(String date);
 }

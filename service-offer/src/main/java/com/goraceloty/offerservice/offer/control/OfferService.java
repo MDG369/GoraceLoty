@@ -28,7 +28,7 @@ public class OfferService {
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
-                .baseUrl("http://localhost:8083")
+                .baseUrl("http://saga-orchestrator:8084")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
     }
@@ -113,18 +113,4 @@ public class OfferService {
                 });
 
     }
-
-//    public Mono<Hotel> getHotelById(Integer hotelId) {
-//        return webClient.method(HttpMethod.GET)
-//                .uri(uriBuilder -> uriBuilder
-//                        .path("/hotels")
-//                        .queryParam("hotelId", hotelId)
-//                        .build())
-//                .retrieve()
-//                .bodyToMono(Hotel.class)
-//                .onErrorResume(RuntimeException.class, e -> {
-//                    log.fine("Getting hotel " + hotelId + " failed: " + e.getMessage());
-//                    return Mono.empty();
-//                });
-//    }
 }

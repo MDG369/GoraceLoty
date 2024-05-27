@@ -1,16 +1,14 @@
 package com.goraceloty.hotelservice.hotel.control;
 
-//import com.goraceloty.hotelservice.hotel.entity.Hotel;
 import com.goraceloty.hotelservice.hotel.entity.Transport;
+import com.goraceloty.hotelservice.saga.entity.ReservationRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.web.client.RestTemplate;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +42,25 @@ public class TransportService {
         Optional<Transport> transport = transportRepository.findById(id);
         return transport.orElse(null);
     }
+
+    public void bookTransport(ReservationRequest reservationRequest) {
+        Transport transport = findTransportByID(reservationRequest.getTransportID());
+        Integer seatsToBook =  reservationRequest.getNumOfAdults() + reservationRequest.getNumOfChildren();
+        if (transport.getNumAvailableSeats() < seatsToBook) {
+            throw new IllegalArgumentException("Number of booked seats exceeds the number of available seats");
+        }
+        transport.setNumAvailableSeats(transport.getNumAvailableSeats() - seatsToBook);
+        transportRepository.save(transport);
+    }
+
+    public void cancelBookingTransport(ReservationRequest reservationRequest) {
+        Transport transport = findTransportByID(reservationRequest.getTransportID());
+        Integer seatsToBook =  reservationRequest.getNumOfAdults() + reservationRequest.getNumOfChildren();
+        transport.setNumAvailableSeats(transport.getNumAvailableSeats() + seatsToBook);
+        transportRepository.save(transport);
+    }
+
+
 //    public List<Transport> getSeatsByExample(Transport transport) {
 //        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 //        final Example<Transport> example = Example.of(transport, matcher);

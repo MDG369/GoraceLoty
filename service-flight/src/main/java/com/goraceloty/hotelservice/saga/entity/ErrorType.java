@@ -1,4 +1,4 @@
-package com.goraceloty.offersagaorchestrator.entity;
+package com.goraceloty.hotelservice.saga.entity;
 
 public enum ErrorType {
     HOTEL,

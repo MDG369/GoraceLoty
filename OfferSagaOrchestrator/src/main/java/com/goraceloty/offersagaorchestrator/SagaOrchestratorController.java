@@ -13,7 +13,7 @@ public class SagaOrchestratorController {
     private final OfferPurchaseSaga offerPurchaseSaga;
     @GetMapping
     public String bookOffer(ReservationRequest reservationRequest) {
-        offerPurchaseSaga.execute(reservationRequest); return "Booked!";
+        offerPurchaseSaga.bookOffer(reservationRequest); return "Booked!";
     }
 
 }
