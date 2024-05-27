@@ -8,7 +8,6 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 
-
 @NgModule({
   declarations: [AppComponent, CatalogComponent, LoginComponent, HomeComponent],
   imports: [

@@ -1,4 +1,9 @@
 package com.goraceloty.hotelservice.saga.control;
+
+import com.goraceloty.hotelservice.hotel.control.HotelService;
+import com.goraceloty.hotelservice.saga.entity.ErrorMessage;
+import com.goraceloty.hotelservice.saga.entity.ErrorType;
+import com.goraceloty.hotelservice.saga.entity.ReservationRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,25 +16,33 @@ import org.springframework.stereotype.Component;
 public class SagaService {
 
     private final RabbitTemplate rabbitTemplate;
+    private final HotelService hotelService;
 
-    @RabbitListener(queues = "hotel_queue")
-    public void receiveMessage(String message) {
+    @RabbitListener(queues = "hotel_action_queue")
+    public void handleAction(ReservationRequest message) {
         processHotelBooking(message);
     }
 
-    public void processHotelBooking(String message) {
+    public void processHotelBooking(ReservationRequest message) {
         try {
-            log.info(message);
-            // Process the message (e.g., book hotel room)
-            // If successful, commit the changes
-            // Otherwise, throw an exception to trigger compensating transactions
+            hotelService.bookHotelRooms(message.getHotelID(), message.getNumOfSingleRooms(),
+                    message.getNumOfDoubleRooms(), message.getNumOfTripleRooms(),
+                    message.getNumOfStudios(), message.getNumOfApartments(), message.getDates());
+
         } catch (Exception e) {
-            // Handle errors and exceptions
-            // Implement compensating transactions to rollback changes
-            cancelHotelBooking();
+            // Send error message to Orchestrator in order to cancel the reservation
+            sendErrorMessage(message);
         }
     }
-    private void cancelHotelBooking() {
-        // Implement compensating logic to cancel the hotel booking
+
+    @RabbitListener(queues = "hotel_compensation_queue")
+    private void handleCompensation(ReservationRequest message) {
+        hotelService.cancelBookingHotelRooms(message.getHotelID(), message.getNumOfSingleRooms(),
+                message.getNumOfDoubleRooms(), message.getNumOfTripleRooms(),
+                message.getNumOfStudios(), message.getNumOfApartments(), message.getDates());
+    }
+
+    private void sendErrorMessage(ReservationRequest message) {
+        rabbitTemplate.convertAndSend("error_exchange", "error_queue", new ErrorMessage(message, ErrorType.HOTEL));
     }
 }

@@ -16,11 +16,17 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
     static final String topicExchangeName = "hotel_exchange";
 
-    static final String queueName = "hotel_queue";
+    static final String actionQueueName = "hotel_action_queue";
+    static final String compensationQueueName = "hotel_compensation_queue";
 
     @Bean
-    Queue queue() {
-        return new Queue(queueName, false);
+    Queue actionQueue() {
+        return new Queue(actionQueueName, false);
+    }
+
+    @Bean
+    Queue compensationQueue() {
+        return new Queue(compensationQueueName, false);
     }
 
     @Bean
@@ -29,22 +35,42 @@ public class RabbitConfig {
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
+    Binding actionBinding(Queue actionQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(actionQueue).to(exchange).with("hotel.action.#");
     }
 
     @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
+    Binding compensationBinding(Queue compensationQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(compensationQueue).to(exchange).with("hotel.compensation.#");
+    }
+
+    @Bean
+    SimpleMessageListenerContainer actionContainer(ConnectionFactory connectionFactory,
+                                                   MessageListenerAdapter actionListenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queueName);
-        container.setMessageListener(listenerAdapter);
+        container.setQueueNames(actionQueueName);
+        container.setMessageListener(actionListenerAdapter);
         return container;
     }
 
     @Bean
-    MessageListenerAdapter listenerAdapter(SagaService receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
+    SimpleMessageListenerContainer compensationContainer(ConnectionFactory connectionFactory,
+                                                         MessageListenerAdapter compensationListenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames(compensationQueueName);
+        container.setMessageListener(compensationListenerAdapter);
+        return container;
+    }
+
+    @Bean
+    MessageListenerAdapter actionListenerAdapter(SagaService sagaService) {
+        return new MessageListenerAdapter(sagaService, "handleAction");
+    }
+
+    @Bean
+    MessageListenerAdapter compensationListenerAdapter(SagaService sagaService) {
+        return new MessageListenerAdapter(sagaService, "handleCompensation");
     }
 }
