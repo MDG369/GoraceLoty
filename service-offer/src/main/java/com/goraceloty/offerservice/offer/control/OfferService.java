@@ -33,41 +33,14 @@ public class OfferService {
                 .build();
     }
 
-    public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
-        URL url;
-        System.out.println("###############" + offerFilter.getCity());
-        if(offerFilter.getCity() != null) {
-            url = new URL("http://10.10.1.1:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
-        }
-        else {
-            url = new URL("http://10.10.1.1:8080/hotels");
-        }
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
-        }
-        return "[\"hotel\" : none]";
-    }
-
     public String GetTransports(OfferFilter offerFilter) throws IOException {
         URL url;
-        System.out.println("###############" + offerFilter.getCity());
+        System.out.println("GetTransports" + offerFilter.getCity());
         if(offerFilter.getCity() != null) {
-            url = new URL("http://10.10.1.3:8080/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
+            url = new URL("http://service-flight:8082/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
-            url = new URL("http://10.10.1.3:8080/transports");
+            url = new URL("http://service-flight:8082/transports");
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -86,6 +59,33 @@ public class OfferService {
             return response.toString();
         }
         return "[\"transport\" : none]";
+    }
+
+    public String GetTransportss(OfferFilter offerFilter) throws IOException, JSONException {
+        URL url;
+        if(offerFilter.getCity() != null) {
+            System.out.println("not null");
+            url = new URL("http://service-flight:8082/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
+        }
+        else {
+            System.out.println("null ");
+            url = new URL("http://service-flight:8082/transports");
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            return response.toString();
+        }
+        return "[\"hotel\" : none]";
     }
 
     public String BuildOffer(OfferFilter offerFilter) {
