@@ -8,28 +8,18 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static java.lang.System.*;
-
 public class JsonProcessingExample {
-
+//g0r4c3_l0ty
     public static void main(String[] args) {
         String url = "jdbc:postgresql://db_postgres:5432/svc_offers";
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
-        //String filePath = "C:\\Users\\Admin\\Documents\\GitHub\\GoraceLoty\\service-flight\\InitialData.json";
-        String filePath = "C:\\Users\\Admin\\Documents\\GitHub\\GoraceLoty\\service-flight\\transport_final_clean.json";
-        String sql = "INSERT INTO transports(transportid, type_of_transport, num_total_seats, num_available_seats, num_base_price, city_departure, city_arrival, date_departure, date_arrival) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                "ON CONFLICT (transportid) DO UPDATE SET " +
-                "type_of_transport = EXCLUDED.type_of_transport, " +
-                "num_total_seats = EXCLUDED.num_total_seats, " +
-                "num_available_seats = EXCLUDED.num_available_seats, " +
-                "num_base_price = EXCLUDED.num_base_price, " +
-                "city_departure = EXCLUDED.city_departure, " +
-                "city_arrival = EXCLUDED.city_arrival, " +
-                "date_departure = EXCLUDED.date_departure, " +
-                "date_arrival = EXCLUDED.date_arrival;";
-
+        String filePath = "C:\\Users\\Admin\\Documents\\GitHub\\GoraceLoty\\data\\offer_reservation_data.json";  // Update the file path to your JSON file
+        String sql = "INSERT INTO offer_reservation (reservationid, date_start, num_adult, num_children, num_of_days, reservation_time, adjusted_price, offerid, transportid, hotelid) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT (reservationid) DO UPDATE SET " +
+                "date_start = EXCLUDED.date_start, num_adult = EXCLUDED.num_adult, num_children = EXCLUDED.num_children, num_of_days = EXCLUDED.num_of_days, " +
+                "reservation_time = EXCLUDED.reservation_time, adjusted_price = EXCLUDED.adjusted_price, offerid = EXCLUDED.offerid, transportid = EXCLUDED.transportid, hotelid = EXCLUDED.hotelid;";
 
         processJsonData(url, filePath, sql, user, password);
     }
@@ -38,55 +28,35 @@ public class JsonProcessingExample {
         try {
             ObjectMapper mapper = new ObjectMapper();
             File jsonFile = new File(filePath);
-            JsonNode transportsArray = mapper.readTree(jsonFile);
-            System.out.println(transportsArray.toString());
+            JsonNode offersArray = mapper.readTree(jsonFile);
 
-
-            // Establish database connection
             Connection conn = DriverManager.getConnection(url, user, password);
-            conn.setAutoCommit(false); // Use transaction control
-
+            conn.setAutoCommit(false);
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            System.out.println(preparedStatement);
-            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-            System.out.println(transportsArray.isArray());
 
-            // Loop through JSON array
-            if (transportsArray.isArray()) {
-                System.out.println("początek pętli");
-                for (JsonNode transport : transportsArray) {
-                    preparedStatement.setLong(1, transport.get("transportID").longValue());
-                    preparedStatement.setString(2, transport.get("typeOfTransport").textValue());
-                    preparedStatement.setInt(3, transport.get("numTotalSeats").intValue());
-                    preparedStatement.setInt(4, transport.get("numAvailableSeats").intValue());
-                    preparedStatement.setInt(5, transport.get("numBasePrice").intValue());
-                    preparedStatement.setString(6, transport.get("cityDeparture").textValue());
-                    preparedStatement.setString(7, transport.get("cityArrival").textValue());
-                    preparedStatement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.parse(transport.get("dateDeparture").textValue(), formatter)));
-                    preparedStatement.setTimestamp(9, Timestamp.valueOf(LocalDateTime.parse(transport.get("dateArrival").textValue(), formatter)));
-                    System.out.println("Executing SQL: " + sql);
-                    System.out.println("With parameters: " +
-                            transport.get("transportID").longValue() + ", " +
-                            transport.get("typeOfTransport").textValue() + ", " +
-                            transport.get("numTotalSeats").intValue() + ", " +
-                            transport.get("numAvailableSeats").intValue() + ", " +
-                            transport.get("numBasePrice").intValue() + ", " +
-                            transport.get("cityDeparture").textValue() + ", " +
-                            transport.get("cityArrival").textValue() + ", " +
-                            transport.get("dateDeparture").textValue() + ", " +
-                            transport.get("dateArrival").textValue());
-                    // Execute upsert
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            if (offersArray.isArray()) {
+                for (JsonNode offer : offersArray) {
+                    preparedStatement.setInt(1, offer.get("reservationID").intValue());  // Handle reservationID
+                    preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.parse(offer.get("dateStart").textValue(), dateTimeFormatter)));
+                    preparedStatement.setInt(3, offer.get("numAdult").intValue());
+                    preparedStatement.setInt(4, offer.get("numChildren").intValue());
+                    preparedStatement.setInt(5, offer.get("numOfDays").intValue());
+                    preparedStatement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.parse(offer.get("reservationTime").textValue(), dateTimeFormatter)));
+                    preparedStatement.setDouble(7, offer.get("adjustedPrice").doubleValue());
+                    preparedStatement.setInt(8, offer.get("offerID").intValue());
+                    preparedStatement.setInt(9, offer.get("transportID").intValue());
+                    preparedStatement.setInt(10, offer.get("hotelID").intValue());
+
                     preparedStatement.executeUpdate();
                 }
-                conn.commit(); // Commit all changes
+                conn.commit();
             }
 
-            // Clean up
             preparedStatement.close();
             conn.close();
         } catch (Exception e) {
-            System.out.println("Nie wyszło");
+            System.err.println("Error processing JSON data: " + e.getMessage());
             e.printStackTrace();
         }
     }

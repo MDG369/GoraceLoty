@@ -26,14 +26,14 @@ public class TransportController {
     }
 
     @GetMapping("/{id}/seats")
-    public ResponseEntity<Integer> getSeatData(@PathVariable Long id) {
+    public ResponseEntity<Double> getSeatData(@PathVariable Long id) {
         System.out.println("Zaczęto budować" + id);
         Transport transport = transportService.findTransportByID(id);
         System.out.println(transport);
         if (transport == null) {
             return ResponseEntity.notFound().build();
         }
-        int seatsDifference = transport.getNumAvailableSeats() / transport.getNumTotalSeats();
+        double seatsDifference = transport.getNumAvailableSeats() / transport.getNumTotalSeats();
         System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
 
         return ResponseEntity.ok(seatsDifference);

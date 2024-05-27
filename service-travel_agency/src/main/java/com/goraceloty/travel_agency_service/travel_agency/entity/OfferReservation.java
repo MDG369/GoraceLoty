@@ -1,6 +1,8 @@
 package com.goraceloty.travel_agency_service.travel_agency.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,14 +19,15 @@ import lombok.Setter;
 @Setter
 public class OfferReservation {
     @Id
-    @GeneratedValue( strategy= GenerationType.AUTO )
-    private Long id;
-    private Long offerId;
+    private Long reservationID;
     private LocalDateTime dateStart;
     private Integer numAdult;
     private Integer numChildren;
     private Integer numOfDays;
     private Timestamp reservationTime;
     private Double adjustedPrice;
-    private Integer numKids;
+    private Long offerID;
+    private Long hotelID;
+    private Long transportID;
 }
+

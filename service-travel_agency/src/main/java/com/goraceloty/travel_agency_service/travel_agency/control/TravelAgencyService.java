@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -35,6 +35,11 @@ public class TravelAgencyService {
 //    }
 
 //
+    private OfferReservation fetchReservationById(Long reservationId) {
+        Optional<OfferReservation> transport = travelAgencyRepository.findById(reservationId);
+        return transport.orElse(null);
+    }
+
     public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
         final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         final Example<OfferReservation> example = Example.of(offerReservation, matcher);
@@ -66,39 +71,69 @@ public class TravelAgencyService {
         return(standard);
     }
 
-    public double calculatePrice(Long transportId, Long hotelId) {
+    public double getGroupDiscount(int numAdults, int numChildren) {
+        int totalPeople = numAdults + numChildren;
+        return totalPeople > 3 ? 0.85 : 1.0;
+    }
+
+    public double getChildrenDiscount(int numChildren) {
+        return numChildren > 0 ? 0.95 : 1.0;
+    }
+
+    public double calculatePrice(Long reservationId) {
+        OfferReservation reservation = fetchReservationById(reservationId);
+        if (reservation == null) {
+            throw new IllegalArgumentException("No reservation found with ID: " + reservationId);
+        }
+        Integer numAdults = reservation.getNumAdult();
+        Integer numChildren = reservation.getNumChildren();
+        Integer totalPeople = numChildren + numAdults;
+        Long transportId = reservation.getTransportID();
+        Long hotelId = reservation.getTransportID();
+        int duration = reservation.getNumOfDays();
+        double groupDiscount = getGroupDiscount(numAdults, numChildren);;
+        double childrenDiscount = getChildrenDiscount(numChildren);
         Integer seatDetails = fetchSeatDetails(transportServiceUrl, transportId);
         double transportPrice = calculateTransportPrice(seatDetails);
-        System.out.println("Cena transportu" + transportPrice);
-
+        double basePrice = 100.0;
         Integer standard = fetchStandardDetails(hotelServiceUrl, hotelId);
-        String roomSize = "dwuosobowy";
-        double hotelPrice= calculateHotelPrice(standard, roomSize);
+        double hotelPrice= calculateHotelPrice(standard, totalPeople);
+
+        //total price computation
+        double totalDiscount = childrenDiscount * groupDiscount;
+        double totalBasePrice = basePrice * duration * totalPeople;
+        double totalTransportPrice = transportPrice * totalPeople;
+        double totalHotelPrice =  totalPeople * duration;
+
+        System.out.println("Cena transportu" + transportPrice);
         System.out.println("Cena noclegu" + hotelPrice);
+        System.out.println("Cena bazowa" + totalBasePrice);
+        System.out.println("Zniżka" + totalDiscount);
 
-        double totalPrice = transportPrice + hotelPrice;
-
+        double totalPrice =  totalDiscount * (totalBasePrice+totalTransportPrice+totalHotelPrice);
+        System.out.println("Cena całkowita" + totalPrice);
+        reservation.setAdjustedPrice(totalPrice);
         return (totalPrice);
     }
 
     private double calculateTransportPrice(Integer seatDetails) {
         // Example pricing logic
         double baseTransportPrice = 500.0;
-        return (baseTransportPrice * (2-seatDetails));
+        return (baseTransportPrice * (2.0-seatDetails));
     }
 
-    private double calculateHotelPrice(Integer standard, String roomSize) {
+    private double calculateHotelPrice(Integer standard, Integer roomSize) {
         // Example pricing logic
         double hotelPrice = 0;
-        if(Objects.equals(roomSize, "dwuosobowy")){
+        if(Objects.equals(roomSize, 2)){
             hotelPrice = 100 * standard;
-        } else if (Objects.equals(roomSize, "trzyosobowy")){
+        } else if (Objects.equals(roomSize, 3)){
             hotelPrice = 130 * standard;
-        } else if(Objects.equals(roomSize, "czterosbowy")){
+        } else if(Objects.equals(roomSize, 4)){
             hotelPrice = 150 * standard;
-        } else if(Objects.equals(roomSize, "apartament")){
+        } else if(Objects.equals(roomSize, 5)){
             hotelPrice = 200 * standard;
-        }else if(Objects.equals(roomSize, "studio")){
+        }else if(roomSize >= 6) {
             hotelPrice = 300 * standard;
         }
         return (hotelPrice);
