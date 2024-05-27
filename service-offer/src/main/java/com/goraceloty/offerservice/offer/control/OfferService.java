@@ -33,19 +33,18 @@ public class OfferService {
                 .build();
     }
 
-    public String GetTransports(OfferFilter offerFilter) throws IOException {
+    public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
         URL url;
-        System.out.println("GetTransports" + offerFilter.getCity());
+        System.out.println("###############" + offerFilter.getCity());
         if(offerFilter.getCity() != null) {
-            url = new URL("http://service-flight:8082/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
+            url = new URL("http://10.10.1.1:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
-            url = new URL("http://service-flight:8082/transports");
+            url = new URL("http://10.10.1.1:8080/hotels");
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         int responseCode = con.getResponseCode();
-        System.out.println("############### code: " + responseCode);
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
@@ -58,8 +57,9 @@ public class OfferService {
 
             return response.toString();
         }
-        return "[\"transport\" : none]";
+        return "[\"hotel\" : none]";
     }
+
 
     public String GetTransportss(OfferFilter offerFilter) throws IOException, JSONException {
         URL url;
