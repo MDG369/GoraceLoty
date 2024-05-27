@@ -3,9 +3,7 @@ package com.goraceloty.hotelservice.saga.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -14,7 +12,7 @@ public class ReservationRequest {
     Long hotelID;
     Long transportID;
     Long clientID;
-    LocalDateTime startDate;
+    LocalDate startDate;
     Integer numOfDays;
     Integer numOfSingleRooms;
     Integer numOfDoubleRooms;

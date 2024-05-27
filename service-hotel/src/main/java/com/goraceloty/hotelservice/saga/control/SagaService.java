@@ -27,7 +27,7 @@ public class SagaService {
         try {
             hotelService.bookHotelRooms(message.getHotelID(), message.getNumOfSingleRooms(),
                     message.getNumOfDoubleRooms(), message.getNumOfTripleRooms(),
-                    message.getNumOfStudios(), message.getNumOfApartments(), message.getDates());
+                    message.getNumOfStudios(), message.getNumOfApartments(), message.getStartDate(), message.getNumOfDays());
 
         } catch (Exception e) {
             // Send error message to Orchestrator in order to cancel the reservation
@@ -39,7 +39,7 @@ public class SagaService {
     private void handleCompensation(ReservationRequest message) {
         hotelService.cancelBookingHotelRooms(message.getHotelID(), message.getNumOfSingleRooms(),
                 message.getNumOfDoubleRooms(), message.getNumOfTripleRooms(),
-                message.getNumOfStudios(), message.getNumOfApartments(), message.getDates());
+                message.getNumOfStudios(), message.getNumOfApartments(), message.getStartDate(), message.getNumOfDays());
     }
 
     private void sendErrorMessage(ReservationRequest message) {

@@ -18,8 +18,6 @@ public class OfferPurchaseSaga{
 
     public void bookOffer(ReservationRequest reservationRequest) {
         try {
-            UUID transactionId = UUID.randomUUID();
-            reservationRequest.setId(transactionId);
             //
             // SagaHotelBookingMessage sagaHotelBookingMessage = new SagaHotelBookingMessage()
             // Step 1: Send to travelAgency to create reservation with status unpaid

@@ -13,11 +13,11 @@ import static java.lang.System.*;
 public class JsonProcessingExample {
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://db_postgres:5432/svc_flight";
+        String url = "jdbc:postgresql://localhost:5432/svc_flight";
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
         //String filePath = "C:\\Users\\Admin\\Documents\\GitHub\\GoraceLoty\\service-flight\\InitialData.json";
-        String filePath = "C:\\Users\\Lenovo\\Desktop\\GoraceLoty\\data\\transport_final_clean.json";
+        String filePath = "..\\data\\transport_final_clean.json";
         String sql = "INSERT INTO transports(transportid, type_of_transport, num_total_seats, num_available_seats, num_base_price, city_departure, city_arrival, date_departure, date_arrival) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (transportid) DO UPDATE SET " +

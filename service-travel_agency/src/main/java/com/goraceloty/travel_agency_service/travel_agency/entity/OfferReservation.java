@@ -4,7 +4,7 @@ import com.goraceloty.travel_agency_service.saga.entity.ReservationRequest;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class OfferReservation {
     @Id
     @GeneratedValue( strategy= GenerationType.AUTO )
     private Long reservationID;
-    private LocalDateTime startDate;
+    private LocalDate startDate;
     private Integer numAdult;
     private Integer numChildren;
     private Integer numOfDays;

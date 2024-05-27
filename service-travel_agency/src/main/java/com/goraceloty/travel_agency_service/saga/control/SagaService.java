@@ -26,28 +26,28 @@ public class SagaService {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @RabbitListener(queues = "reservation_action_queue")
-    public void handleAction(ReservationRequest message) {
-        processHotelBooking(message);
+    public void handleAction(ReservationRequest reservationRequest) {
+        processHotelBooking(reservationRequest);
     }
 
-    public void processHotelBooking(ReservationRequest message) {
+    public void processHotelBooking(ReservationRequest reservationRequest) {
         CompletableFuture.runAsync(() -> {
             try {
                 OfferReservation offerReservation = new OfferReservation();
-                offerReservation.createOfferReservationFromReservationRequest(message);
+                offerReservation.createOfferReservationFromReservationRequest(reservationRequest);
                 // Save offerReservation to the database
                 travelAgencyService.addReservation(offerReservation);
 
                 // Schedule the check for 5 minutes later
-                scheduler.schedule(() -> checkPaidStatus(offerReservation.getReservationID(), message), 5, TimeUnit.MINUTES);
+                scheduler.schedule(() -> checkPaidStatus(offerReservation.getReservationID(), reservationRequest), 5, TimeUnit.MINUTES);
             } catch (Exception e) {
                 // Send error message to Orchestrator to cancel the reservation
-                sendErrorMessage(message);
+                sendErrorMessage(reservationRequest);
             }
         });
     }
 
-    private void checkPaidStatus(Long offerReservationId, ReservationRequest message) {
+    private void checkPaidStatus(Long offerReservationId, ReservationRequest reservationRequest) {
         CompletableFuture.runAsync(() -> {
             try {
                 OfferReservation offerReservation = travelAgencyService.getOfferReservationById(offerReservationId)
@@ -55,25 +55,26 @@ public class SagaService {
                 if (!offerReservation.getIsPaid()) {
                     // Take appropriate action if the reservation is not paid
                     log.info("Reservation with id " + offerReservationId + " is not paid, cancelling the process");
-                    sendErrorMessage(message);
+                    handleCompensation(reservationRequest);
+                    sendErrorMessage(reservationRequest);
                 }
             } catch (Exception e) {
                 log.severe("Error checking paid status: " + e.getMessage());
-                sendErrorMessage(message);
+                sendErrorMessage(reservationRequest);
             }
         });
     }
 
 
     @RabbitListener(queues = "reservation_compensation_queue")
-    private void handleCompensation(ReservationRequest message) {
+    private void handleCompensation(ReservationRequest reservationRequest) {
         OfferReservation offerReservation = new OfferReservation();
-        offerReservation.createOfferReservationFromReservationRequest(message);
+        offerReservation.createOfferReservationFromReservationRequest(reservationRequest);
         offerReservation = travelAgencyService.getOfferReservationByExample(offerReservation).getFirst();
         travelAgencyService.removeTransportById(offerReservation.getReservationID());
     }
 
-    private void sendErrorMessage(ReservationRequest message) {
-        rabbitTemplate.convertAndSend("error_exchange", "error_queue", new ErrorMessage(message, ErrorType.RESERVATION));
+    private void sendErrorMessage(ReservationRequest reservationRequest) {
+        rabbitTemplate.convertAndSend("error_exchange", "error_queue", new ErrorMessage(reservationRequest, ErrorType.RESERVATION));
     }
 }

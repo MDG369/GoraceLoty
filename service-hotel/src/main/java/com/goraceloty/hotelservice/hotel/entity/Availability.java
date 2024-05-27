@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "availability")
@@ -19,7 +19,7 @@ public class Availability {
     @GeneratedValue( strategy=GenerationType.AUTO )
     private Long availabilityID;
     private Long hotelID;
-    private String date;
+    private LocalDate date;
     private Integer numOfAvSingleRooms;
     private Integer numOfAvDoubleRooms;
     private Integer numOfAvTripleRooms;
