@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -76,6 +78,7 @@ public class HotelService {
         }
     }
 
+
     public void cancelBookingHotelRooms(Long id, Integer numberOfSingleRooms,
                                         Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
                                         Integer numberOfStudios, Integer numberOfApartments,
@@ -123,4 +126,3 @@ public class HotelService {
         return "Update successful!";
     }
 }
-

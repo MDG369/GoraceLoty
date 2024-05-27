@@ -74,4 +74,5 @@ public class HotelController {
 //        SeatDataDTO seatDetails = new SeatDataDTO(transport.getNumTotalSeats(), transport.getNumAvailableSeats());
 //        return ResponseEntity.ok(seatDetails);
     }
+
 }
