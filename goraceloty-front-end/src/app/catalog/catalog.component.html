@@ -1,8 +1,25 @@
 <div class="container-fluid py-3">
 
 <form class="d-flex" >
+
+  <!-- Kalendarz z datami (2 kalendarze) Input miasto, liczba miejsc, country-->
   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
   <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
+  <table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <!-- więcej kolumn -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let offerView of offersTableView">
+      <td>{{ offerView.offer.id }}</td>
+
+    </tr>
+    </tbody>
+  </table>
+
 
 </div>

@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: '', component: HomeComponent
   },
   { path: 'login', component: LoginComponent, pathMatch: 'full'},
-  {path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard]},
+  {path: 'catalog', component: CatalogComponent},
 
 ];
 @NgModule({
