@@ -4,8 +4,11 @@ import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-import com.goraceloty.offerservice.offer.entity.Offer;
+import com.goraceloty.offerservice.offer.entity.OfferFilter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,11 +33,11 @@ public class OfferService {
                 .build();
     }
 
-    public String GetHotels(Offer offer) throws IOException {
+    public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
         URL url;
-        System.out.println("###############" + offer.getCountry());
-        if(offer.getCountry() != null) {
-            url = new URL("http://10.10.1.1:8080/hotels/matching?country=" + offer.getCountry());
+        System.out.println("###############" + offerFilter.getCity());
+        if(offerFilter.getCity() != null) {
+            url = new URL("http://10.10.1.1:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
             url = new URL("http://10.10.1.1:8080/hotels");
@@ -54,14 +57,14 @@ public class OfferService {
 
             return response.toString();
         }
-        return "Connection error to hotels";
+        return "[\"hotel\" : none]";
     }
 
-    public String GetTransports(Offer offer) throws IOException {
+    public String GetTransports(OfferFilter offerFilter) throws IOException {
         URL url;
-        System.out.println("###############" + offer.getCountry());
-        if(offer.getCountry() != null) {
-            url = new URL("http://10.10.1.3:8080/transports");
+        System.out.println("###############" + offerFilter.getCity());
+        if(offerFilter.getCity() != null) {
+            url = new URL("http://10.10.1.3:8080/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
             url = new URL("http://10.10.1.3:8080/transports");
@@ -82,14 +85,14 @@ public class OfferService {
 
             return response.toString();
         }
-        return "Connection error to transports";
+        return "[\"transport\" : none]";
     }
 
-    public String healthCheck() {
+    public String BuildOffer(OfferFilter offerFilter) {
         return "OK";
     }
 
-    public Long createOffer(Offer offer) {
+    public Long createOffer(OfferFilter offer) {
         return offerRepository.save(offer).getId();
     }
 
