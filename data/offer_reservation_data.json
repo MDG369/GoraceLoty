@@ -1,0 +1,122 @@
+[
+    {
+        "reservationID": 1,
+        "dateStart": "2024-08-23T13:36:57",
+        "numAdult": 1,
+        "numChildren": 0,
+        "numOfDays": 6,
+        "reservationTime": "2024-06-03T06:50:57",
+        "adjustedPrice": 480.61,
+        "offerID": 18,
+        "transportID": 12,
+        "hotelID": 17
+    },
+    {
+        "reservationID": 2,
+        "dateStart": "2025-01-03T13:36:57",
+        "numAdult": 5,
+        "numChildren": 0,
+        "numOfDays": 10,
+        "reservationTime": "2024-06-02T07:29:57",
+        "adjustedPrice": 735.92,
+        "offerID": 22,
+        "transportID": 20,
+        "hotelID": 11
+    },
+    {
+        "reservationID": 3,
+        "dateStart": "2025-01-05T13:36:57",
+        "numAdult": 5,
+        "numChildren": 0,
+        "numOfDays": 13,
+        "reservationTime": "2024-05-31T02:30:57",
+        "adjustedPrice": 278.54,
+        "offerID": 14,
+        "transportID": 17,
+        "hotelID": 7
+    },
+    {
+        "reservationID": 4,
+        "dateStart": "2025-02-02T13:36:57",
+        "numAdult": 4,
+        "numChildren": 3,
+        "numOfDays": 2,
+        "reservationTime": "2024-06-02T05:05:57",
+        "adjustedPrice": 877.19,
+        "offerID": 10,
+        "transportID": 12,
+        "hotelID": 3
+    },
+    {
+        "reservationID": 5,
+        "dateStart": "2024-07-24T13:36:57",
+        "numAdult": 4,
+        "numChildren": 1,
+        "numOfDays": 8,
+        "reservationTime": "2024-06-02T23:17:57",
+        "adjustedPrice": 916.8,
+        "offerID": 2,
+        "transportID": 16,
+        "hotelID": 9
+    },
+    {
+        "reservationID": 6,
+        "dateStart": "2024-05-31T13:36:57",
+        "numAdult": 2,
+        "numChildren": 1,
+        "numOfDays": 1,
+        "reservationTime": "2024-05-29T02:17:57",
+        "adjustedPrice": 786.45,
+        "offerID": 21,
+        "transportID": 1,
+        "hotelID": 12
+    },
+    {
+        "reservationID": 7,
+        "dateStart": "2024-06-16T13:36:57",
+        "numAdult": 2,
+        "numChildren": 1,
+        "numOfDays": 9,
+        "reservationTime": "2024-05-27T20:25:57",
+        "adjustedPrice": 207.46,
+        "offerID": 7,
+        "transportID": 13,
+        "hotelID": 17
+    },
+    {
+        "reservationID": 8,
+        "dateStart": "2025-02-08T13:36:57",
+        "numAdult": 5,
+        "numChildren": 2,
+        "numOfDays": 7,
+        "reservationTime": "2024-05-31T21:02:57",
+        "adjustedPrice": 967.01,
+        "offerID": 15,
+        "transportID": 19,
+        "hotelID": 14
+    },
+    {
+        "reservationID": 9,
+        "dateStart": "2024-10-15T13:36:57",
+        "numAdult": 4,
+        "numChildren": 0,
+        "numOfDays": 14,
+        "reservationTime": "2024-05-30T15:12:57",
+        "adjustedPrice": 685.11,
+        "offerID": 13,
+        "transportID": 15,
+        "hotelID": 2
+    },
+    {
+        "reservationID": 10,
+        "dateStart": "2024-12-20T13:36:57",
+        "numAdult": 4,
+        "numChildren": 3,
+        "numOfDays": 13,
+        "reservationTime": "2024-05-27T21:32:57",
+        "adjustedPrice": 232.18,
+        "offerID": 19,
+        "transportID": 17,
+        "hotelID": 6
+    }
+]
