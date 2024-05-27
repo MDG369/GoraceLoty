@@ -1,8 +1,6 @@
 package com.goraceloty.offerservice.offer.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Offer {
     @Id
+    @GeneratedValue( strategy= GenerationType.AUTO )
     private Long id;
-    private String name;
+    private Long transportID;
+    private Long hotelID;
+    private String city;
+    private String dateStart;
+    private String dateEnd;
+    private String offerName;
+    private Integer numOfPeople;
 }
