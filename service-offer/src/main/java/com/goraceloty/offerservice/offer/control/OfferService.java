@@ -37,10 +37,10 @@ public class OfferService {
         URL url;
         System.out.println("###############" + offerFilter.getCity());
         if(offerFilter.getCity() != null) {
-            url = new URL("http://10.10.1.1:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
+            url = new URL("http://service-hotel:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
-            url = new URL("http://10.10.1.1:8080/hotels");
+            url = new URL("http://service-hotel:8080/hotels");
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
