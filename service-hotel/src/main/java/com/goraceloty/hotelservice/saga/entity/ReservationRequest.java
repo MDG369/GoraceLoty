@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -13,7 +13,9 @@ public class ReservationRequest {
     Long offerID;
     Long hotelID;
     Long transportID;
-    List<String> dates;
+    Long clientID;
+    LocalDateTime startDate;
+    Integer numOfDays;
     Integer numOfSingleRooms;
     Integer numOfDoubleRooms;
     Integer numOfTripleRooms;

@@ -26,13 +26,18 @@ public class TravelAgencyService {
 //        return transportRepository.findAll();
 //    }
 //
-//    public void addTransport(com.goraceloty.travel_agencyservice.travel_agency.entity.Clients transport) {
-//        transportRepository.save(transport);
-//    }
-//
-//    public void removeTransportById(Long id) {
-//        transportRepository.delete(transportRepository.findById(id).orElseThrow());
-//    }
+
+    public Optional<OfferReservation> getOfferReservationById(Long id) {
+        return travelAgencyRepository.findById(id);
+    }
+
+    public OfferReservation addReservation(OfferReservation offerReservation) {
+        return travelAgencyRepository.save(offerReservation);
+    }
+
+    public void removeTransportById(Long id) {
+        travelAgencyRepository.delete(travelAgencyRepository.findById(id).orElseThrow());
+    }
 
 //
     private OfferReservation fetchReservationById(Long reservationId) {
@@ -41,7 +46,7 @@ public class TravelAgencyService {
     }
 
     public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
-        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnorePaths("reservationID");
         final Example<OfferReservation> example = Example.of(offerReservation, matcher);
         List<OfferReservation> results;
         results = travelAgencyRepository.findAll(example);

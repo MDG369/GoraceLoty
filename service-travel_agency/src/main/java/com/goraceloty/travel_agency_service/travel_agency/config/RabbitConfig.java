@@ -1,6 +1,7 @@
 package com.goraceloty.travel_agency_service.travel_agency.config;
 
 
+import com.goraceloty.travel_agency_service.saga.control.SagaService;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -72,5 +73,4 @@ public class RabbitConfig {
     MessageListenerAdapter compensationListenerAdapter(SagaService sagaService) {
         return new MessageListenerAdapter(sagaService, "handleCompensation");
     }
-}
 }

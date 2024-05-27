@@ -4,15 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class ReservationRequest {
-    UUID id = null;
     Long offerID;
     Long hotelID;
     Long transportID;
-    List<String> dates;
+    Long clientID;
+    LocalDateTime startDate;
+    Integer numOfDays;
     Integer numOfSingleRooms;
     Integer numOfDoubleRooms;
     Integer numOfTripleRooms;

@@ -1,12 +1,13 @@
-package com.goraceloty.hotelservice.saga.entity;
+package com.goraceloty.travel_agency_service.saga.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
+@AllArgsConstructor
 @Getter
 @Setter
 public class ReservationRequest {
