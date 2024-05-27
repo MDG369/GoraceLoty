@@ -33,7 +33,7 @@ public class TransportController {
         if (transport == null) {
             return ResponseEntity.notFound().build();
         }
-        int seatsDifference = transport.getNumTotalSeats() - transport.getNumAvailableSeats();
+        int seatsDifference = transport.getNumAvailableSeats() / transport.getNumTotalSeats();
         System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
 
         return ResponseEntity.ok(seatsDifference);

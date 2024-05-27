@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SeatDataDTO {
-    private int numTotalSeats;
+public class HotelDataDTO {
+    private Integer numTotalSeats;
     private int numAvailableSeats;
 }

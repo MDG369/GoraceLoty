@@ -1,0 +1,24 @@
+HotelID,hotelName,standard,country,city,childrenAllowed,address
+1,Areti,3,Grecja,Santorini,True,Glorieta de Marisela Manso 94
+2,Armonia Studios,2,Grecja,Lesbos - Mitylena,False,Vial de Úrsula Royo 60 Apt. 41 
+3,Olimpos Beach Hotel,3,Turcja,Antalya,True,Callejón de Teodoro Pellicer 73
+4,Green Field,4,Hiszpania,Gran Canaria,True,Vial Isaura Pallarès 27 Puerta 4 
+5,Nikos Studios,2,Grecja,Lesbos - Mitylena,True,Cañada Ani Cañizares 571 Piso 7 
+6,Alex Studios,3,Grecja,Zakynthos,True,Calle de Juan Antonio Sarabia 74 Puerta 5 
+7,Moreno Horizon Spa & Resort,4,Egipt,Hurghada,True,Via de Jaime Lobato 88 Puerta 1 
+8,El Karma Aqua Beach Resort,4,Egipt,Hurghada,True,Urbanización Modesto Torralba 52 Apt. 84 
+9,Marbel Hotel,4,Turcja,Bodrum,False,Via Cándida Pinto 69 Apt. 58 
+10,Bonapart Sealine Hotel,3,Turcja,Antalya,True,Rambla de Pánfilo Donaire 20 Puerta 3 
+11,Zante Village,3,Grecja,Zakynthos,True,Paseo Luís Cortina 5
+12,Monte Carlo Vlora,3,Albania,Tirana,True,Via de Lupe Andrés 44
+13,Falcon Naama Star,3,Egipt,Sharm el Sheikh,False,Calle Manolo Blanes 2
+14,Katerina Studio,2,Grecja,Zakynthos,True,Pasadizo Clemente Carrera 23
+15,Oba Star,4,Turcja,Antalya,False,Ronda Luis Miguel Macias 45
+16,Golf Residence,4,Tunezja,Enfidha,True,Vial Nando Benavent 46
+17,Alykes Park,4,Grecja,Zakynthos,True,Camino Roberto Portero 41 Piso 7 
+18,Incekum Su Hotel,4,Turcja,Antalya,True,Urbanización de Baldomero Niño 4 Apt. 08 
+19,Xenonas,3,Grecja,Saloniki,True,Avenida Carlos Arregui 891 Apt. 42 
+20,Liberty Resort,4,Tunezja,Enfidha,False,Plaza Inmaculada Salas 31
+21,Sey Beach Hotel & SPA,4,Turcja,Antalya,False,Vial de Amaro Manso 97
+22,Aqua Rosa,3,Grecja,Saloniki,True,Camino Ezequiel Morell 29
+23,Riviera,3,Tunezja,Enfidha,True,Alameda Fermín Daza 4

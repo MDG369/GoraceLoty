@@ -27,8 +27,8 @@ public class OfferReservationController {
     }
 
     @GetMapping("/price")
-    public double getAdjustedPrice(@RequestParam Long transportId) {
-        return travelAgencyService.calculatePriceBasedOnSeats(transportId);
+    public double getAdjustedPrice(@RequestParam Long transportId, Long hotelId) {
+        return travelAgencyService.calculatePrice(transportId, hotelId);
     }
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {
