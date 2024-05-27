@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -33,6 +34,9 @@ public class HotelService {
         hotelRepository.delete(hotelRepository.findById(id).orElseThrow());
     }
 
+//    public Hotel getHotelByStars(Integer stars) {
+//        return hotelRepository.getHotelByStars(stars).orElseThrow();
+//    }
     public void bookHotelRooms(Long id, Integer numberOfSingleRooms,
                                Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
                                Integer numberOfStudios, Integer numberOfApartments,
@@ -56,6 +60,9 @@ public class HotelService {
         }
     }
 
+    public Hotel findHotelByID(Long id) {
+        Optional<Hotel> transport = hotelRepository.findById(id);
+        return transport.orElse(null);
     public void cancelBookingHotelRooms(Long id, Integer numberOfSingleRooms,
                                Integer numberOfDoubleRooms, Integer numberOfTripleRooms,
                                Integer numberOfStudios, Integer numberOfApartments,
@@ -86,6 +93,7 @@ public class HotelService {
 
         return results;
     }
+}
 
     public String generateHotelAvailability() {
         DateTimeFormatter formatter =
