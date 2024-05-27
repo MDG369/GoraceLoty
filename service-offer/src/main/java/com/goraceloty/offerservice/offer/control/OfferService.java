@@ -37,10 +37,10 @@ public class OfferService {
         URL url;
         System.out.println("###############" + offerFilter.getCity());
         if(offerFilter.getCity() != null) {
-            url = new URL("http://10.10.1.1:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
+            url = new URL("http://service-hotel:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
-            url = new URL("http://10.10.1.1:8080/hotels");
+            url = new URL("http://service-hotel:8080/hotels");
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -64,10 +64,10 @@ public class OfferService {
         URL url;
         System.out.println("###############" + offerFilter.getCity());
         if(offerFilter.getCity() != null) {
-            url = new URL("http://10.10.1.3:8080/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
+            url = new URL("http://service-flight:8082/transports/matching?cityArrival=" + offerFilter.getCity().replaceAll(" ", "%20"));
         }
         else {
-            url = new URL("http://10.10.1.3:8080/transports");
+            url = new URL("http://service-flight:8082/transports");
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -101,6 +101,7 @@ public class OfferService {
     }
 
     public Mono<String> tryBookingOffer(ReservationRequest reservationRequest) {
+        log.info("Try booking offer");
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
                         .path("/booking")
                         .build())

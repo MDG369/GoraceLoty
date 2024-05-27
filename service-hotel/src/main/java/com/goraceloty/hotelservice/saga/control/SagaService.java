@@ -43,6 +43,6 @@ public class SagaService {
     }
 
     private void sendErrorMessage(ReservationRequest message) {
-        rabbitTemplate.convertAndSend("error_exchange", "error_queue", new ErrorMessage(message, ErrorType.HOTEL));
+        rabbitTemplate.convertAndSend("error_exchange", "error.queue.baz", new ErrorMessage(message, ErrorType.HOTEL));
     }
 }

@@ -5,6 +5,7 @@ import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +22,7 @@ import java.util.List;
 import static java.lang.Long.parseLong;
 import java.time.Duration;
 
+@Log
 @RestController
 @RequestMapping("/offers")
 @RequiredArgsConstructor
@@ -37,14 +39,18 @@ public class OfferController {
         try {
             hotelsResponse = offerService.GetHotels(offerFilter);
             transportsResponse = offerService.GetTransports(offerFilter);
-
+            log.info("Hotels: " + hotelsResponse);
+            log.info(transportsResponse);
             JSONArray arrayHotel = new JSONArray(hotelsResponse.toString());
             JSONArray arrayTransport = new JSONArray(transportsResponse.toString());
             for(int i=0; i < arrayHotel.length(); i++)
             {
+
                 JSONObject objectHotel = arrayHotel.getJSONObject(i);
+                log.info("OBJHotel: " + objectHotel.toString());
                 for(int j=0; j < arrayTransport.length(); j++) {
                     JSONObject objectTransport = arrayTransport.getJSONObject(j);
+                    log.info("OBJTransport: " + objectTransport.toString());
                     tmp = new Offer();
                     tmp.setId(id);
                     tmp.setHotelID(parseLong(objectHotel.getString("hotelID")));
@@ -73,11 +79,11 @@ public class OfferController {
     }
 
     @PostMapping
-    public void startOfferBookingSaga(ReservationRequest reservationRequest) {
+    public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
         // Orchestrator sends message to Reservation(Travel Agency) service, the reservation is created with status PENDING.
         // Orchestrator sends messages to Transport and Hotel. If there is an error in either compensate Tran, Hotel and Res
         // If paid, Orchestrator sends message to Reservation to change status to paid, if 15 minutes pass remove reservation, compensate hotel and Transport
-        offerService.tryBookingOffer(reservationRequest);
+        offerService.tryBookingOffer(reservationRequest).block(Duration.ofSeconds(20));
     }
 }
