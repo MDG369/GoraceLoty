@@ -36,19 +36,25 @@ public class OfferController {
         Long id = 0L;
         try {
             hotelsResponse = offerService.GetHotels(offerFilter);
-            transportsResponse = offerService.GetTransports(offerFilter);
+            System.out.println(hotelsResponse);
+            transportsResponse = offerService.GetTransportss(offerFilter);
+            System.out.println(transportsResponse);
 
-            JSONArray arrayHotel = new JSONArray(hotelsResponse.toString());
-            JSONArray arrayTransport = new JSONArray(transportsResponse.toString());
+            JSONArray arrayHotel = new JSONArray(hotelsResponse);
+            JSONArray arrayTransport = new JSONArray(transportsResponse);
+            System.out.println("arrayHotel length: " + arrayHotel.length());
+            System.out.println("arrayTransport length: " + arrayTransport.length());
             for(int i=0; i < arrayHotel.length(); i++)
             {
+                System.out.println("JSON loop ");
                 JSONObject objectHotel = arrayHotel.getJSONObject(i);
+                System.out.println(objectHotel.getLong("hotelID"));
                 for(int j=0; j < arrayTransport.length(); j++) {
                     JSONObject objectTransport = arrayTransport.getJSONObject(j);
                     tmp = new Offer();
                     tmp.setId(id);
-                    tmp.setHotelID(parseLong(objectHotel.getString("hotelID")));
-                    tmp.setTransportID(parseLong(objectTransport.getString("transportID")));
+                    tmp.setHotelID(objectHotel.getLong("hotelID"));
+                    tmp.setTransportID(objectTransport.getLong("transportID"));
                     tmp.setCity(offerFilter.getCity());
                     tmp.setDateStart(offerFilter.getDateStart());
                     tmp.setDateEnd(offerFilter.getDateEnd());
@@ -56,7 +62,7 @@ public class OfferController {
                     id++;
 
                     offers.add(tmp);
-                    System.out.println(objectHotel.getString("hotelID") + " " + objectTransport.getString("transportID"));
+                    System.out.println(objectHotel.getLong("hotelID") + " " + objectTransport.getLong("transportID"));
                 }
             }
         } catch (IOException | JSONException e) {
