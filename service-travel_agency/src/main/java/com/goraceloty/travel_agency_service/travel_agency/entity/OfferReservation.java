@@ -19,11 +19,14 @@ import lombok.Setter;
 @Setter
 public class OfferReservation {
     @Id
+    private Long reservationID;
     private LocalDateTime dateStart;
     private Integer numAdult;
     private Integer numChildren;
     private Integer numOfDays;
     private Timestamp reservationTime;
     private Double adjustedPrice;
-    private Integer numKids;
+    private Long offerID;
+    private Long hotelID;
+    private Long transportID;
 }
