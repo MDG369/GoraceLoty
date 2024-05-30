@@ -27,7 +27,7 @@ import java.time.Duration;
 public class OfferController {
 
     private final OfferService offerService;
-    @GetMapping
+   /* @GetMapping
     List<Offer> getEx(OfferFilter offerFilter) {
         String hotelsResponse;
         String transportsResponse;
@@ -75,6 +75,19 @@ public class OfferController {
         //}
 
         return offers;
+    }*/
+    @GetMapping
+    List<Offer> getOffers(OfferFilter offerFilter) {
+        return offerService.getOffers();
+    }
+
+    // example of valid command
+    // http://localhost:8081/offers/hotel?id=1&numOfPeople=2
+    // id - offer if
+    // numOfPeople - number of people 1-3 is a valid input representing single, double and triple room
+    @GetMapping("/hotel")
+    Boolean getHotelAvailability(Long id, Integer numOfPeople) {
+        return offerService.getHotelAvailability(id, numOfPeople);
     }
 
     @PostMapping
