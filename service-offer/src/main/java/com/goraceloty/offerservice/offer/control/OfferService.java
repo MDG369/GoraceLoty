@@ -1,12 +1,11 @@
 package com.goraceloty.offerservice.offer.control;
 
+import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 
@@ -14,7 +13,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -31,6 +34,77 @@ public class OfferService {
                 .baseUrl("http://saga-orchestrator:8084")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
+    }
+
+    public List<Offer> getOffers() {
+        return offerRepository.findAll();
+    }
+
+    private String sendGet(URL url) {
+        HttpURLConnection con = null;
+        try {
+            System.out.println("sendGet: " + url);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            int responseCode = con.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                return response.toString();
+            }
+        }
+        catch (Exception e){
+            return "fail";
+        }
+        finally {
+            if (con != null) {
+                con.disconnect();
+            }
+        }
+        return "fail";
+    }
+    public Boolean getHotelAvailability(Long id, Integer numOfPeople) {
+        Optional<Offer> offer = offerRepository.findById(id);
+        if (offer.isEmpty()) {
+            return false;
+        }
+
+        URL url;
+        try {
+            url = new URL(String.format(
+                    "http://service-hotel:8080/hotels/availability?dateStart=%s&dateEnd=%s&hotelID=%d&numOfPeople=%d",
+                    offer.get().getDateStart(), offer.get().getDateEnd(), offer.get().getHotelID(), numOfPeople));
+            System.out.println("getHotelAvailability getting url: " + url);
+        } catch (MalformedURLException e) {
+            System.out.println("MalformedURLException " + e);
+            return false;
+        }
+
+        String response = sendGet(url);
+        System.out.println("Response from hotel availability: " + response);
+
+        if(response.equals("fail")) {
+            System.out.println("Request to hotel availability returned fail, perhaps wrong url?");
+            return false;
+        }
+        else if (response.equals("false")) {
+            System.out.println("Request to hotel availability returned false");
+            return false;
+        }
+        else if (response.equals("true")) {
+            System.out.println("Request to hotel availability returned true");
+            return true;
+        }
+
+        return false;
     }
 
     public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
@@ -61,7 +135,7 @@ public class OfferService {
     }
 
 
-    public String GetTransportss(OfferFilter offerFilter) throws IOException, JSONException {
+    /*public String GetTransportss(OfferFilter offerFilter) throws IOException, JSONException {
         URL url;
         if(offerFilter.getCity() != null) {
             System.out.println("not null");
@@ -86,13 +160,13 @@ public class OfferService {
             return response.toString();
         }
         return "[\"hotel\" : none]";
-    }
+    }*/
 
     public String BuildOffer(OfferFilter offerFilter) {
         return "OK";
     }
 
-    public Long createOffer(OfferFilter offer) {
+    public Long createOffer(Offer offer) {
         return offerRepository.save(offer).getId();
     }
 
@@ -111,6 +185,6 @@ public class OfferService {
                     log.fine("Initiating booking saga failed with error: " + e);
                     return Mono.empty();
                 });
-
     }
+
 }
