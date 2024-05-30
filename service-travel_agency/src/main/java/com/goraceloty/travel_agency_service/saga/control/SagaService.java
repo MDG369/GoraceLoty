@@ -70,7 +70,7 @@ public class SagaService {
     private void handleCompensation(ReservationRequest reservationRequest) {
         OfferReservation offerReservation = new OfferReservation();
         offerReservation.createOfferReservationFromReservationRequest(reservationRequest);
-        offerReservation = travelAgencyService.getOfferReservationByExample(offerReservation).getFirst();
+        offerReservation = travelAgencyService.getOfferReservationByExample(offerReservation).get(0);
         travelAgencyService.removeTransportById(offerReservation.getReservationID());
     }
 

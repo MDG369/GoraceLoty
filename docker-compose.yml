@@ -63,7 +63,7 @@ services:
       - goraceloty_net
 
   saga-orchestrator:
-    build: ./service-travel_agency
+    build: ./OfferSagaOrchestrator
     depends_on:
       - db_postgres
     environment:

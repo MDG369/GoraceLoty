@@ -55,10 +55,9 @@ public class OfferController {
                     tmp.setId(id);
                     tmp.setHotelID(objectHotel.getLong("hotelID"));
                     tmp.setTransportID(objectTransport.getLong("transportID"));
-                    tmp.setCity(offerFilter.getCity());
+                    tmp.setCityDeparture(offerFilter.getCity());
                     tmp.setDateStart(offerFilter.getDateStart());
                     tmp.setDateEnd(offerFilter.getDateEnd());
-                    tmp.setNumOfPeople(offerFilter.getNumOfPeople());
                     id++;
 
                     offers.add(tmp);

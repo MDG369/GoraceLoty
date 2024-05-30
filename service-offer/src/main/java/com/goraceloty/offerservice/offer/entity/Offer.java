@@ -18,8 +18,8 @@ public class Offer {
     private Long id;
     private Long transportID;
     private Long hotelID;
-    private String city;
+    private String cityArrival;
+    private String cityDeparture;
     private String dateStart;
     private String dateEnd;
-    private Integer numOfPeople;
 }
