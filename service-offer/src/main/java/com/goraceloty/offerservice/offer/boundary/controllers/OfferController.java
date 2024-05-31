@@ -27,55 +27,6 @@ import java.time.Duration;
 public class OfferController {
 
     private final OfferService offerService;
-   /* @GetMapping
-    List<Offer> getEx(OfferFilter offerFilter) {
-        String hotelsResponse;
-        String transportsResponse;
-        List<Offer> offers = new ArrayList<>();
-        Offer tmp;
-        Long id = 0L;
-        try {
-            hotelsResponse = offerService.GetHotels(offerFilter);
-            System.out.println(hotelsResponse);
-            transportsResponse = offerService.GetTransportss(offerFilter);
-            System.out.println(transportsResponse);
-
-            JSONArray arrayHotel = new JSONArray(hotelsResponse);
-            JSONArray arrayTransport = new JSONArray(transportsResponse);
-            System.out.println("arrayHotel length: " + arrayHotel.length());
-            System.out.println("arrayTransport length: " + arrayTransport.length());
-            for(int i=0; i < arrayHotel.length(); i++)
-            {
-                System.out.println("JSON loop ");
-                JSONObject objectHotel = arrayHotel.getJSONObject(i);
-                System.out.println(objectHotel.getLong("hotelID"));
-                for(int j=0; j < arrayTransport.length(); j++) {
-                    JSONObject objectTransport = arrayTransport.getJSONObject(j);
-                    tmp = new Offer();
-                    tmp.setId(id);
-                    tmp.setHotelID(objectHotel.getLong("hotelID"));
-                    tmp.setTransportID(objectTransport.getLong("transportID"));
-                    tmp.setCityDeparture(offerFilter.getCity());
-                    tmp.setDateStart(offerFilter.getDateStart());
-                    tmp.setDateEnd(offerFilter.getDateEnd());
-                    id++;
-
-                    offers.add(tmp);
-                    System.out.println(objectHotel.getLong("hotelID") + " " + objectTransport.getLong("transportID"));
-                }
-            }
-        } catch (IOException | JSONException e) {
-            hotelsResponse = "";
-        }
-
-        //try {
-        //    transportsResponse = offerService.GetTransports(offerFilter);
-        //} catch (IOException e) {
-        //    transportsResponse = "";
-        //}
-
-        return offers;
-    }*/
     @GetMapping
     List<Offer> getOffers(OfferFilter offerFilter) {
         return offerService.getOffers();
@@ -83,11 +34,29 @@ public class OfferController {
 
     // example of valid command
     // http://localhost:8081/offers/hotel?id=1&numOfPeople=2
+    // getting hotel availability
     // id - offer if
     // numOfPeople - number of people 1-3 is a valid input representing single, double and triple room
     @GetMapping("/hotel")
     Boolean getHotelAvailability(Long id, Integer numOfPeople) {
         return offerService.getHotelAvailability(id, numOfPeople);
+    }
+
+    // example
+    // http://localhost:8081/offers/transport?id=1&numOfPeople=2
+    // getting transport availability, checks if numOfSeats >= numOfPeople
+    // id - offer id
+    // numOfPeople - number of people, any number valid
+    @GetMapping("/transport")
+    Boolean getTransportAvailability(Long id, Integer numOfPeople) {
+        return offerService.getTransportAvailability(id, numOfPeople);
+    }
+
+    // Logical AND on transport and hotel availability
+    // http://localhost:8081/offers/availability?id=1&numOfPeople=1
+    @GetMapping("/availability")
+    Boolean getAvailability(Long id, Integer numOfPeople) {
+        return offerService.getAvailability(id, numOfPeople);
     }
 
     @GetMapping("/matching")
