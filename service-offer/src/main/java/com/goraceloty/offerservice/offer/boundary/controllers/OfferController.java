@@ -90,6 +90,11 @@ public class OfferController {
         return offerService.getHotelAvailability(id, numOfPeople);
     }
 
+    @GetMapping("/matching")
+    public List<Offer> getOfferByExample(Offer offer) {
+        return offerService.getOffersByExample(offer);
+    }
+
     @PostMapping
     public void startOfferBookingSaga(ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
