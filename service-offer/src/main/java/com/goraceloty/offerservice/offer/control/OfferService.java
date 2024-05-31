@@ -3,6 +3,8 @@ package com.goraceloty.offerservice.offer.control;
 import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.json.JSONException;
@@ -38,6 +40,15 @@ public class OfferService {
 
     public List<Offer> getOffers() {
         return offerRepository.findAll();
+    }
+
+    public List<Offer> getOffersByExample(Offer offer) {
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        final Example<Offer> example = Example.of(offer, matcher);
+        List<Offer> results;
+        results = offerRepository.findAll(example);
+
+        return results;
     }
 
     private String sendGet(URL url) {
