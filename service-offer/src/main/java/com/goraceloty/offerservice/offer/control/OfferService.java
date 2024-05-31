@@ -118,6 +118,42 @@ public class OfferService {
         return false;
     }
 
+    public Boolean getTransportAvailability(Long id, Integer numOfPeople) {
+        Optional<Offer> offer = offerRepository.findById(id);
+        if (offer.isEmpty()) {
+            return false;
+        }
+
+        URL url;
+        try {
+            url = new URL(String.format(
+                    "http://service-flight:8082/transports/%d/seats", offer.get().getTransportID()));
+            System.out.println("getTransportAvailability getting url: " + url);
+        } catch (MalformedURLException e) {
+            System.out.println("MalformedURLException " + e);
+            return false;
+        }
+
+        String response = sendGet(url);
+        System.out.println("Response from transport seats: " + response);
+        Integer numOfSeats;
+
+        try {
+            numOfSeats = Integer.valueOf(response);
+            System.out.println("getTransportAvailability numOfSeats returned: " + numOfSeats);
+        }
+        catch (NumberFormatException e) {
+            System.out.println("getTransportAvailability Integer conversion FAILED");
+            return false;
+        }
+
+        if (numOfSeats >= numOfPeople) {
+            return true;
+        }
+
+        return false;
+    }
+
     public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
         URL url;
         System.out.println("###############" + offerFilter.getCity());
@@ -145,6 +181,12 @@ public class OfferService {
         return "[\"hotel\" : none]";
     }
 
+    public Boolean getAvailability(Long id, Integer numOfPeople) {
+        boolean availability = getTransportAvailability(id, numOfPeople);
+        availability = availability && getHotelAvailability(id, numOfPeople);
+
+        return availability;
+    }
 
     /*public String GetTransportss(OfferFilter offerFilter) throws IOException, JSONException {
         URL url;

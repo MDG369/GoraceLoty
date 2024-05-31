@@ -26,14 +26,14 @@ public class TransportController {
     }
 
     @GetMapping("/{id}/seats")
-    public ResponseEntity<Double> getSeatData(@PathVariable Long id) {
+    public ResponseEntity<Integer> getSeatData(@PathVariable Long id) {
         System.out.println("Zaczęto budować" + id);
         Transport transport = transportService.findTransportByID(id);
         System.out.println(transport);
         if (transport == null) {
             return ResponseEntity.notFound().build();
         }
-        double seatsDifference = transport.getNumAvailableSeats() / transport.getNumTotalSeats();
+        Integer seatsDifference = transport.getNumTotalSeats() - transport.getNumAvailableSeats();
         System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
 
         return ResponseEntity.ok(seatsDifference);
@@ -41,10 +41,12 @@ public class TransportController {
 //        SeatDataDTO seatDetails = new SeatDataDTO(transport.getNumTotalSeats(), transport.getNumAvailableSeats());
 //        return ResponseEntity.ok(seatDetails);
     }
+
    /* @GetMapping("/matching/totalSeats")
     public List<Transport> getSeatsByExample(Transport transport) {
         return transportService.getSeatsByExample(transport);
     }*/
+
     @GetMapping
     public List<Transport> getAllTransports() {
         return transportService.getAllTransports();
