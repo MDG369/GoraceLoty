@@ -3,6 +3,7 @@ package com.goraceloty.hotelservice.hotel.control;
 import com.goraceloty.hotelservice.hotel.entity.Availability;
 import com.goraceloty.hotelservice.hotel.entity.Hotel;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -16,16 +17,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Log
 @AllArgsConstructor
 @Service
 public class HotelService {
 
-    @Autowired
     private final HotelRepository hotelRepository;
-    @Autowired
     private final AvailabilityRepository availabilityRepository;
 
     public List<Hotel> getHotels() {
+        log.info("Getting all hotels");
         return hotelRepository.findAll();
     }
 
@@ -47,11 +48,12 @@ public class HotelService {
     }
 
     public List<Hotel> getHotelsByExample(Hotel hotel) {
+        log.info("Getting by Example");
         final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         final Example<Hotel> example = Example.of(hotel, matcher);
         List<Hotel> results;
         results = hotelRepository.findAll(example);
-
+        log.info("Results :" + results);
         return results;
     }
 

@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class ReservationRequest {
+    UUID reservationRequestID;
     Long offerID;
     Long hotelID;
     Long transportID;

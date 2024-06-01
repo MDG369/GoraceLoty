@@ -1,8 +1,10 @@
 package com.goraceloty.travel_agency_service.travel_agency.control;
 
+import com.goraceloty.travel_agency_service.saga.entity.ReservationRequest;
 import com.goraceloty.travel_agency_service.travel_agency.entity.OfferReservation;
 //import com.goraceloty.travel_agency_service.travel_agency.entity.SeatDataDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -35,7 +37,7 @@ public class TravelAgencyService {
         return travelAgencyRepository.save(offerReservation);
     }
 
-    public void removeTransportById(Long id) {
+    public void removeReservationById(Long id) {
         travelAgencyRepository.delete(travelAgencyRepository.findById(id).orElseThrow());
     }
 
@@ -144,6 +146,13 @@ public class TravelAgencyService {
         return (hotelPrice);
     }
 
+    public OfferReservation getOfferReservationByReservationRequest(ReservationRequest reservationRequest) throws Exception {
+        OfferReservation offerReservation = new OfferReservation();
+        offerReservation.createOfferReservationFromReservationRequest(reservationRequest);
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnorePaths("reservationID", "reservationTime", "isPaid").withIgnoreNullValues();
+        final Example<OfferReservation> example = Example.of(offerReservation, matcher);
+        return travelAgencyRepository.findAll(example, Sort.by(Sort.Direction.DESC, "reservationTime")).getFirst();
+    }
     /*public double adjustPriceBasedOnSeats(Long transportId) {
         int availableSeats = getAvailableSeats(transportId);
         double basePrice = 500.0;

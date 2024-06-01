@@ -2,7 +2,7 @@ services:
   frontend:
     build: ./goraceloty-front-end
     depends_on:
-      - service-hotel
+      - service-offer
     environment:
       - API_URL=http://service-hotel:8080
     ports:
@@ -14,6 +14,7 @@ services:
     build: ./service-hotel
     depends_on:
       - db_postgres
+      - rabbitmq
     environment:
       - DATASOURCE_URL=db_postgres:5432/svc_hotel
       - DATASOURCE_USERNAME=gl_pg_user
@@ -40,6 +41,7 @@ services:
     build: ./service-flight
     depends_on:
       - db_postgres
+      - rabbitmq
     environment:
       - DATASOURCE_URL=db_postgres:5432/svc_flight
       - DATASOURCE_USERNAME=gl_pg_user
@@ -53,6 +55,7 @@ services:
     build: ./service-travel_agency
     depends_on:
       - db_postgres
+      - rabbitmq
     environment:
       - DATASOURCE_URL=db_postgres:5432/svc_travel_agency
       - DATASOURCE_USERNAME=gl_pg_user
@@ -66,6 +69,10 @@ services:
     build: ./OfferSagaOrchestrator
     depends_on:
       - db_postgres
+      - service-hotel
+      - service-flight
+      - service-travel-agency
+      - rabbitmq
     environment:
       - DATASOURCE_URL=db_postgres:5432/svc_travel_agency
       - DATASOURCE_USERNAME=gl_pg_user
