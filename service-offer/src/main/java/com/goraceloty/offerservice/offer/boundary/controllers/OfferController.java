@@ -5,7 +5,6 @@ import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +21,6 @@ import java.util.List;
 import static java.lang.Long.parseLong;
 import java.time.Duration;
 
-@Log
 @RestController
 @RequestMapping("/offers")
 @RequiredArgsConstructor
@@ -30,60 +28,48 @@ public class OfferController {
 
     private final OfferService offerService;
     @GetMapping
-    List<Offer> getEx(OfferFilter offerFilter) {
-        String hotelsResponse;
-        String transportsResponse;
-        List<Offer> offers = new ArrayList<>();
-        Offer tmp;
-        Long id = 0L;
-        try {
-            hotelsResponse = offerService.GetHotels(offerFilter);
-            transportsResponse = offerService.GetTransports(offerFilter);
-            log.info("Hotels: " + hotelsResponse);
-            log.info(transportsResponse);
-            JSONArray arrayHotel = new JSONArray(hotelsResponse.toString());
-            JSONArray arrayTransport = new JSONArray(transportsResponse.toString());
-            for(int i=0; i < arrayHotel.length(); i++)
-            {
+    List<Offer> getOffers(OfferFilter offerFilter) {
+        return offerService.getOffers();
+    }
 
-                JSONObject objectHotel = arrayHotel.getJSONObject(i);
-                log.info("OBJHotel: " + objectHotel.toString());
-                for(int j=0; j < arrayTransport.length(); j++) {
-                    JSONObject objectTransport = arrayTransport.getJSONObject(j);
-                    log.info("OBJTransport: " + objectTransport.toString());
-                    tmp = new Offer();
-                    tmp.setId(id);
-                    tmp.setHotelID(parseLong(objectHotel.getString("hotelID")));
-                    tmp.setTransportID(parseLong(objectTransport.getString("transportID")));
-                    tmp.setCity(offerFilter.getCity());
-                    tmp.setDateStart(offerFilter.getDateStart());
-                    tmp.setDateEnd(offerFilter.getDateEnd());
-                    tmp.setNumOfPeople(offerFilter.getNumOfPeople());
-                    id++;
+    // example of valid command
+    // http://localhost:8081/offers/hotel?id=1&numOfPeople=2
+    // getting hotel availability
+    // id - offer if
+    // numOfPeople - number of people 1-3 is a valid input representing single, double and triple room
+    @GetMapping("/hotel")
+    Boolean getHotelAvailability(Long id, Integer numOfPeople) {
+        return offerService.getHotelAvailability(id, numOfPeople);
+    }
 
-                    offers.add(tmp);
-                    System.out.println(objectHotel.getString("hotelID") + " " + objectTransport.getString("transportID"));
-                }
-            }
-        } catch (IOException | JSONException e) {
-            hotelsResponse = "";
-        }
+    // example
+    // http://localhost:8081/offers/transport?id=1&numOfPeople=2
+    // getting transport availability, checks if numOfSeats >= numOfPeople
+    // id - offer id
+    // numOfPeople - number of people, any number valid
+    @GetMapping("/transport")
+    Boolean getTransportAvailability(Long id, Integer numOfPeople) {
+        return offerService.getTransportAvailability(id, numOfPeople);
+    }
 
-        //try {
-        //    transportsResponse = offerService.GetTransports(offerFilter);
-        //} catch (IOException e) {
-        //    transportsResponse = "";
-        //}
+    // Logical AND on transport and hotel availability
+    // http://localhost:8081/offers/availability?id=1&numOfPeople=1
+    @GetMapping("/availability")
+    Boolean getAvailability(Long id, Integer numOfPeople) {
+        return offerService.getAvailability(id, numOfPeople);
+    }
 
-        return offers;
+    @GetMapping("/matching")
+    public List<Offer> getOfferByExample(Offer offer) {
+        return offerService.getOffersByExample(offer);
     }
 
     @PostMapping
-    public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
+    public void startOfferBookingSaga(ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
         // Orchestrator sends message to Reservation(Travel Agency) service, the reservation is created with status PENDING.
         // Orchestrator sends messages to Transport and Hotel. If there is an error in either compensate Tran, Hotel and Res
         // If paid, Orchestrator sends message to Reservation to change status to paid, if 15 minutes pass remove reservation, compensate hotel and Transport
-        offerService.tryBookingOffer(reservationRequest).block(Duration.ofSeconds(20));
+        offerService.tryBookingOffer(reservationRequest);
     }
 }
