@@ -7,8 +7,14 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +24,21 @@ public class RabbitConfig {
 
     static final String actionQueueName = "hotel_action_queue";
     static final String compensationQueueName = "hotel_compensation_queue";
+
+    @Bean
+    public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+        return new Jackson2JsonMessageConverter(customObjectMapper());
+    }
+
+    @Bean
+    public ObjectMapper customObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.findAndRegisterModules(); // Registers all available modules including JSR310
+
+        // Configure other settings if needed
+        return objectMapper;
+    }
 
     @Bean
     Queue actionQueue() {
@@ -45,26 +66,6 @@ public class RabbitConfig {
     }
 
     @Bean
-    SimpleMessageListenerContainer actionContainer(ConnectionFactory connectionFactory,
-                                                   MessageListenerAdapter actionListenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(actionQueueName);
-        container.setMessageListener(actionListenerAdapter);
-        return container;
-    }
-
-    @Bean
-    SimpleMessageListenerContainer compensationContainer(ConnectionFactory connectionFactory,
-                                                         MessageListenerAdapter compensationListenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(compensationQueueName);
-        container.setMessageListener(compensationListenerAdapter);
-        return container;
-    }
-
-    @Bean
     MessageListenerAdapter actionListenerAdapter(SagaService sagaService) {
         return new MessageListenerAdapter(sagaService, "handleAction");
     }
@@ -72,5 +73,12 @@ public class RabbitConfig {
     @Bean
     MessageListenerAdapter compensationListenerAdapter(SagaService sagaService) {
         return new MessageListenerAdapter(sagaService, "handleCompensation");
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter converter) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(converter);
+        return rabbitTemplate;
     }
 }

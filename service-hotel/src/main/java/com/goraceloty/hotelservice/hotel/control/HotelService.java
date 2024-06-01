@@ -22,9 +22,7 @@ import java.util.Optional;
 @Service
 public class HotelService {
 
-    @Autowired
     private final HotelRepository hotelRepository;
-    @Autowired
     private final AvailabilityRepository availabilityRepository;
 
     public List<Hotel> getHotels() {
