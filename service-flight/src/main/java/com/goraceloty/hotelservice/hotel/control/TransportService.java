@@ -3,11 +3,15 @@ package com.goraceloty.hotelservice.hotel.control;
 import com.goraceloty.hotelservice.hotel.entity.Transport;
 import com.goraceloty.hotelservice.saga.entity.ReservationRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +21,7 @@ import java.util.Optional;
 
 public class TransportService {
     private final TransportRepository transportRepository;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public List<Transport> getAllTransports() {
         return transportRepository.findAll();
@@ -43,13 +48,23 @@ public class TransportService {
         return transport.orElse(null);
     }
 
-    public void bookTransport(ReservationRequest reservationRequest) {
+    public void bookTransport(ReservationRequest reservationRequest) throws MalformedURLException {
         Transport transport = findTransportByID(reservationRequest.getTransportID());
         Integer seatsToBook =  reservationRequest.getNumOfAdults() + reservationRequest.getNumOfChildren();
         if (transport.getNumAvailableSeats() < seatsToBook) {
             throw new IllegalArgumentException("Number of booked seats exceeds the number of available seats");
         }
         transport.setNumAvailableSeats(transport.getNumAvailableSeats() - seatsToBook);
+
+        // if number of available seats is 0 emit transportFull event
+        if(transport.getNumAvailableSeats() == 0) {
+            System.out.println("id: " + reservationRequest.getOfferID());
+            URL url = new URL(String.format("http://service-offer:8081/offers/event?event=%s&id=%d", "transportFull", reservationRequest.getOfferID()));
+            String response = restTemplate.sendGet(url);
+            System.out.println("event response: " + response);
+            ResponseEntity.ok("Event sent to service-offer: " + response);
+
+        }
         transportRepository.save(transport);
     }
 
