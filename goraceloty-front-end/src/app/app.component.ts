@@ -11,7 +11,7 @@ export class AppComponent {
   hotelsString: string = 'none'
   constructor(private hotelService: HotelService) {
   }
-  setHotelsString(){
-    this.hotelService.getHotels().subscribe(data => {this.hotelsString = data; console.log(data)});
-  }
+  // setHotelsString(){
+  //   this.hotelService.getHotels().subscribe(data => {this.hotelsString = data; console.log(data)});
+  // }
 }

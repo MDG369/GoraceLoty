@@ -4,14 +4,17 @@ import {AppComponent} from "./app.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "./app-routing.module";
 import {BrowserModule} from "@angular/platform-browser";
+import {OffersComponent} from "./offers/offers.component";
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [AppComponent,
+  declarations: [AppComponent, OffersComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
+    FormsModule,
     AppRoutingModule,
     BrowserModule
   ],
