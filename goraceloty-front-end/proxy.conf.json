@@ -15,12 +15,12 @@
       "^/hotel": ""
     }
   },
-  "/transport/*": {
+  "/api/transports/*": {
     "target": "http://localhost:8082",
     "secure": false,
     "ws": true,
     "pathRewrite": {
-      "^/transport": ""
+      "^/api/transports": ""
     }
   }
 }

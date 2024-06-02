@@ -1,0 +1,31 @@
+<!-- offer-details.component.html -->
+<div *ngIf="transport; else noData">
+  <h2>Transport Details</h2>
+  <table class="table">
+    <tr>
+      <th>Transport ID</th>
+      <td>{{ transport.transportID }}</td>
+    </tr>
+    <tr>
+      <th>Type of Transport</th>
+      <td>{{ transport.typeOfTransport }}</td>
+    </tr>
+    <tr>
+      <th>Departure</th>
+      <td>{{ transport.cityDeparture }}</td>
+    </tr>
+    <tr>
+      <th>Arrival</th>
+      <td>{{ transport.cityArrival }}</td>
+    </tr>
+    <!-- Additional fields as necessary -->
+  </table>
+  <!-- parent-component.html -->
+  <button (click)="openBookingModal()">Book Now</button>
+
+  <!-- Assuming BookingModalComponent can be toggled by an *ngIf -->
+  <app-booking-modal *ngIf="isModalOpen" (closeModal)="closeBookingModal()"></app-booking-modal>
+</div>
+<ng-template #noData>
+  <p>No transport details available.</p>
+</ng-template>

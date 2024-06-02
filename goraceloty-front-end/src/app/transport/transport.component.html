@@ -1,0 +1,31 @@
+<title>"Połączono z hotelami</title>
+<div *ngIf="selectedTransport">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Transport ID</th>
+<th>Type</th>
+<th>Total Seats</th>
+<th>Available Seats</th>
+<th>Base Price</th>
+<th>City Departure</th>
+<th>City Arrival</th>
+<th>Date Departure</th>
+<th>Date Arrival</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>{{ selectedTransport.transportID }}</td>
+<td>{{ selectedTransport.typeOfTransport }}</td>
+<td>{{ selectedTransport.numTotalSeats }}</td>
+<td>{{ selectedTransport.numAvailableSeats }}</td>
+<td>{{ selectedTransport.numBasePrice }}</td>
+<td>{{ selectedTransport.cityDeparture }}</td>
+<td>{{ selectedTransport.cityArrival }}</td>
+<td>{{ selectedTransport.dateDeparture | date:'medium' }}</td>
+<td>{{ selectedTransport.dateArrival | date:'medium' }}</td>
+</tr>
+</tbody>
+</table>
+</div>

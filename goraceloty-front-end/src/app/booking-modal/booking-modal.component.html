@@ -1,0 +1,24 @@
+<!-- booking-modal.component.html -->
+<div class="booking-modal">
+  <h2>Book Your Stay</h2>
+  <div>
+    <label>Adults:</label>
+    <button (click)="decrement('adults')">-</button>
+    <span>{{ bookingDetails.adults }}</span>
+    <button (click)="increment('adults')">+</button>
+  </div>
+  <div>
+    <label>Kids:</label>
+    <button (click)="decrement('kids')">-</button>
+    <span>{{ bookingDetails.kids }}</span>
+    <button (click)="increment('kids')">+</button>
+  </div>
+  <div>
+    <label>Rooms:</label>
+    <button (click)="decrement('rooms')">-</button>
+    <span>{{ bookingDetails.rooms }}</span>
+    <button (click)="increment('rooms')">+</button>
+  </div>
+  <button (click)="confirmBooking()">Confirm Booking</button>
+  <button (click)="close()">Close</button>
+</div>

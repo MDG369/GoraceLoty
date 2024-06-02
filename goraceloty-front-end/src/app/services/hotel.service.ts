@@ -6,7 +6,7 @@ import { Hotel } from "../entity/Hotel";
   providedIn: 'root'
 })
 export class HotelService {
-  private apiPath: string = "/hotel/hotels"
+  private apiPath: string = "/api/hotels/hotels/matching"
   constructor(private httpClient: HttpClient) {
   }
   getHotels() {

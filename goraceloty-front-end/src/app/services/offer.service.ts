@@ -1,14 +1,14 @@
 // transport.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {map, Observable} from 'rxjs';
 import { Offer } from '../entity/Offer'; // Ensure you have an Offer model
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfferService {
-  private apiUrl = '/api/offers/offers';
+  private apiUrl = '/api/offers/matching';
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +28,16 @@ export class OfferService {
     const fullUrl = `${this.apiUrl}?${params.toString()}`; // Construct full URL
     console.log('Making request to:', fullUrl);
 
-    return this.http.get<Offer[]>(this.apiUrl);
+    return this.http.get<Offer[]>(fullUrl);
     //{ params }
+  }
+  getOfferById(offerId: number): Observable<Offer | null> {
+    // Setting up HttpParams with the query parameter
+    const params = new HttpParams().set('id', offerId.toString());
+
+    // Making the HTTP GET request with query parameters
+    return this.http.get<Offer[]>(`${this.apiUrl}`, { params }).pipe(
+      map(offers => offers.length > 0 ? offers[0] : null)
+    );
   }
 }
