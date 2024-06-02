@@ -22,7 +22,8 @@ import static java.lang.Long.parseLong;
 import java.time.Duration;
 
 @RestController
-@RequestMapping("/offers")
+// todo Dodanie z powrotem offers, hotfix bo front nie działał
+@RequestMapping("")
 @RequiredArgsConstructor
 public class OfferController {
 
@@ -65,7 +66,7 @@ public class OfferController {
     }
 
     @PostMapping
-    public void startOfferBookingSaga(ReservationRequest reservationRequest) {
+    public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
         // Orchestrator sends message to Reservation(Travel Agency) service, the reservation is created with status PENDING.
         // Orchestrator sends messages to Transport and Hotel. If there is an error in either compensate Tran, Hotel and Res
