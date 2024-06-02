@@ -29,14 +29,16 @@ public class OfferPurchaseSaga{
     private final Set<UUID> compensatedRequests = ConcurrentHashMap.newKeySet();
 
 
-    public void bookOffer(ReservationRequest reservationRequest) {
+    public Long bookOffer(ReservationRequest reservationRequest) {
+        Long reservationId = null;
         try {
+            // Returns reservationId for payment in the future
             //
             // SagaHotelBookingMessage sagaHotelBookingMessage = new SagaHotelBookingMessage()
             // Step 1: Send to travelAgency to create reservation with status unpaid
 
         //  log.info("Sending " + mapper.writeValueAsString(reservationRequest));
-            String res = (String) rabbitTemplate.convertSendAndReceive("reservation_exchange", "reservation.action.baz", reservationRequest);
+            reservationId = (Long) rabbitTemplate.convertSendAndReceive("reservation_exchange", "reservation.action.baz", reservationRequest);
 
         // Step 2: Reserve hotel
             String res2 = (String) rabbitTemplate.convertSendAndReceive("hotel_exchange", "hotel.action.baz", reservationRequest);
@@ -44,12 +46,12 @@ public class OfferPurchaseSaga{
         // Step 3: Reserve flight
             String res3 = (String) rabbitTemplate.convertSendAndReceive("transport_exchange", "transport.action.baz", reservationRequest);
 
-
         } catch (Exception e) {
             log.info(e.getMessage());
             // Handle failure, initiate compensation
             // Example: send compensating messages to cancel previous reservations
         }
+        return reservationId;
     }
     @RabbitListener(queues = "error_queue")
     public void handleError(ErrorMessage errorMessage) {

@@ -4,15 +4,12 @@ import com.goraceloty.travel_agency_service.travel_agency.entity.OfferReservatio
 import com.goraceloty.travel_agency_service.travel_agency.control.TravelAgencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/OfferReservation")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class OfferReservationController {
     private final TravelAgencyService travelAgencyService;
@@ -29,6 +26,11 @@ public class OfferReservationController {
     @GetMapping("/price")
     public double getAdjustedPrice(@RequestParam Long reservationId) {
         return travelAgencyService.calculatePrice(reservationId);
+    }
+
+    @PostMapping("/pay")
+    public void pay(@RequestParam Long reservationId) {
+        travelAgencyService.pay(reservationId);
     }
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {

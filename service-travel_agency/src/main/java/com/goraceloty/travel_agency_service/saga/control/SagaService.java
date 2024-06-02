@@ -35,13 +35,13 @@ public class SagaService {
         processHotelBooking(reservationRequest);
     }
 
-    public String processHotelBooking(ReservationRequest reservationRequest) {
+    public Long processHotelBooking(ReservationRequest reservationRequest) {
         OfferReservation offerReservation = new OfferReservation();
         offerReservation.createOfferReservationFromReservationRequest(reservationRequest);
         // Save offerReservation to the database
         if (compensatedRequests.contains(reservationRequest.getReservationRequestID())) {
             log.info("Request already compensating, not creating the reservation " + reservationRequest.getReservationRequestID() );
-            return "Request already compensated";
+            return null;
         }
         offerReservation = travelAgencyService.addReservation(offerReservation);
         OfferReservation finalOfferReservation = offerReservation;
@@ -55,7 +55,7 @@ public class SagaService {
             }
 
         });
-        return "Completed";
+        return offerReservation.getReservationID();
     }
 
     private void checkPaidStatus(Long offerReservationId, ReservationRequest reservationRequest) {

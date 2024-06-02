@@ -153,6 +153,12 @@ public class TravelAgencyService {
         final Example<OfferReservation> example = Example.of(offerReservation, matcher);
         return travelAgencyRepository.findAll(example, Sort.by(Sort.Direction.DESC, "reservationTime")).getFirst();
     }
+
+    public void pay(Long reservationId) {
+        OfferReservation reservation = fetchReservationById(reservationId);
+        reservation.setIsPaid(true);
+        travelAgencyRepository.save(reservation);
+    }
     /*public double adjustPriceBasedOnSeats(Long transportId) {
         int availableSeats = getAvailableSeats(transportId);
         double basePrice = 500.0;
