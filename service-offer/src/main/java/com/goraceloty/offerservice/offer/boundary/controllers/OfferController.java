@@ -5,21 +5,13 @@ import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Long.parseLong;
-import java.time.Duration;
 
 @RestController
 // todo Dodanie z powrotem offers, hotfix bo front nie działał
