@@ -1,8 +1,10 @@
 package com.goraceloty.offerservice.offer.entity;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class ReservationRequest {
+    UUID reservationRequestID = UUID.randomUUID();
     Long offerID;
     Long hotelID;
     Long transportID;
