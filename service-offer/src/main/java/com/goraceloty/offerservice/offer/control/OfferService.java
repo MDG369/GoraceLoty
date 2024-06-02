@@ -154,32 +154,11 @@ public class OfferService {
         return false;
     }
 
-    public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
-        URL url;
-        System.out.println("###############" + offerFilter.getCity());
-        if(offerFilter.getCity() != null) {
-            url = new URL("http://service-hotel:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
-        }
-        else {
-            url = new URL("http://service-hotel:8080/hotels");
-        }
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
-        }
-        return "[\"hotel\" : none]";
+    public void handleTransportFull(Long id) {
+        offerRepository.deleteById(id);
     }
+
+
 
     public Boolean getAvailability(Long id, Integer numOfPeople) {
         boolean availability = getTransportAvailability(id, numOfPeople);

@@ -57,6 +57,21 @@ public class OfferController {
         return offerService.getOffersByExample(offer);
     }
 
+    @GetMapping("/event")
+    public String getTransportFull(String event, Long id) {
+
+        System.out.println("event received: " + event + " id: " + id);
+
+        if(event.equals("transportFull")) {
+            System.out.println("transportFull received");
+
+            offerService.handleTransportFull(id);
+        }
+
+        return "event received";
+    }
+
+
     @PostMapping
     public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
