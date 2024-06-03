@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/transports")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class TransportController {
     private final TransportService transportService;
@@ -26,17 +26,19 @@ public class TransportController {
     }
 
     @GetMapping("/{id}/seats")
-    public ResponseEntity<Integer> getSeatData(@PathVariable Long id) {
+    public ResponseEntity<Double> getSeatData(@PathVariable Long id) {
         System.out.println("Zaczęto budować" + id);
         Transport transport = transportService.findTransportByID(id);
         System.out.println(transport);
         if (transport == null) {
             return ResponseEntity.notFound().build();
         }
-        Integer seatsDifference = transport.getNumTotalSeats() - transport.getNumAvailableSeats();
-        System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
+        double seatsDifferenceRatio = (double) (transport.getNumTotalSeats() - transport.getNumAvailableSeats()) /transport.getNumTotalSeats();
+        System.out.println(transport.getNumTotalSeats());
+        System.out.println(transport.getNumAvailableSeats());
+        System.out.println("Seats difference for transport ID " + id + ": " + seatsDifferenceRatio);
 
-        return ResponseEntity.ok(seatsDifference);
+        return ResponseEntity.ok(seatsDifferenceRatio);
 //        System.out.println(transport.getNumTotalSeats());
 //        SeatDataDTO seatDetails = new SeatDataDTO(transport.getNumTotalSeats(), transport.getNumAvailableSeats());
 //        return ResponseEntity.ok(seatDetails);

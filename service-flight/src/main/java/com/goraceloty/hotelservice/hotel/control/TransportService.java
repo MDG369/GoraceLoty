@@ -13,6 +13,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +75,6 @@ public class TransportService {
         transport.setNumAvailableSeats(transport.getNumAvailableSeats() + seatsToBook);
         transportRepository.save(transport);
     }
-
 
 //    public List<Transport> getSeatsByExample(Transport transport) {
 //        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);

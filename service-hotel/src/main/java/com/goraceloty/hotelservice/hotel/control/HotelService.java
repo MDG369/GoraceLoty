@@ -105,8 +105,6 @@ public class HotelService {
         Availability tmpAv;
         List<Hotel> hotels = hotelRepository.findAll();
 
-        LocalDate startDate = LocalDate.of(2024, 5, 20);
-
         if (hotels.isEmpty()) {
             return "No hotels found!";
         }
@@ -115,10 +113,10 @@ public class HotelService {
             if (hotel.getHotelID() == null) {
                 return "Hotel ID is null!";
             }
-            for (int i = 0; i < 60; i++) {
+            for (int i = 0; i < 30; i++) {
                 tmpAv = new Availability();
                 tmpAv.setHotelID(hotel.getHotelID());
-                tmpAv.setDate(startDate.plusDays(i));
+                tmpAv.setDate(LocalDate.now().plusDays(i));
                 tmpAv.setNumOfAvSingleRooms(15);
                 tmpAv.setNumOfAvDoubleRooms(10);
                 tmpAv.setNumOfAvTripleRooms(0);
