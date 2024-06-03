@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <h1 class="mb-3">Available Offers</h1>
+  <div class="mb-3">
+    <div>
+      <input type="text" class="form-control mb-2" [(ngModel)]="cityArrival" placeholder="City arrival">
+      <input type="date" class="form-control mb-2" [(ngModel)]="dateStart">
+      <input type="date" class="form-control mb-2" [(ngModel)]="dateEnd">
+      <button class="btn btn-primary" (click)="loadOffers()">Filter Offers</button>
+    </div>
+    <div *ngIf="offers && offers.length > 0">
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Transport ID</th>
+                <th scope="col">Hotel ID</th>
+                <th scope="col">City Arrival</th>
+                <th scope="col">City Departure</th>
+                <th scope="col">Date Start</th>
+                <th scope="col">Date End</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let offer of offers; let i = index" (click)="navigateToDetails(offer.id)" style="cursor: pointer;">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ offer.transportID }}</td>
+                <td>{{ offer.hotelID }}</td>
+                <td>{{ offer.cityArrival }}</td>
+                <td>{{offer.cityDeparture }}</td>
+                <td>{{ offer.dateStart | date:'mediumDate' }}</td>
+                <td>{{ offer.dateEnd | date:'mediumDate' }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!offers || offers.length === 0">
+      <p>No offers available. Please adjust your search criteria.</p>
+    </div>
+  </div>
+</div>
+
+
+
