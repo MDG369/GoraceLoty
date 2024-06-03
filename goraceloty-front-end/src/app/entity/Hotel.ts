@@ -24,4 +24,5 @@ export class Hotel {
     this.childrenAllowed = childrenAllowed;
     this.address = address;
   }
+
 }

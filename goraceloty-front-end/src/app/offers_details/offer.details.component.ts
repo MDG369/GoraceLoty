@@ -12,12 +12,9 @@ import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
   templateUrl: './offer.details.component.html'
 })
 export class OfferDetailsComponent implements OnInit {
-  // @ts-ignore
-  offerId: number;
-  // @ts-ignore
-  transport: Transport;
-  // @ts-ignore
-  hotel: Hotel;
+  offerId: number = 0;
+  transport: Transport = new Transport();
+  hotel: Hotel = new Hotel(1, "", 1, "" ,"" ,true ,"" );
   isModalOpen: boolean = false;
 
   constructor(

@@ -15,12 +15,11 @@ type NumericKeysOfReservationRequest = {
 })
 
 export class BookingModalComponent implements OnInit {
-  // @ts-ignore
-  @Input() transportId: number ;  // Default values as placeholders
-  // @ts-ignore
-  @Input() hotelId: number ;
-  // @ts-ignore
-  @Input() offerId: number ;
+  @Input()
+  transportId: number = 1;  // Default values as placeholders
+  @Input()
+  hotelId: number = 1;
+  @Input() offerId: number = 1 ;
 
   reservationRequest!: ReservationRequest
   constructor(private travelAgency: TravelAgencyService,
@@ -32,34 +31,13 @@ export class BookingModalComponent implements OnInit {
   price: number = 1000;  // Initialize price here
 
   private initializeReservationRequest() {
-    this.reservationRequest = new ReservationRequest({
-      // numOfAdults: 1,
-      // numOfChildren: 0,
-      // numOfSingleRooms: 1,
-      // numOfDoubleRooms: 0,
-      // numOfTripleRooms: 0,
-      // numOfStudios: 0,
-      // numOfApartments: 0,
-      // numOfDays: 1,
-      // transportID: this.transportId,
-      // hotelID: this.hotelId,
-      // offerID: this.offerId,
-      // clientID: 1,
-      // startDate: "2024-05-05"
-      offerID: 1,
-      hotelID: 2,
-      transportID: 1,
-      clientID: 1,
-      startDate: "2024-06-01",
-      numOfDays: 1,
-      numOfSingleRooms: 1,
-      numOfDoubleRooms:1,
-      numOfTripleRooms:0,
-      numOfStudios:0,
-      numOfApartments:0,
-      numOfAdults:2,
-      numOfChildren:1
-    });
+    this.reservationRequest = new ReservationRequest();
+    this.reservationRequest.hotelID = this.hotelId;
+    this.reservationRequest.transportID = this.transportId;
+    this.reservationRequest.clientID = 1;
+    this.reservationRequest.offerID = this.offerId;
+    console.log(this.reservationRequest);
+    console.log(this.transportId);
   }
 
   increment(field: NumericKeysOfReservationRequest) {

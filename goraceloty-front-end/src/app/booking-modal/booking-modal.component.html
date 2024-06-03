@@ -1,55 +1,99 @@
 <!-- booking-modal.component.html -->
-<div class="booking-modal">
+<div class="booking-modal row">
   <h2>Book Your Stay</h2>
 
-  <div>
-    <label>Adults:</label>
-    <button (click)="decrement('numOfAdults')">-</button>
-    <span>{{ reservationRequest.numOfAdults }}</span>
-    <button (click)="increment('numOfAdults')">+</button>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3 d-flex">
+        <label>Adults:</label>
+      </div>
+      <div class="col-4 offset-2 d-flex">
+        <button class="btn btn-danger" (click)="decrement('numOfAdults')">-</button>
+        <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfAdults }}</span>
+        <button class="btn btn-success" (click)="increment('numOfAdults')">+</button>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <label>Kids:</label>
-    <button (click)="decrement('numOfChildren')">-</button>
-    <span>{{ reservationRequest.numOfChildren }}</span>
-    <button (click)="increment('numOfChildren')">+</button>
+
+  <div class="col-12 ">
+    <div class="row">
+    <div class="col-3 d-flex">
+     <label>Kids:</label>
+    </div>
+      <div class="col-4 offset-2 d-flex ">
+      <button class="btn btn-danger" (click)="decrement('numOfChildren')">-</button>
+      <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfChildren }}</span>
+      <button class="btn btn-success" (click)="increment('numOfChildren')">+</button>
+      </div>
+    </div>
   </div>
 
   <!-- Adding buttons for different types of rooms -->
-  <div>
-    <label>Single Rooms:</label>
-    <button (click)="decrement('numOfSingleRooms')">-</button>
-    <span>{{ reservationRequest.numOfSingleRooms }}</span>
-    <button (click)="increment('numOfSingleRooms')">+</button>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3 d-flex">
+        <label>Single Rooms:</label>
+      </div>
+      <div class="col-4 offset-2 d-flex">
+        <button class="btn btn-danger" (click)="decrement('numOfSingleRooms')">-</button>
+        <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfSingleRooms }}</span>
+        <button class="btn btn-success" (click)="increment('numOfSingleRooms')">+</button>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <label>Double Rooms:</label>
-    <button (click)="decrement('numOfDoubleRooms')">-</button>
-    <span>{{ reservationRequest.numOfDoubleRooms }}</span>
-    <button (click)="increment('numOfDoubleRooms')">+</button>
+
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3 d-flex">
+        <label>Double Rooms:</label>
+      </div>
+      <div class="col-4 offset-2 d-flex">
+        <button class="btn btn-danger" (click)="decrement('numOfDoubleRooms')">-</button>
+        <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfDoubleRooms }}</span>
+        <button class="btn btn-success" (click)="increment('numOfDoubleRooms')">+</button>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <label>Triple Rooms:</label>
-    <button (click)="decrement('numOfTripleRooms')">-</button>
-    <span>{{ reservationRequest.numOfTripleRooms }}</span>
-    <button (click)="increment('numOfTripleRooms')">+</button>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3 d-flex">
+        <label>Triple Rooms:</label>
+      </div>
+      <div class="col-4 offset-2 d-flex">
+        <button class="btn btn-danger" (click)="decrement('numOfTripleRooms')">-</button>
+        <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfTripleRooms }}</span>
+        <button class="btn btn-success" (click)="increment('numOfTripleRooms')">+</button>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <label>Studios:</label>
-    <button (click)="decrement('numOfStudios')">-</button>
-    <span>{{ reservationRequest.numOfStudios }}</span>
-    <button (click)="increment('numOfStudios')">+</button>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3 d-flex">
+        <label>Studios:</label>
+      </div>
+      <div class="col-4 offset-2 d-flex">
+        <button class="btn btn-danger" (click)="decrement('numOfStudios')">-</button>
+        <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfStudios }}</span>
+        <button class="btn btn-success" (click)="increment('numOfStudios')">+</button>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <label>Apartments:</label>
-    <button (click)="decrement('numOfApartments')">-</button>
-    <span>{{ reservationRequest.numOfApartments }}</span>
-    <button (click)="increment('numOfApartments')">+</button>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3 d-flex">
+        <label>Apartments:</label>
+      </div>
+      <div class="col-4 offset-2 d-flex">
+        <button class="btn btn-danger" (click)="decrement('numOfApartments')">-</button>
+        <span style="padding-left: 1rem; padding-right: 1rem; align-content: space-evenly">{{ reservationRequest.numOfApartments }}</span>
+        <button class="btn btn-success" (click)="increment('numOfApartments')">+</button>
+      </div>
+    </div>
   </div>
 
   <div>

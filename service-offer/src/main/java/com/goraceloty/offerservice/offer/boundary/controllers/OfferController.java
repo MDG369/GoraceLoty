@@ -71,13 +71,13 @@ public class OfferController {
         return "event received";
     }
 
-
-    @PostMapping
-    public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
+    @PostMapping("book")
+    public Long startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
         // Orchestrator sends message to Reservation(Travel Agency) service, the reservation is created with status PENDING.
         // Orchestrator sends messages to Transport and Hotel. If there is an error in either compensate Tran, Hotel and Res
         // If paid, Orchestrator sends message to Reservation to change status to paid, if 15 minutes pass remove reservation, compensate hotel and Transport
-        offerService.tryBookingOffer(reservationRequest);
+
+        return offerService.tryBookingOffer(reservationRequest).block();
     }
 }

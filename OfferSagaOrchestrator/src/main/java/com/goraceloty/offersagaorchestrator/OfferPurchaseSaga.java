@@ -36,7 +36,6 @@ public class OfferPurchaseSaga{
             //
             // SagaHotelBookingMessage sagaHotelBookingMessage = new SagaHotelBookingMessage()
             // Step 1: Send to travelAgency to create reservation with status unpaid
-
         //  log.info("Sending " + mapper.writeValueAsString(reservationRequest));
             reservationId = (Long) rabbitTemplate.convertSendAndReceive("reservation_exchange", "reservation.action.baz", reservationRequest);
 

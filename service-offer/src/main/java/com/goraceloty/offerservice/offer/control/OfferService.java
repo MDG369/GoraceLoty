@@ -33,7 +33,7 @@ public class OfferService {
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
-                .baseUrl("http://saga-orchestrator:8084")
+                .baseUrl("http://localhost:8084")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
     }
@@ -206,13 +206,13 @@ public class OfferService {
 
     }
 
-    public Mono<String> tryBookingOffer(ReservationRequest reservationRequest) {
+    public Mono<Long> tryBookingOffer(ReservationRequest reservationRequest) {
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
                         .path("/booking")
                         .build())
                 .body(Mono.just(reservationRequest), ReservationRequest.class)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(Long.class)
                 .onErrorResume(RuntimeException.class, e -> {
                     log.fine("Initiating booking saga failed with error: " + e);
                     return Mono.empty();
