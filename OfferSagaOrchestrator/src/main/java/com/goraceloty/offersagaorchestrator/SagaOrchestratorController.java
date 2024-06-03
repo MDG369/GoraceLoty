@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SagaOrchestratorController {
     private final OfferPurchaseSaga offerPurchaseSaga;
     @GetMapping
-    public String bookOffer(@RequestBody ReservationRequest reservationRequest) {
-        offerPurchaseSaga.bookOffer(reservationRequest); return "Booked!";
+    public Long bookOffer(@RequestBody ReservationRequest reservationRequest) {
+        return offerPurchaseSaga.bookOffer(reservationRequest);
     }
 
 }
