@@ -3,6 +3,8 @@ package com.goraceloty.hotelservice.hotel.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,7 +12,7 @@ import lombok.*;
 @Setter
 public class AvailabilityFilter {
     private Long hotelID;
-    private String dateStart;
-    private String dateEnd;
+    private LocalDate dateStart;
+    private LocalDate dateEnd;
     private Integer numOfPeople; // 1-3
 }

@@ -45,6 +45,19 @@ export class OfferService {
   startSaga(reservationRequest: ReservationRequest): Observable<ReservationRequest> {
     // Setting up HttpParams with the query parameter
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    return this.http.post<ReservationRequest>(`${this.sagaUrl}`, reservationRequest, { headers })
+    return this.http.post<ReservationRequest>(`${this.sagaUrl}/book`, {
+      offerID: 1,
+      transportID: 1,
+      clientID: 1,
+      startDate: "2024-06-01",
+      numOfDays: 1,
+      numOfSingleRooms: 1,
+      numOfDoubleRooms:1,
+      numOfTripleRooms:0,
+      numOfStudios:0,
+      numOfApartments:0,
+      numOfAdults:2,
+      numOfChildren:1
+    }, { headers })
   }
 }

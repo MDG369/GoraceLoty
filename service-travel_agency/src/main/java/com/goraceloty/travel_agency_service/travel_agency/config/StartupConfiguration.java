@@ -25,16 +25,16 @@ public class StartupConfiguration implements ApplicationListener<ApplicationRead
         return () -> {
             try {
 
-                var jsonFile = resourceLoader.getResource("file:/app/data/offer_reservation_data.json").getInputStream();
+                var jsonFile = resourceLoader.getResource("file:..\\data\\offer_reservation_data.json").getInputStream();
                 System.out.println("Got path");
                 var jsonData = objectMapper.readTree(jsonFile);
                 System.out.println("Data loaded");
                 JsonProcessingExample.processJsonData(
-                        "jdbc:postgresql://db_postgres:5432/svc_travel_agency",
+                        "jdbc:postgresql://localhost:5432/svc_travel_agency",
                         jsonData,
                         "INSERT INTO offer_reservation (reservationid, date_start, num_adult, num_children, num_of_days, reservation_time, adjusted_price, offerid, transportid, hotelid) " +
                                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (reservationid) DO UPDATE SET " +
-                                "date_start = EXCLUDED.date_start, num_adult = EXCLUDED.num_adult, num_children = EXCLUDED.num_children, num_of_days = EXCLUDED.num_of_days, " +
+                                "start_date = EXCLUDED.date_start, num_adult = EXCLUDED.num_adult, num_children = EXCLUDED.num_children, num_of_days = EXCLUDED.num_of_days, " +
                                 "reservation_time = EXCLUDED.reservation_time, adjusted_price = EXCLUDED.adjusted_price, offerid = EXCLUDED.offerid, transportid = EXCLUDED.transportid, hotelid = EXCLUDED.hotelid;",
                         "gl_pg_user",
                         "g0r4c3_l0ty"

@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
-    //public Optional<Hotel> getHotelByStars(Integer stars);
+    public Optional<Hotel> getHotelByStandard(Integer stars);
 }

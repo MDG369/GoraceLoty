@@ -14,8 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Clients {
+public class Client {
     @Id
+    private Long clientId;
     private String name;
     private String emailAdress;
     private String login;

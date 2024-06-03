@@ -1,7 +1,7 @@
 [
     {
         "reservationID": 1,
-        "dateStart": "2024-08-23T13:36:57",
+        "startDate": "2024-08-23T13:36:57",
         "numAdult": 1,
         "numChildren": 0,
         "numOfDays": 6,
@@ -13,7 +13,7 @@
     },
     {
         "reservationID": 2,
-        "dateStart": "2025-01-03T13:36:57",
+        "startDate": "2025-01-03T13:36:57",
         "numAdult": 5,
         "numChildren": 0,
         "numOfDays": 10,
@@ -25,7 +25,7 @@
     },
     {
         "reservationID": 3,
-        "dateStart": "2025-01-05T13:36:57",
+        "startDate": "2025-01-05T13:36:57",
         "numAdult": 5,
         "numChildren": 0,
         "numOfDays": 13,
@@ -37,7 +37,7 @@
     },
     {
         "reservationID": 4,
-        "dateStart": "2025-02-02T13:36:57",
+        "startDate": "2025-02-02T13:36:57",
         "numAdult": 4,
         "numChildren": 3,
         "numOfDays": 2,
@@ -49,7 +49,7 @@
     },
     {
         "reservationID": 5,
-        "dateStart": "2024-07-24T13:36:57",
+        "startDate": "2024-07-24T13:36:57",
         "numAdult": 4,
         "numChildren": 1,
         "numOfDays": 8,
@@ -61,7 +61,7 @@
     },
     {
         "reservationID": 6,
-        "dateStart": "2024-05-31T13:36:57",
+        "startDate": "2024-05-31T13:36:57",
         "numAdult": 2,
         "numChildren": 1,
         "numOfDays": 1,
@@ -73,7 +73,7 @@
     },
     {
         "reservationID": 7,
-        "dateStart": "2024-06-16T13:36:57",
+        "startDate": "2024-06-16T13:36:57",
         "numAdult": 2,
         "numChildren": 1,
         "numOfDays": 9,
@@ -85,7 +85,7 @@
     },
     {
         "reservationID": 8,
-        "dateStart": "2025-02-08T13:36:57",
+        "startDate": "2025-02-08T13:36:57",
         "numAdult": 5,
         "numChildren": 2,
         "numOfDays": 7,
@@ -97,7 +97,7 @@
     },
     {
         "reservationID": 9,
-        "dateStart": "2024-10-15T13:36:57",
+        "startDate": "2024-10-15T13:36:57",
         "numAdult": 4,
         "numChildren": 0,
         "numOfDays": 14,
@@ -109,7 +109,7 @@
     },
     {
         "reservationID": 10,
-        "dateStart": "2024-12-20T13:36:57",
+        "startDate": "2024-12-20T13:36:57",
         "numAdult": 4,
         "numChildren": 3,
         "numOfDays": 13,

@@ -13,11 +13,11 @@ import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
 })
 export class OfferDetailsComponent implements OnInit {
   // @ts-ignore
-  offerId: number;
+  offerId: number = 0;
   // @ts-ignore
-  transport: Transport;
+  transport: Transport = new Transport();
   // @ts-ignore
-  hotel: Hotel;
+  hotel: Hotel = new Hotel(1, "", 1, "" ,"" ,true ,"" );
   isModalOpen: boolean = false;
 
   constructor(

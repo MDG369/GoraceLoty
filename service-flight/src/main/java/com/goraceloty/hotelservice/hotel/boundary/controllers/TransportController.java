@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/transports")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class TransportController {
     private final TransportService transportService;
@@ -33,10 +33,12 @@ public class TransportController {
         if (transport == null) {
             return ResponseEntity.notFound().build();
         }
-        double seatsDifference = transport.getNumAvailableSeats() / transport.getNumTotalSeats();
-        System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
+        double seatsDifferenceRatio = (double) (transport.getNumTotalSeats() - transport.getNumAvailableSeats()) /transport.getNumTotalSeats();
+        System.out.println(transport.getNumTotalSeats());
+        System.out.println(transport.getNumAvailableSeats());
+        System.out.println("Seats difference for transport ID " + id + ": " + seatsDifferenceRatio);
 
-        return ResponseEntity.ok(seatsDifference);
+        return ResponseEntity.ok(seatsDifferenceRatio);
 //        System.out.println(transport.getNumTotalSeats());
 //        SeatDataDTO seatDetails = new SeatDataDTO(transport.getNumTotalSeats(), transport.getNumAvailableSeats());
 //        return ResponseEntity.ok(seatDetails);
@@ -45,6 +47,11 @@ public class TransportController {
     public List<Transport> getSeatsByExample(Transport transport) {
         return transportService.getSeatsByExample(transport);
     }*/
+
+    @GetMapping
+    public List<Transport> getAllTransports() {
+        return transportService.getAllTransports();
+    }
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {
 //        Transport savedTransport = transportService.saveTransport(transport);

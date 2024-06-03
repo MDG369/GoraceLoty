@@ -1,7 +1,8 @@
 package com.goraceloty.travel_agency_service.travel_agency;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,7 +22,7 @@ public class JsonProcessingExample {
             if (offersArray.isArray()) {
                 for (JsonNode offer : offersArray) {
                     preparedStatement.setInt(1, offer.get("reservationID").intValue());
-                    preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.parse(offer.get("dateStart").textValue(), dateTimeFormatter)));
+                    preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.parse(offer.get("startDate").textValue(), dateTimeFormatter)));
                     preparedStatement.setInt(3, offer.get("numAdult").intValue());
                     preparedStatement.setInt(4, offer.get("numChildren").intValue());
                     preparedStatement.setInt(5, offer.get("numOfDays").intValue());

@@ -11,6 +11,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,20 +64,27 @@ public class TravelAgencyService {
         return results;
     }
 
-    private Integer fetchSeatDetails(String url, Long transportID) {
-        String concat_url = url + "/" + transportID + "/seats";
-        System.out.println("Requesting seat details from URL: " + concat_url);
-        Integer seatDetails = restTemplate.getForObject(concat_url, Integer.class);
-        System.out.println("Retrieved seat details: " + seatDetails);
+    private double fetchSeatDetails(String url, Long transportID) {
+        String concatUrl = String.format("%s/%d/seats", url, transportID);
+        System.out.println("Requesting seat details from URL: " + concatUrl);
+
+        Double seatDetails = null;
+        try {
+            seatDetails = restTemplate.getForObject(concatUrl, Double.class);
+            System.out.println("Retrieved seat details: " + seatDetails);
+        } catch (Exception e) {
+            System.err.println("Error retrieving seat details: " + e.getMessage());
+            throw new IllegalStateException("Unable to retrieve seat details for transport ID: " + transportID, e);
+        }
+
         if (seatDetails != null) {
             double price = calculateTransportPrice(seatDetails);
-            System.out.println(price);
+            System.out.println("Calculated price based on seat details: " + price);
             return seatDetails;
         } else {
-            throw new IllegalStateException("Unable to retrieve seat details for transport ID: " + url);
+            throw new IllegalStateException("No seat details were found for transport ID: " + transportID);
         }
     }
-
     private Integer fetchStandardDetails(String url, Long hotelId) {
         String concat_url = url + hotelId + "/standard";
         System.out.println("Requesting seat details from URL: " + concat_url);
@@ -90,20 +102,17 @@ public class TravelAgencyService {
         return numChildren > 0 ? 0.95 : 1.0;
     }
 
-    public double calculatePrice(Long reservationId, int numAdults) {
-        OfferReservation reservation = fetchReservationById(reservationId);
-        if (reservation == null) {
-            throw new IllegalArgumentException("No reservation found with ID: " + reservationId);
-        }
+    public double calculatePrice(int numAdults, int numChildren, long transportId,long hotelId, int duration,
+                                 int numOfSingleRooms, int numOfDoubleRooms, int numOfTripleRooms, int numOfStudios, int numOfApartments) {
+        //OfferReservation reservation = fetchReservationById(reservationId);
+        //if (reservation == null) {
+           // throw new IllegalArgumentException("No reservation found with ID: " + reservationId);
+       // }
         //Integer numAdults = reservation.getNumAdult();
-        Integer numChildren = reservation.getNumChildren();
-        Integer totalPeople = numChildren + numAdults;
-        Long transportId = reservation.getTransportID();
-        Long hotelId = reservation.getTransportID();
-        int duration = reservation.getNumOfDays();
+        int totalPeople = numChildren + numAdults;
         double groupDiscount = getGroupDiscount(numAdults, numChildren);;
         double childrenDiscount = getChildrenDiscount(numChildren);
-        Integer seatDetails = fetchSeatDetails(transportServiceUrl, transportId);
+        double seatDetails = fetchSeatDetails(transportServiceUrl, transportId);
         double transportPrice = calculateTransportPrice(seatDetails);
         double basePrice = 100.0;
         Integer standard = fetchStandardDetails(hotelServiceUrl, hotelId);
@@ -121,12 +130,13 @@ public class TravelAgencyService {
         System.out.println("Zniżka" + totalDiscount);
 
         double totalPrice =  totalDiscount * (totalBasePrice+totalTransportPrice+totalHotelPrice);
+        BigDecimal bd = new BigDecimal(totalPrice).setScale(2, RoundingMode.HALF_UP);
+        double roundedTotalPrice = bd.doubleValue();
         System.out.println("Cena całkowita" + totalPrice);
-        reservation.setAdjustedPrice(totalPrice);
-        return (totalPrice);
+        return (roundedTotalPrice);
     }
 
-    private double calculateTransportPrice(Integer seatDetails) {
+    private double calculateTransportPrice(double seatDetails) {
         // Example pricing logic
         System.out.println(seatDetails);
         double baseTransportPrice = 500.0;
@@ -163,7 +173,21 @@ public class TravelAgencyService {
             reservation.incrementAdults();
             travelAgencyRepository.save(reservation);
         }
+
+    public static int calculateTripDuration(String dateStart, String dateEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Parse the start and end dates from the given strings
+        LocalDate startDate = LocalDate.parse(dateStart, formatter);
+        LocalDate endDate = LocalDate.parse(dateEnd, formatter);
+
+        // Calculate the number of days between the start and end dates
+        int days = (int) ChronoUnit.DAYS.between(startDate, endDate);
+
+        return days;
     }
+    }
+
     /*public double adjustPriceBasedOnSeats(Long transportId) {
         int availableSeats = getAvailableSeats(transportId);
         double basePrice = 500.0;
