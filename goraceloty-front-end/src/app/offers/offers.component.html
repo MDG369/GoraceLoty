@@ -24,7 +24,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let offer of offers; let i = index">
+              <tr *ngFor="let offer of offers; let i = index" (click)="navigateToDetails(offer.id)" style="cursor: pointer;">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ offer.transportID }}</td>
                 <td>{{ offer.hotelID }}</td>
@@ -44,3 +44,6 @@
     </div>
   </div>
 </div>
+
+
+

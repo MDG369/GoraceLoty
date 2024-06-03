@@ -7,12 +7,12 @@
       "^/api/offers": ""
     }
   },
-  "/hotel/*": {
+  "/api/hotels/*": {
     "target": "http://localhost:8080",
     "secure": false,
     "ws": true,
     "pathRewrite": {
-      "^/hotel": ""
+      "^/api/hotels": ""
     }
   },
   "/api/transports/*": {
@@ -22,5 +22,14 @@
     "pathRewrite": {
       "^/api/transports": ""
     }
+  },
+  "/api/OfferReservation/*": {
+    "target": "http://localhost:8083",
+    "secure": false,
+    "ws": true,
+    "pathRewrite": {
+      "^/api/OfferReservation": ""
+    }
   }
 }
+

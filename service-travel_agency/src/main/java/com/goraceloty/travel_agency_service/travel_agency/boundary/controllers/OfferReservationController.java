@@ -4,15 +4,12 @@ import com.goraceloty.travel_agency_service.travel_agency.entity.OfferReservatio
 import com.goraceloty.travel_agency_service.travel_agency.control.TravelAgencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/OfferReservation")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class OfferReservationController {
     private final TravelAgencyService travelAgencyService;
@@ -25,14 +22,23 @@ public class OfferReservationController {
     public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
         return travelAgencyService.getOfferReservationByExample(offerReservation);
     }
-
     @GetMapping("/price")
-    public double getAdjustedPrice(@RequestParam Long reservationId) {
-        return travelAgencyService.calculatePrice(reservationId);
+    public double getAdjustedPrice(@RequestParam Long reservationId, int numAdults) {
+        return travelAgencyService.calculatePrice(reservationId, numAdults);
     }
+    @PutMapping("/{id}/incrementAdults")
+    public ResponseEntity<?> incrementAdults(@PathVariable Long id) {
+        try {
+            travelAgencyService.incrementNumAdults(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+}
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {
 //        Transport savedTransport = transportService.saveTransport(transport);
 //        return ResponseEntity.ok(savedTransport);
 //    }
-}
+

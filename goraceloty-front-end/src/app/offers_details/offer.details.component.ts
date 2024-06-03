@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { TransportService } from '../services/transport.service';
 import { OfferService } from '../services/offer.service';
 import { Transport } from '../entity/Transport';
-import { Offer } from '../entity/Offer'; // Assuming you have an Offer entity
+import { Offer } from '../entity/Offer';
+import {HotelService} from "../services/hotel.service";
+import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
 
 @Component({
   selector: 'app-offer-details',
@@ -12,11 +14,13 @@ import { Offer } from '../entity/Offer'; // Assuming you have an Offer entity
 export class OfferDetailsComponent implements OnInit {
   offerId?: number;
   transport?: Transport | null = null;
+  hotel?: Hotel | null = null;
   isModalOpen: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private transportService: TransportService,
+    private hotelService: HotelService,
     private offerService: OfferService
   ) {}
 
@@ -41,6 +45,9 @@ export class OfferDetailsComponent implements OnInit {
         if (offer && offer.transportID) {
           this.loadMatchingTransport(offer.transportID);
         }
+        if(offer && offer.hotelID){
+          this.loadMatchingHotel(offer.hotelID);
+        }
       },
       error: error => {
         console.error('Error loading offer details', error);
@@ -54,6 +61,18 @@ export class OfferDetailsComponent implements OnInit {
       next: transport => {
         console.log("Transport details loaded:", transport);
         this.transport = transport;
+      },
+      error: error => {
+        console.error('Error loading transport', error);
+        // Handle error, potentially setting transport to null or providing user feedback
+      }
+    });
+  }
+  loadMatchingHotel(hotelId: number): void {
+    this.hotelService.getMatchingHotel(hotelId).subscribe({
+      next: hotel => {
+        console.log("Transport details loaded:", hotel);
+        this.hotel = hotel;
       },
       error: error => {
         console.error('Error loading transport', error);

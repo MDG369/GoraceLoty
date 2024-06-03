@@ -19,6 +19,10 @@
     <span>{{ bookingDetails.rooms }}</span>
     <button (click)="increment('rooms')">+</button>
   </div>
+  <div>
+    <label>Total price:</label>
+    <span>{{ bookingDetails.price }}</span>
+  </div>
   <button (click)="confirmBooking()">Confirm Booking</button>
   <button (click)="close()">Close</button>
 </div>

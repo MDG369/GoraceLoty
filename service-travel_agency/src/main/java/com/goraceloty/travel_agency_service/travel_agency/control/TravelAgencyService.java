@@ -1,8 +1,11 @@
 package com.goraceloty.travel_agency_service.travel_agency.control;
 
+import com.goraceloty.travel_agency_service.saga.entity.ReservationRequest;
 import com.goraceloty.travel_agency_service.travel_agency.entity.OfferReservation;
 //import com.goraceloty.travel_agency_service.travel_agency.entity.SeatDataDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -17,8 +20,10 @@ import java.util.Optional;
 
 public class TravelAgencyService {
     private final TravelAgencyRepository travelAgencyRepository;
-    public final String transportServiceUrl = "http://service-flight:8080/transports/";
-    public final String hotelServiceUrl = "http://service-hotel:8080/hotels/";
+    //public final String transportServiceUrl = "http://service-flight:8080/transports/";
+    public final String transportServiceUrl = "http://localhost:8082/";
+    //public final String hotelServiceUrl = "http://service-hotel:8080/hotels/";
+    public final String hotelServiceUrl = "http://localhost:8080/";
     private final RestTemplate restTemplate;
 
 
@@ -26,13 +31,18 @@ public class TravelAgencyService {
 //        return transportRepository.findAll();
 //    }
 //
-//    public void addTransport(com.goraceloty.travel_agencyservice.travel_agency.entity.Clients transport) {
-//        transportRepository.save(transport);
-//    }
-//
-//    public void removeTransportById(Long id) {
-//        transportRepository.delete(transportRepository.findById(id).orElseThrow());
-//    }
+
+    public Optional<OfferReservation> getOfferReservationById(Long id) {
+        return travelAgencyRepository.findById(id);
+    }
+
+    public OfferReservation addReservation(OfferReservation offerReservation) {
+        return travelAgencyRepository.save(offerReservation);
+    }
+
+    public void removeReservationById(Long id) {
+        travelAgencyRepository.delete(travelAgencyRepository.findById(id).orElseThrow());
+    }
 
 //
     private OfferReservation fetchReservationById(Long reservationId) {
@@ -41,7 +51,7 @@ public class TravelAgencyService {
     }
 
     public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
-        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnorePaths("reservationID");
         final Example<OfferReservation> example = Example.of(offerReservation, matcher);
         List<OfferReservation> results;
         results = travelAgencyRepository.findAll(example);
@@ -80,12 +90,12 @@ public class TravelAgencyService {
         return numChildren > 0 ? 0.95 : 1.0;
     }
 
-    public double calculatePrice(Long reservationId) {
+    public double calculatePrice(Long reservationId, int numAdults) {
         OfferReservation reservation = fetchReservationById(reservationId);
         if (reservation == null) {
             throw new IllegalArgumentException("No reservation found with ID: " + reservationId);
         }
-        Integer numAdults = reservation.getNumAdult();
+        //Integer numAdults = reservation.getNumAdult();
         Integer numChildren = reservation.getNumChildren();
         Integer totalPeople = numChildren + numAdults;
         Long transportId = reservation.getTransportID();
@@ -118,6 +128,7 @@ public class TravelAgencyService {
 
     private double calculateTransportPrice(Integer seatDetails) {
         // Example pricing logic
+        System.out.println(seatDetails);
         double baseTransportPrice = 500.0;
         return (baseTransportPrice * (2.0-seatDetails));
     }
@@ -139,6 +150,20 @@ public class TravelAgencyService {
         return (hotelPrice);
     }
 
+    public OfferReservation getOfferReservationByReservationRequest(ReservationRequest reservationRequest) throws Exception {
+        OfferReservation offerReservation = new OfferReservation();
+        offerReservation.createOfferReservationFromReservationRequest(reservationRequest);
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnorePaths("reservationID", "reservationTime", "isPaid").withIgnoreNullValues();
+        final Example<OfferReservation> example = Example.of(offerReservation, matcher);
+        return travelAgencyRepository.findAll(example, Sort.by(Sort.Direction.DESC, "reservationTime")).getFirst();
+    }
+    public void incrementNumAdults(Long reservationId) {
+        OfferReservation reservation = travelAgencyRepository.findById(reservationId)
+                    .orElseThrow(() -> new RuntimeException("Reservation not found with id: " + reservationId));
+            reservation.incrementAdults();
+            travelAgencyRepository.save(reservation);
+        }
+    }
     /*public double adjustPriceBasedOnSeats(Long transportId) {
         int availableSeats = getAvailableSeats(transportId);
         double basePrice = 500.0;
@@ -155,7 +180,7 @@ public class TravelAgencyService {
 //        System.out.println(Adjusted_price);
 //        return Adjusted_price;
 //    }
-}
+
 
 
 
