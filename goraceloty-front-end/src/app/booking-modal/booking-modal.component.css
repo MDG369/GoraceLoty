@@ -9,14 +9,16 @@
 }
 
 .booking-modal {
-  /* Other styles for the modal */
-  position: fixed;
-  top: 50%;
-  left: 8%;
-  transform: translate(-50%, -50%);
+  position: fixed; /* Keeps the modal in place during scrolling */
+  top: 50%; /* Align the top edge of the modal at the middle of the viewport */
+  left: 50%; /* Align the left edge of the modal at the middle of the viewport */
+  transform: translate(-50%, -50%); /* Offset the modal to truly center it */
   background: white;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  width: auto; /* Adjust width as necessary */
+  width: 80%; /* Sensible default width, adjust based on your design needs */
+  max-width: 600px; /* Maximum width the modal can extend to */
+  box-sizing: border-box; /* Includes padding in the width calculation */
 }
+

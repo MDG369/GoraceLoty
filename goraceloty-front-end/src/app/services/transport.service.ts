@@ -14,13 +14,13 @@ export class TransportService {
   getTransports(): Observable<Transport[]> {
     return this.http.get<Transport[]>(`$this.apiUrl`);
   }
-  getMatchingTransport(offerId: number): Observable<Transport | null> {
+  getMatchingTransport(offerId: number): Observable<Transport>{
     // Create HttpParams object
     let params = new HttpParams();
     params = params.append('transportID', offerId.toString());
 
     return this.http.get<Transport[]>(`${this.apiUrl}`, { params }).pipe(
-      map(transports => transports.length > 0 ? transports[0] : null)
+      map(transports => transports[0])
     );
   }
 

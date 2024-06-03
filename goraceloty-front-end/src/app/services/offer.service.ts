@@ -1,15 +1,16 @@
 // transport.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import { Offer } from '../entity/Offer'; // Ensure you have an Offer model
+import{ReservationRequest} from "../entity/ReservationRequest";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfferService {
   private apiUrl = '/api/offers/matching';
-
+  private sagaUrl = '/api/offers'
   constructor(private http: HttpClient) {}
 
   getOffers(cityArrival?: string, dateStart?: string, dateEnd?: string): Observable<Offer[]> {
@@ -39,5 +40,11 @@ export class OfferService {
     return this.http.get<Offer[]>(`${this.apiUrl}`, { params }).pipe(
       map(offers => offers.length > 0 ? offers[0] : null)
     );
+  }
+
+  startSaga(reservationRequest: ReservationRequest): Observable<ReservationRequest> {
+    // Setting up HttpParams with the query parameter
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post<ReservationRequest>(`${this.sagaUrl}`, reservationRequest, { headers })
   }
 }
