@@ -17,11 +17,11 @@ export class HotelService {
   }
 
   // Get a matching hotel by ID or other criteria
-  getMatchingHotel(hotelId: number): Observable<Hotel | null> {
+  getMatchingHotel(hotelId: number): Observable<Hotel > {
     let params = new HttpParams().set('hotelID', hotelId.toString());
 
     return this.http.get<Hotel[]>(`${this.apiUrl}`, { params }).pipe(
-      map(hotels => hotels.length > 0 ? hotels[0] : null)
+      map(hotels => hotels[0])
     );
   }
 }

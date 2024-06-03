@@ -1,5 +1,4 @@
 export class ReservationRequest {
-  reservationRequestID: string; // UUIDs are strings in TypeScript contexts
   offerID: number;
   hotelID: number;
   transportID: number;
@@ -15,7 +14,6 @@ export class ReservationRequest {
   numOfChildren: number;
 
   constructor(init?: Partial<ReservationRequest>) {
-    this.reservationRequestID = init?.reservationRequestID || this.generateUUID();
     this.offerID = init?.offerID || 0;
     this.hotelID = init?.hotelID || 0;
     this.transportID = init?.transportID || 0;

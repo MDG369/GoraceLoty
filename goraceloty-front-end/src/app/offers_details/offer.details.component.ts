@@ -12,9 +12,12 @@ import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
   templateUrl: './offer.details.component.html'
 })
 export class OfferDetailsComponent implements OnInit {
-  offerId?: number;
-  transport?: Transport | null = null;
-  hotel?: Hotel | null = null;
+  // @ts-ignore
+  offerId: number;
+  // @ts-ignore
+  transport: Transport;
+  // @ts-ignore
+  hotel: Hotel;
   isModalOpen: boolean = false;
 
   constructor(
@@ -43,10 +46,10 @@ export class OfferDetailsComponent implements OnInit {
       next: offer => {
         console.log("Loaded offer details:", offer);
         if (offer && offer.transportID) {
-          this.loadMatchingTransport(offer.transportID);
+           this.loadMatchingTransport(offer.transportID);
         }
         if(offer && offer.hotelID){
-          this.loadMatchingHotel(offer.hotelID);
+           this.loadMatchingHotel(offer.hotelID);
         }
       },
       error: error => {

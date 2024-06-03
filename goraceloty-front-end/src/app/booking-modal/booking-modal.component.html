@@ -1,28 +1,63 @@
 <!-- booking-modal.component.html -->
 <div class="booking-modal">
   <h2>Book Your Stay</h2>
+
   <div>
     <label>Adults:</label>
-    <button (click)="decrement('adults')">-</button>
-    <span>{{ bookingDetails.adults }}</span>
-    <button (click)="increment('adults')">+</button>
+    <button (click)="decrement('numOfAdults')">-</button>
+    <span>{{ reservationRequest.numOfAdults }}</span>
+    <button (click)="increment('numOfAdults')">+</button>
   </div>
+
   <div>
     <label>Kids:</label>
-    <button (click)="decrement('kids')">-</button>
-    <span>{{ bookingDetails.kids }}</span>
-    <button (click)="increment('kids')">+</button>
+    <button (click)="decrement('numOfChildren')">-</button>
+    <span>{{ reservationRequest.numOfChildren }}</span>
+    <button (click)="increment('numOfChildren')">+</button>
   </div>
+
+  <!-- Adding buttons for different types of rooms -->
   <div>
-    <label>Rooms:</label>
-    <button (click)="decrement('rooms')">-</button>
-    <span>{{ bookingDetails.rooms }}</span>
-    <button (click)="increment('rooms')">+</button>
+    <label>Single Rooms:</label>
+    <button (click)="decrement('numOfSingleRooms')">-</button>
+    <span>{{ reservationRequest.numOfSingleRooms }}</span>
+    <button (click)="increment('numOfSingleRooms')">+</button>
   </div>
+
+  <div>
+    <label>Double Rooms:</label>
+    <button (click)="decrement('numOfDoubleRooms')">-</button>
+    <span>{{ reservationRequest.numOfDoubleRooms }}</span>
+    <button (click)="increment('numOfDoubleRooms')">+</button>
+  </div>
+
+  <div>
+    <label>Triple Rooms:</label>
+    <button (click)="decrement('numOfTripleRooms')">-</button>
+    <span>{{ reservationRequest.numOfTripleRooms }}</span>
+    <button (click)="increment('numOfTripleRooms')">+</button>
+  </div>
+
+  <div>
+    <label>Studios:</label>
+    <button (click)="decrement('numOfStudios')">-</button>
+    <span>{{ reservationRequest.numOfStudios }}</span>
+    <button (click)="increment('numOfStudios')">+</button>
+  </div>
+
+  <div>
+    <label>Apartments:</label>
+    <button (click)="decrement('numOfApartments')">-</button>
+    <span>{{ reservationRequest.numOfApartments }}</span>
+    <button (click)="increment('numOfApartments')">+</button>
+  </div>
+
   <div>
     <label>Total price:</label>
-    <span>{{ bookingDetails.price }}</span>
+    <span>{{price }}</span>
   </div>
-  <button (click)="confirmBooking()">Confirm Booking</button>
+
+  <button (click)="reloadPrice()">Reload price</button>
+  <button (click)="confirmBooking()">Confirm booking</button>
   <button (click)="close()">Close</button>
 </div>

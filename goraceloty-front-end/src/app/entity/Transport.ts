@@ -1,5 +1,6 @@
 export class Transport {
-  transportID?: number;
+  // @ts-ignore
+  transportID: number;
   typeOfTransport?: string;
   numTotalSeats?: number;
   numAvailableSeats?: number;
