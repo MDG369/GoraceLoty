@@ -6,6 +6,7 @@ import { Transport } from '../entity/Transport';
 import { Offer } from '../entity/Offer';
 import {HotelService} from "../services/hotel.service";
 import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-offer-details',
@@ -21,7 +22,8 @@ export class OfferDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private transportService: TransportService,
     private hotelService: HotelService,
-    private offerService: OfferService
+    private offerService: OfferService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -86,6 +88,11 @@ export class OfferDetailsComponent implements OnInit {
 
   closeBookingModal(): void {
     this.isModalOpen = false;  // You can call this method to close the modal
+  }
+  showSuccessfulMessage() {
+    this.messageService.add({
+      severity: 'success', summary: 'Success', detail: 'Oferta zarezerwowana, przejdź do zakładki rezerwacje aby ją opłacić'
+    })
   }
 
 }

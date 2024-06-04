@@ -40,7 +40,7 @@ public class OfferReservationController {
     }
 
     @PostMapping("/pay")
-    public void pay(@RequestParam Long reservationId) {
+    public void pay(@RequestBody Long reservationId) {
         travelAgencyService.pay(reservationId);
     }
 //    @PostMapping

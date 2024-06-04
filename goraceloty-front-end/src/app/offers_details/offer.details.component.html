@@ -52,7 +52,8 @@
                    [hotelId]="hotel.hotelID"
                    [transportId] = "transport.transportID"
                    [offerId] = "offerId"
-                   (closeModal)="closeBookingModal()"></app-booking-modal>
+                   (closeModal)="closeBookingModal()"
+(succesfulTransaction)="showSuccessfulMessage()"></app-booking-modal>
 
 <!-- No Data Template -->
 <ng-template #noData>

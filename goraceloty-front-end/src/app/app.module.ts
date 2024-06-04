@@ -10,14 +10,19 @@ import { FormsModule } from '@angular/forms';
 import {TransportDetailsComponent} from "./transport/transport.component";
 import {BookingModalComponent} from "./booking-modal/booking-modal.component";
 import {HotelDetailsComponent} from "./hotel/hotel.component";
+import {ToastModule} from "primeng/toast";
+import {MessageService} from "primeng/api";
 
-
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import { ReservationTabComponent } from './reservation-tab/reservation-tab.component';
 @NgModule({
   declarations: [AppComponent,
     OffersComponent,
     OfferDetailsComponent,
     TransportDetailsComponent,
-    HotelDetailsComponent
+    HotelDetailsComponent,
+    ReservationTabComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +31,12 @@ import {HotelDetailsComponent} from "./hotel/hotel.component";
     AppRoutingModule,
     BrowserModule,
     BookingModalComponent,
+    ToastModule,
+    MessageModule,
+    MessagesModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [MessageService],
+
 })
 export class AppModule { }

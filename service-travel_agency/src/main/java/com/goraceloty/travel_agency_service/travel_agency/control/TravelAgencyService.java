@@ -166,12 +166,6 @@ public class TravelAgencyService {
         final Example<OfferReservation> example = Example.of(offerReservation, matcher);
         return travelAgencyRepository.findAll(example, Sort.by(Sort.Direction.DESC, "reservationTime")).getFirst();
     }
-    public void incrementNumAdults(Long reservationId) {
-        OfferReservation reservation = travelAgencyRepository.findById(reservationId)
-                    .orElseThrow(() -> new RuntimeException("Reservation not found with id: " + reservationId));
-            reservation.incrementAdults();
-            travelAgencyRepository.save(reservation);
-        }
 
     public static int calculateTripDuration(String dateStart, String dateEnd) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -185,7 +179,12 @@ public class TravelAgencyService {
 
         return days;
     }
+    public void pay(Long reservationId) {
+        OfferReservation reservation = fetchReservationById(reservationId);
+        reservation.setIsPaid(true);
+        travelAgencyRepository.save(reservation);
     }
+}
 
     /*public double adjustPriceBasedOnSeats(Long transportId) {
         int availableSeats = getAvailableSeats(transportId);
@@ -203,7 +202,7 @@ public class TravelAgencyService {
 //        System.out.println(Adjusted_price);
 //        return Adjusted_price;
 //    }
-}
+
 
 
 

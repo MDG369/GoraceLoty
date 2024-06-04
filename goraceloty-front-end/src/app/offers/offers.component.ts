@@ -24,14 +24,11 @@ export class OffersComponent implements OnInit {
     this.loadOffers();
   }
   loadOffers(): void {
-    if (this.cityArrival || this.dateStart || this.dateEnd) {  // Only load if any criteria are set
+
       this.offerService.getOffers(this.cityArrival, this.dateStart, this.dateEnd).subscribe({
         next: (offers) => this.offers = offers,
         error: (error) => console.error('Failed to load offers', error)
       });
-    } else {
-      this.offers = []; // Clear offers or set to default if no criteria are set
-    }
   }
   navigateToDetails(offerId: number): void {
     this.router.navigate(['/offer-details', offerId]);

@@ -17,7 +17,7 @@ export class OfferService {
     let params = new HttpParams();
 
     // Append parameters if they are provided
-    if (cityArrival) {
+    if (cityArrival && cityArrival != "") {
       params = params.append('cityArrival', cityArrival);
     }
     if (dateStart) {

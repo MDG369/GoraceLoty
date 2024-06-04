@@ -92,17 +92,16 @@ public class OfferService {
 
                 return response.toString();
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return "fail";
-        }
-        finally {
+        } finally {
             if (con != null) {
                 con.disconnect();
             }
         }
         return "fail";
     }
+
     public Boolean getHotelAvailability(Long id, Integer numOfPeople) {
         Optional<Offer> offer = offerRepository.findById(id);
         if (offer.isEmpty()) {
@@ -123,15 +122,13 @@ public class OfferService {
         String response = sendGet(url);
         System.out.println("Response from hotel availability: " + response);
 
-        if(response.equals("fail")) {
+        if (response.equals("fail")) {
             System.out.println("Request to hotel availability returned fail, perhaps wrong url?");
             return false;
-        }
-        else if (response.equals("false")) {
+        } else if (response.equals("false")) {
             System.out.println("Request to hotel availability returned false");
             return false;
-        }
-        else if (response.equals("true")) {
+        } else if (response.equals("true")) {
             System.out.println("Request to hotel availability returned true");
             return true;
         }
@@ -175,32 +172,11 @@ public class OfferService {
         return false;
     }
 
-    public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
-        URL url;
-        System.out.println("###############" + offerFilter.getCity());
-        if(offerFilter.getCity() != null) {
-            url = new URL("http://service-hotel:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
-        }
-        else {
-            url = new URL("http://service-hotel:8080/hotels");
-        }
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
-        }
-        return "[\"hotel\" : none]";
+    public void handleTransportFull(Long id) {
+        offerRepository.deleteById(id);
     }
+
+
 
     public Boolean getAvailability(Long id, Integer numOfPeople) {
         boolean availability = getTransportAvailability(id, numOfPeople);
@@ -261,18 +237,4 @@ public class OfferService {
                 });
     }
 
-
-    public static int calculateTripDuration(String dateStart, String dateEnd) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        // Parse the start and end dates from the given strings
-        LocalDate startDate = LocalDate.parse(dateStart, formatter);
-        LocalDate endDate = LocalDate.parse(dateEnd, formatter);
-
-        // Calculate the number of days between the start and end dates
-        int days = (int) ChronoUnit.DAYS.between(startDate, endDate);
-
-        return days;
-    }
-}
 }

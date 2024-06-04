@@ -26,7 +26,6 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("")
 // todo Dodanie z powrotem offers, hotfix bo front nie działał
 @RequestMapping("")
 @RequiredArgsConstructor
@@ -82,8 +81,6 @@ public class OfferController {
         // If paid, Orchestrator sends message to Reservation to change status to paid, if 15 minutes pass remove reservation, compensate hotel and Transport
 
         return offerService.tryBookingOffer(reservationRequest).block();
-    List<Offer> getOffers(OfferFilter offerFilter) {
-        return offerService.getOffers();
     }
 
     // example of valid command
@@ -101,29 +98,5 @@ public class OfferController {
     // getting transport availability, checks if numOfSeats >= numOfPeople
     // id - offer id
     // numOfPeople - number of people, any number valid
-    @GetMapping("/transport")
-    Boolean getTransportAvailability(Long id, Integer numOfPeople) {
-        return offerService.getTransportAvailability(id, numOfPeople);
-    }
 
-    // Logical AND on transport and hotel availability
-    // http://localhost:8081/offers/availability?id=1&numOfPeople=1
-    @GetMapping("/availability")
-    Boolean getAvailability(Long id, Integer numOfPeople) {
-        return offerService.getAvailability(id, numOfPeople);
-    }
-
-    @GetMapping("/matching")
-    public List<Offer> getOfferByExample(Offer offer) {
-        return offerService.getOffersByExample(offer);
-    }
-
-    @PostMapping("/book")
-    public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
-        // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
-        // Orchestrator sends message to Reservation(Travel Agency) service, the reservation is created with status PENDING.
-        // Orchestrator sends messages to Transport and Hotel. If there is an error in either compensate Tran, Hotel and Res
-        // If paid, Orchestrator sends message to Reservation to change status to paid, if 15 minutes pass remove reservation, compensate hotel and Transport
-        offerService.tryBookingOffer(reservationRequest).block();
-    }
 }
