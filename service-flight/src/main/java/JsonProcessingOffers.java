@@ -14,15 +14,16 @@ public class JsonProcessingOffers {
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
         String filePath = "..\\data\\offers.json";
-        String sql = "INSERT INTO offers(id, transportID, hotelID, city_arrival, city_departure, date_start, date_end ) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+        String sql = "INSERT INTO offers(id, transportID, hotelID, city_arrival, city_departure, date_start, date_end, available) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET " +
                 "transportID = EXCLUDED.transportID, " +
                 "hotelID = EXCLUDED.hotelID, " +
                 "city_arrival = EXCLUDED.city_arrival, " +
                 "city_departure = EXCLUDED.city_departure, " +
                 "date_start = EXCLUDED.date_start, " +
-                "date_end = EXCLUDED.date_end;";
+                "date_end = EXCLUDED.date_end, " +
+                "available = EXCLUDED.available";
 
 
         processJsonData(url, filePath, sql, user, password);
@@ -55,6 +56,7 @@ public class JsonProcessingOffers {
                     preparedStatement.setString(5, transport.get("cityDeparture").textValue());
                     preparedStatement.setString(6, transport.get("dateStart").textValue());
                     preparedStatement.setString(7, transport.get("dateEnd").textValue());
+                    preparedStatement.setBoolean(8, transport.get("available").booleanValue());
                     System.out.println("Executing SQL: " + sql);
                     System.out.println("With parameters: " +
                             transport.get("id").longValue() + ", " +
@@ -63,7 +65,8 @@ public class JsonProcessingOffers {
                             transport.get("cityArrival").textValue() + ", " +
                             transport.get("cityDeparture").textValue() + ", " +
                             transport.get("dateStart").booleanValue() + ", " +
-                            transport.get("dateEnd").textValue());
+                            transport.get("dateEnd").textValue() + ", " +
+                            transport.get("available").booleanValue());
                     // Execute upsert
                     preparedStatement.executeUpdate();
                 }

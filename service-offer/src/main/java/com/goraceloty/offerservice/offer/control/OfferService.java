@@ -155,7 +155,14 @@ public class OfferService {
     }
 
     public void handleTransportFull(Long id) {
-        offerRepository.deleteById(id);
+        Optional<Offer> offer = offerRepository.findById(id);
+        if (offer.isPresent()) {
+            System.out.println("Updated offer availability " + id);
+            offer.get().setAvailable(false);
+        }
+        else {
+            System.out.println("Could not find offer " + id);
+        }
     }
 
 
