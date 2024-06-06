@@ -22,4 +22,5 @@ public class Offer {
     private String cityDeparture;
     private String dateStart;
     private String dateEnd;
+    private Boolean available;
 }
