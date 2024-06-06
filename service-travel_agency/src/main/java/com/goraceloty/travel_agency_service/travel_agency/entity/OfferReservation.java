@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +20,7 @@ public class OfferReservation {
     @Id
     @GeneratedValue( strategy= GenerationType.AUTO )
     private Long reservationID;
-    private LocalDateTime startDate;
+    private LocalDate startDate;
     private Integer numAdult;
     private Integer numChildren;
     private Integer numOfDays;
@@ -40,17 +38,11 @@ public class OfferReservation {
         this.setTransportID(reservationRequest.getTransportID());
         this.setOfferID(reservationRequest.getOfferID());
         this.setReservationTime(new Timestamp(System.currentTimeMillis()));
-        this.setStartDate(reservationRequest.getStartDate().atStartOfDay());
+        this.setStartDate(reservationRequest.getStartDate());
         this.setNumAdult(reservationRequest.getNumOfAdults());
         this.setNumChildren(reservationRequest.getNumOfChildren());
         this.setNumOfDays(reservationRequest.getNumOfDays());
         this.setIsPaid(false);
-    }
-    public void incrementAdults() {
-        this.numAdult++;
-    }
-    public void incrementChildren() {
-        this.numChildren++;
     }
 }
 

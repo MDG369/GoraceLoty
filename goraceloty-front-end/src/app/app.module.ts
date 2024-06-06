@@ -4,28 +4,17 @@ import {AppComponent} from "./app.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "./app-routing.module";
 import {BrowserModule} from "@angular/platform-browser";
-import {OffersComponent} from "./offers/offers.component";
-import { OfferDetailsComponent } from './offers_details/offer.details.component';
-import { FormsModule } from '@angular/forms';
-import {TransportDetailsComponent} from "./transport/transport.component";
-import {BookingModalComponent} from "./booking-modal/booking-modal.component";
-import {HotelDetailsComponent} from "./hotel/hotel.component";
-
+import { CatalogComponent } from './catalog/catalog.component';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
-  declarations: [AppComponent,
-    OffersComponent,
-    OfferDetailsComponent,
-    TransportDetailsComponent,
-    HotelDetailsComponent
-  ],
+  declarations: [AppComponent, CatalogComponent, LoginComponent, HomeComponent],
   imports: [
     CommonModule,
     HttpClientModule,
-    FormsModule,
     AppRoutingModule,
-    BrowserModule,
-    BookingModalComponent,
+    BrowserModule
   ],
   bootstrap: [AppComponent]
 })

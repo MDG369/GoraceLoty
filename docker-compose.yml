@@ -23,7 +23,7 @@ services:
       - "8080:8080"
     networks:
       - goraceloty_net
-    
+
   service-offer:
     build: ./service-offer
     depends_on:
@@ -36,7 +36,7 @@ services:
       - "8081:8081"
     networks:
       - goraceloty_net
-    
+
   service-flight:
     build: ./service-flight
     depends_on:
@@ -63,7 +63,24 @@ services:
     ports:
       - "8083:8083"
     networks:
-      - goraceloty_net  
+      - goraceloty_net
+
+  saga-orchestrator:
+    build: ./OfferSagaOrchestrator
+    depends_on:
+      - db_postgres
+      - service-hotel
+      - service-flight
+      - service-travel-agency
+      - rabbitmq
+    environment:
+      - DATASOURCE_URL=db_postgres:5432/svc_travel_agency
+      - DATASOURCE_USERNAME=gl_pg_user
+      - DATASOURCE_PASSWORD=g0r4c3_l0ty
+    ports:
+      - "8084:8084"
+    networks:
+      - goraceloty_net
 
   saga-orchestrator:
     build: ./OfferSagaOrchestrator
@@ -87,7 +104,7 @@ services:
     volumes:
       - ./pg-init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_MULTIPLE_DATABASES: svc_travel_agency, svc_offer,svc_hotel, svc_travel, svc_flight
+      POSTGRES_MULTIPLE_DATABASES: svc_offer, svc_hotel, svc_travel_agency,svc_flight
       POSTGRES_USER: gl_pg_user
       POSTGRES_PASSWORD: g0r4c3_l0ty
     ports:

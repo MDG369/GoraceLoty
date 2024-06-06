@@ -22,35 +22,19 @@ public class OfferReservationController {
     public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
         return travelAgencyService.getOfferReservationByExample(offerReservation);
     }
+
     @GetMapping("/price")
-    public double getAdjustedPrice(
-            @RequestParam int numAdults,
-            @RequestParam int numChildren,
-            @RequestParam long transportId,
-            @RequestParam long hotelId,
-            @RequestParam int duration,
-            @RequestParam int numOfSingleRooms,
-            @RequestParam int numOfDoubleRooms,
-            @RequestParam int numOfTripleRooms,
-            @RequestParam int numOfStudios,
-            @RequestParam int numOfApartments) {
-
-        return travelAgencyService.calculatePrice(numAdults, numChildren, transportId, hotelId, duration, numOfSingleRooms, numOfDoubleRooms, numOfTripleRooms, numOfStudios, numOfApartments);
+    public double getAdjustedPrice(@RequestParam Long reservationId) {
+        return travelAgencyService.calculatePrice(reservationId);
     }
 
-    @PutMapping("/{id}/incrementAdults")
-    public ResponseEntity<?> incrementAdults(@PathVariable Long id) {
-        try {
-            travelAgencyService.incrementNumAdults(id);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/pay")
+    public void pay(@RequestParam Long reservationId) {
+        travelAgencyService.pay(reservationId);
     }
-}
 //    @PostMapping
 //    public ResponseEntity<Transport> createOrUpdateTransport(@RequestBody Transport transport) {
 //        Transport savedTransport = transportService.saveTransport(transport);
 //        return ResponseEntity.ok(savedTransport);
 //    }
-
+}

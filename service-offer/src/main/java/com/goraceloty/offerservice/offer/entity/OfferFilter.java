@@ -1,4 +1,3 @@
-
 package com.goraceloty.offerservice.offer.entity;
 
 import jakarta.persistence.Entity;

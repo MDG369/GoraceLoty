@@ -17,9 +17,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +33,7 @@ public class OfferService {
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
-                .baseUrl("http://localhost:8084")
+                .baseUrl("http://saga-orchestrator:8084")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
     }
@@ -157,32 +154,18 @@ public class OfferService {
         return false;
     }
 
-    public String GetHotels(OfferFilter offerFilter) throws IOException, JSONException {
-        URL url;
-        System.out.println("###############" + offerFilter.getCity());
-        if(offerFilter.getCity() != null) {
-            url = new URL("http://service-hotel:8080/hotels/matching?city=" + offerFilter.getCity().replaceAll(" ", "%20"));
+    public void handleTransportFull(Long id) {
+        Optional<Offer> offer = offerRepository.findById(id);
+        if (offer.isPresent()) {
+            System.out.println("Updated offer availability " + id);
+            offer.get().setAvailable(false);
         }
         else {
-            url = new URL("http://service-hotel:8080/hotels");
+            System.out.println("Could not find offer " + id);
         }
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
-        }
-        return "[\"hotel\" : none]";
     }
+
+
 
     public Boolean getAvailability(Long id, Integer numOfPeople) {
         boolean availability = getTransportAvailability(id, numOfPeople);
@@ -241,18 +224,6 @@ public class OfferService {
                     log.fine("Initiating booking saga failed with error: " + e);
                     return Mono.empty();
                 });
-    }
-    public static int calculateTripDuration(String dateStart, String dateEnd) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        // Parse the start and end dates from the given strings
-        LocalDate startDate = LocalDate.parse(dateStart, formatter);
-        LocalDate endDate = LocalDate.parse(dateEnd, formatter);
-
-        // Calculate the number of days between the start and end dates
-        int days = (int) ChronoUnit.DAYS.between(startDate, endDate);
-
-        return days;
     }
 
 }

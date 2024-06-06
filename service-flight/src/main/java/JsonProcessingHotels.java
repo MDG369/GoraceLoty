@@ -1,5 +1,3 @@
-package com.goraceloty.hotelservice;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,7 +18,7 @@ public class JsonProcessingHotels {
         String filePath = "..\\data\\hotels_final_clean.json";
         String sql = "INSERT INTO hotels(hotelid, hotel_name, standard, country, city, children_allowed, address ) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "ON CONFLICT (hotelid) DO UPDATE SET " +
+                "ON CONFLICT (HotelID) DO UPDATE SET " +
                 "hotel_name = EXCLUDED.hotel_name, " +
                 "standard = EXCLUDED.standard, " +
                 "country = EXCLUDED.country, " +
