@@ -82,22 +82,18 @@ services:
     networks:
       - goraceloty_net
 
-  saga-orchestrator:
-    build: ./OfferSagaOrchestrator
+  api-gateway:
+    build: ./api-gateway
     depends_on:
-      - db_postgres
       - service-hotel
       - service-flight
       - service-travel-agency
-      - rabbitmq
-    environment:
-      - DATASOURCE_URL=db_postgres:5432/svc_travel_agency
-      - DATASOURCE_USERNAME=gl_pg_user
-      - DATASOURCE_PASSWORD=g0r4c3_l0ty
-    ports:
-      - "8084:8084"
+      - saga-orchestrator
+      - service-offer
     networks:
-      - goraceloty_net
+      - goraceloty_net:
+
+
 
   db_postgres:
     image: postgres:14
