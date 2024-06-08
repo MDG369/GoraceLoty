@@ -15,7 +15,7 @@ export class WebsocketService {
 
   constructor(private rxStompService: RxStompService,
               ) {
-    this.rxStompService.watch('/topic/greetings')
+    this.rxStompService.watch('/topic/changes')
       .subscribe((message: any): void => {
         console.log('Received message:');
         if (!message) {

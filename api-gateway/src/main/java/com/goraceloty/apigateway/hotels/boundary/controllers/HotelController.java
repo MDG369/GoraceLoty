@@ -3,7 +3,6 @@ package com.goraceloty.apigateway.hotels.boundary.controllers;
 import com.goraceloty.apigateway.AppProperties;
 import com.goraceloty.apigateway.hotels.control.HotelClient;
 import com.goraceloty.apigateway.hotels.entity.Hotel;
-import com.goraceloty.apigateway.websockets.entity.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +24,6 @@ public class HotelController {
 
     @GetMapping("health")
     public String healthCheck() {
-        Message message = new Message("s");
-        messagingTemplate.convertAndSend("/topic/greetings",  message);
         return appProperties.getHotel();
     }
 
