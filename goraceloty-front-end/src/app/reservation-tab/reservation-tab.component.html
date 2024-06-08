@@ -1,0 +1,32 @@
+<div *ngIf="reservations && reservations.length > 0">
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+          <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Transport ID</th>
+            <th scope="col">Hotel ID</th>
+            <th scope="col">Adjusted Price</th>
+            <th scope="col">Paid</th>
+            <th scope="col">Date Start</th>
+            <th scope="col">Pay</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let reservation of reservations; let i = index" style="cursor: pointer;">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ reservation.transportID }}</td>
+            <td>{{ reservation.hotelID }}</td>
+            <td>{{ reservation.adjustedPrice }}</td>
+            <td>{{ reservation.isPaid }}</td>
+            <td>{{ reservation.startDate | date:'mediumDate' }}</td>
+            <td><button class="btn btn-success" [disabled]="reservation.isPaid" (click)="payReservation(reservation.reservationID)">Pay</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
