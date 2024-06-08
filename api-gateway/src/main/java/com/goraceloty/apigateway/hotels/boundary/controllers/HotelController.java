@@ -7,6 +7,7 @@ import com.goraceloty.apigateway.saga.entity.ChangeMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
@@ -15,7 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@RestController("hotels")
+@RestController
+@RequestMapping("hotels")
 public class HotelController {
 
     private static final int BLOCK_TIME = 30; // 30s block time
@@ -32,6 +34,8 @@ public class HotelController {
 
     @GetMapping
     public List<Hotel> getHotelsByExample(Hotel hotel) {
-        return Arrays.stream(hotelClient.getHotelsByExample(hotel).block(Duration.ofSeconds(BLOCK_TIME))).collect(Collectors.toList());
+        var res = hotelClient.getHotelsByExample(hotel).block(Duration.ofSeconds(BLOCK_TIME));
+
+        return res != null ? Arrays.stream(res).collect(Collectors.toList()): null;
     }
 }

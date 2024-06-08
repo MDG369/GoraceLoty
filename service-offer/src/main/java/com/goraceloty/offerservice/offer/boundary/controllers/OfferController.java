@@ -55,7 +55,7 @@ public class OfferController {
     }
 
     @GetMapping("/matching")
-    public List<Offer> getOfferByExample(Offer offer) {
+    public List<Offer> getOfferByExample(@RequestBody Offer offer) {
         return offerService.getOffersByExample(offer);
     }
 

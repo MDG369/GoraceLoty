@@ -64,6 +64,7 @@ public class OfferService {
     }
 
     public List<Offer> getOffersByExample(Offer offer) {
+
         final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         final Example<Offer> example = Example.of(offer, matcher);
         List<Offer> results;
