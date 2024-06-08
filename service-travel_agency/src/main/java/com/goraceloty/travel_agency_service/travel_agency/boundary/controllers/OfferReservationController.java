@@ -24,12 +24,23 @@ public class OfferReservationController {
     }
 
     @GetMapping("/price")
-    public double getAdjustedPrice(@RequestParam Long reservationId) {
-        return travelAgencyService.calculatePrice(reservationId);
+    public double getAdjustedPrice(
+            @RequestParam int numAdults,
+            @RequestParam int numChildren,
+            @RequestParam long transportId,
+            @RequestParam long hotelId,
+            @RequestParam int duration,
+            @RequestParam int numOfSingleRooms,
+            @RequestParam int numOfDoubleRooms,
+            @RequestParam int numOfTripleRooms,
+            @RequestParam int numOfStudios,
+            @RequestParam int numOfApartments) {
+
+        return travelAgencyService.calculatePrice(numAdults, numChildren, transportId, hotelId, duration, numOfSingleRooms, numOfDoubleRooms, numOfTripleRooms, numOfStudios, numOfApartments);
     }
 
     @PostMapping("/pay")
-    public void pay(@RequestParam Long reservationId) {
+    public void pay(@RequestBody Long reservationId) {
         travelAgencyService.pay(reservationId);
     }
 //    @PostMapping

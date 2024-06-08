@@ -82,6 +82,19 @@ services:
     networks:
       - goraceloty_net
 
+  api-gateway:
+    build: ./api-gateway
+    depends_on:
+      - service-hotel
+      - service-flight
+      - service-travel-agency
+      - saga-orchestrator
+      - service-offer
+    networks:
+      - goraceloty_net:
+
+
+
   db_postgres:
     image: postgres:14
     volumes:

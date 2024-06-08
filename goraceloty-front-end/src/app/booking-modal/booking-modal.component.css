@@ -1,0 +1,24 @@
+.booking-modal button {
+  font-size: 12px; /* Smaller font size */
+  padding: 5px 10px; /* Smaller padding */
+  margin: 2px; /* Adds a bit of space around buttons */
+}
+
+.booking-modal .decrement, .booking-modal .increment {
+  width: 10px; /* Smaller width for + and - buttons */
+}
+
+.booking-modal {
+  position: fixed; /* Keeps the modal in place during scrolling */
+  top: 50%; /* Align the top edge of the modal at the middle of the viewport */
+  left: 50%; /* Align the left edge of the modal at the middle of the viewport */
+  transform: translate(-50%, -50%); /* Offset the modal to truly center it */
+  background: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 80%; /* Sensible default width, adjust based on your design needs */
+  max-width: 600px; /* Maximum width the modal can extend to */
+  box-sizing: border-box; /* Includes padding in the width calculation */
+}
+

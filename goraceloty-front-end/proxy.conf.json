@@ -1,6 +1,6 @@
 {
-  "/api/*": {
-    "target": "http://service-hotel:8080",
+  "/api": {
+    "target": "http://localhost:8085",
     "secure": false,
     "ws": true,
     "pathRewrite": {
@@ -8,3 +8,4 @@
     }
   }
 }
+

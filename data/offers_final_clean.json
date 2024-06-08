@@ -19,6 +19,6 @@
 {"offerID":19,"offerName":"Wakacje w Xenonas","dateEnd":1718150400000,"dateStart":1717545600000,"basePrice":1455.0,"hotelID":19,"numOfDays":7},
 {"offerID":20,"offerName":"Wakacje w Liberty Resort","dateEnd":1716768000000,"dateStart":1716422400000,"basePrice":1480.0,"hotelID":20,"numOfDays":4},
 {"offerID":21,"offerName":"Wakacje w Sey Beach Hotel & SPA","dateEnd":1717891200000,"dateStart":1717545600000,"basePrice":1888.0,"hotelID":21,"numOfDays":4},
-{"offerID":22,"offerName":"Wakacje w Aqua Rosa","dateEnd":1717804800000,"dateStart":1717200000000,"basePrice":1520.0,"hotelID":22,"numOfDays":7}
+{"offerID":22,"offerName":"Wakacje w Aqua Rosa","dateEnd":1717804800000,"dateStart":1717200000000,"basePrice":1520.0,"hotelID":22,"numOfDays":7},
 {"offerID":23,"offerName":"Wakacje w Riviera","dateEnd":1716768000000,"dateStart":1716422400000,"basePrice":1500.0,"hotelID":23,"numOfDays":4}
 ]

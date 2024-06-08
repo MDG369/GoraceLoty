@@ -1,19 +1,16 @@
 import {RouterModule, Routes} from '@angular/router';
 import {NgModule} from "@angular/core";
-import { CatalogComponent } from './catalog/catalog.component';
-import {AuthGuard} from './guards/AuthGuard'
-import { LoginComponent } from './login/login.component';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { OffersComponent } from './offers/offers.component';
+import { OfferDetailsComponent } from './offers_details/offer.details.component';
+import { ReservationTabComponent } from './reservation-tab/reservation-tab.component';
 
 export const routes: Routes = [
-  {
-    path: '', component: HomeComponent
-  },
-  { path: 'login', component: LoginComponent, pathMatch: 'full'},
-  {path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard]},
-
+  { path: 'offers', component: OffersComponent },  // Path to access OffersComponent
+  { path: '', redirectTo: '/offers', pathMatch: 'full' }, // Redirect to /offers by default
+  { path: 'offer-details/:id', component: OfferDetailsComponent },
+  { path: 'reservations', component: ReservationTabComponent}
 ];
+
 @NgModule({
   imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
