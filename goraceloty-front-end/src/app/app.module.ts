@@ -16,6 +16,7 @@ import {MessageService} from "primeng/api";
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { ReservationTabComponent } from './reservation-tab/reservation-tab.component';
+import { RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 @NgModule({
   declarations: [AppComponent,
     OffersComponent,
@@ -36,7 +37,12 @@ import { ReservationTabComponent } from './reservation-tab/reservation-tab.compo
     MessagesModule
   ],
   bootstrap: [AppComponent],
-  providers: [MessageService],
+  providers: [MessageService,
+    {
+    provide: RxStompService,
+    useFactory: rxStompServiceFactory
+  }
+  ],
 
 })
 export class AppModule { }

@@ -3,7 +3,9 @@ package com.goraceloty.apigateway.hotels.boundary.controllers;
 import com.goraceloty.apigateway.AppProperties;
 import com.goraceloty.apigateway.hotels.control.HotelClient;
 import com.goraceloty.apigateway.hotels.entity.Hotel;
+import com.goraceloty.apigateway.websockets.entity.Message;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +21,12 @@ public class HotelController {
     private static final int BLOCK_TIME = 30; // 30s block time
     private final AppProperties appProperties;
     private final HotelClient hotelClient;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("health")
     public String healthCheck() {
+        Message message = new Message("s");
+        messagingTemplate.convertAndSend("/topic/greetings",  message);
         return appProperties.getHotel();
     }
 
