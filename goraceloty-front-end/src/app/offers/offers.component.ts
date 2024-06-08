@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { OfferService} from '../services/offer.service';
 import { Offer } from '../entity/Offer';
 import { Router } from '@angular/router';
+import { Subscription } from "rxjs";
 import {ChangesService} from "../services/changes.service";
 import {ChangesMessage} from "../entity/ChangesMessage";
 
