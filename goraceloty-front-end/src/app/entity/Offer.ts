@@ -7,4 +7,5 @@ export interface Offer {
   cityDeparture: string;
   dateStart: string;
   dateEnd: string;
+  popularity: number;
 }

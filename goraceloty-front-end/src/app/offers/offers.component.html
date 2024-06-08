@@ -25,7 +25,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let offer of offers; let i = index" (click)="navigateToDetails(offer.id)" style="cursor: pointer;">
-                <th scope="row">{{ i + 1 }}</th>
+                <th scope="row" [ngStyle]="offer.popularity > 2 ? { color: 'green' } : { color: 'red'}">{{ i + 1 }}</th>
                 <td>{{ offer.transportID }}</td>
                 <td>{{ offer.hotelID }}</td>
                 <td>{{ offer.cityArrival }}</td>
