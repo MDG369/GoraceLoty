@@ -17,6 +17,7 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { ReservationTabComponent } from './reservation-tab/reservation-tab.component';
 import { RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 @NgModule({
   declarations: [AppComponent,
     OffersComponent,
@@ -34,7 +35,8 @@ import { RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
     BookingModalComponent,
     ToastModule,
     MessageModule,
-    MessagesModule
+    MessagesModule,
+    BrowserAnimationsModule
   ],
   bootstrap: [AppComponent],
   providers: [MessageService,

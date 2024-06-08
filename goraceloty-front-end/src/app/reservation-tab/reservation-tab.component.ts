@@ -1,39 +1,27 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OfferReservation } from '../entity/OfferReservation';
 import { TravelAgencyService } from '../services/travel.agency.service';
-import { WebsocketService } from '../services/ws.service';
+import { WebsocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
+import {MessageService} from "primeng/api";
+import {ChangesMessage} from "../entity/ChangesMessage";
 
 @Component({
   selector: 'app-reservation-tab',
   templateUrl: './reservation-tab.component.html',
   styleUrl: './reservation-tab.component.css'
 })
-export class ReservationTabComponent implements OnInit, OnDestroy {
+export class ReservationTabComponent implements OnInit {
   reservations: OfferReservation[] = [];
   message: string;
   messages: string[] = [];
 
-  constructor(private travelAgencyService: TravelAgencyService, private webSocketService: WebsocketService) {
+  constructor(private travelAgencyService: TravelAgencyService, ) {
   }
-  private taskProgressSubscription: Subscription;
 
 
   ngOnInit() {
-    this.webSocketService.tearDownWebsocketEvents();
-    this.taskProgressSubscription = this.webSocketService.getTaskProgressObservable
-      .subscribe((status: string) => this.updateCurrentProgress(status));
-
     this.travelAgencyService.getUsersReservations(1).subscribe(data => this.reservations = data);
-  }
-
-  ngOnDestroy() {
-    console.log("Destroing");
-    this.webSocketService.tearDownWebsocketEvents();
-  }
-
-  updateCurrentProgress(status: string) {
-    console.log(status);
   }
 
   payReservation(reservationID: number) {

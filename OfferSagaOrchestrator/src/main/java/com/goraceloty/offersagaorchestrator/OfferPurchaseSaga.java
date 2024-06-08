@@ -1,6 +1,7 @@
 package com.goraceloty.offersagaorchestrator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.goraceloty.offersagaorchestrator.entity.ChangeMessage;
 import com.goraceloty.offersagaorchestrator.entity.ErrorMessage;
 import com.goraceloty.offersagaorchestrator.entity.ErrorType;
 import com.goraceloty.offersagaorchestrator.entity.ReservationRequest;
@@ -45,6 +46,10 @@ public class OfferPurchaseSaga{
         // Step 3: Reserve flight
             String res3 = (String) rabbitTemplate.convertSendAndReceive("transport_exchange", "transport.action.baz", reservationRequest);
 
+            ChangeMessage changeMessage = new ChangeMessage("Offer booked", reservationRequest.getHotelID(), reservationRequest.getTransportID(), reservationRequest.getOfferID());
+
+            String res4 = (String) rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.baz", changeMessage);
+            
         } catch (Exception e) {
             log.info(e.getMessage());
             // Handle failure, initiate compensation

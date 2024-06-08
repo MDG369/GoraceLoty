@@ -1,4 +1,4 @@
-package com.goraceloty.apigateway.saga.entity;
+package com.goraceloty.offersagaorchestrator.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

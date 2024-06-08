@@ -3,14 +3,15 @@ import { RxStompConfig, RxStompState } from "@stomp/rx-stomp";
 import { eventsRxStompConfig } from "./rx-stomp-factory.service";
 import { Subject } from "rxjs";
 import { Injectable } from "@angular/core";
+import {ChangesMessage} from "../entity/ChangesMessage";
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
-  private taskProgress: Subject<string> = new Subject<string>();
+  private changesSubject: Subject<ChangesMessage> = new Subject<ChangesMessage>();
 
-  get getTaskProgressObservable() {
-    return this.taskProgress.asObservable();
+  get getChangesObservable() {
+    return this.changesSubject.asObservable();
   }
 
   constructor(private rxStompService: RxStompService,
@@ -21,13 +22,11 @@ export class WebsocketService {
         if (!message) {
           return;
         }
-        const progress: string = JSON.parse(message.body) as string;
-        this.taskProgress.next(progress);
+        const changesMessage: ChangesMessage = JSON.parse(message.body) as ChangesMessage;
+        this.changesSubject.next(changesMessage);
       });
     this.rxStompService.connectionState$.subscribe(next => {
       console.log('Connection State', RxStompState[next]);
-      // if(next === RxStompState.CLOSED) {
-      //   this.setupWebsocketEvents()     }
     });
   }
 
