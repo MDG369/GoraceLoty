@@ -7,7 +7,7 @@ import { OfferReservation } from '../entity/OfferReservation';
   providedIn: 'root'
 })
 export class TravelAgencyService {
-  private apiUrl = 'api/OfferReservation'; // Base URL from environment
+  private apiUrl = '/api/travelagency'; // Base URL from environment
 
   constructor(private http: HttpClient) { }
 
@@ -35,7 +35,7 @@ export class TravelAgencyService {
   }
 
   getAllReservations() {
-    return this.http.get<OfferReservation[]>(`${this.apiUrl}/matching`)
+    return this.http.get<OfferReservation[]>(`${this.apiUrl}`)
   }
 
   payReservation(reservationID: number) {

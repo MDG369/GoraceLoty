@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { Subscription } from "rxjs";
 import {ChangesService} from "../services/changes.service";
 import {ChangesMessage} from "../entity/ChangesMessage";
+import {TravelAgencyService} from "../services/travel.agency.service";
+import {OfferReservation} from "../entity/OfferReservation";
 
 @Component({
   selector: 'app-offers',
@@ -23,7 +25,8 @@ export class OffersComponent implements OnInit {
 
   constructor(private offerService: OfferService,
               private router: Router,
-              private changesService: ChangesService) {}
+              private changesService: ChangesService,
+              private travelAgencyService: TravelAgencyService) {}
 
   ngOnInit(): void {
     this.loadOffers();
@@ -44,10 +47,13 @@ export class OffersComponent implements OnInit {
   }
 
   checkOfferPopularity() {
-    this.offers.forEach(offer => {
-      console.log(offer);
-      offer.popularity = this.changesService.getNumberOfChangesForOfferId(offer.id);
-    })
+    // setting offers popularity based on number of entries in the database
+    let res: OfferReservation[] = [];
+    this.travelAgencyService.getAllReservations().subscribe(data => {res = data;
+      this.offers.forEach(offer => {
+        offer.popularity = res.filter(res => res.offerID == offer.id).length
+      })} );
+
   }
 
 
