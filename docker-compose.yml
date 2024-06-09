@@ -90,8 +90,10 @@ services:
       - service-travel-agency
       - saga-orchestrator
       - service-offer
+    ports:
+      - "8085:8085"
     networks:
-      - goraceloty_net:
+      - goraceloty_net
 
 
 
