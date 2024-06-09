@@ -15,7 +15,7 @@ public class JsonProcessingHotels {
         String url = "jdbc:postgresql://localhost:5432/svc_hotel";
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
-        String filePath = "..\\data\\hotels_final_clean.json";
+        String filePath = "..\\service-hotel\\data\\hotels_final_clean.json";
         String sql = "INSERT INTO hotels(hotelid, hotel_name, standard, country, city, children_allowed, address ) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (HotelID) DO UPDATE SET " +

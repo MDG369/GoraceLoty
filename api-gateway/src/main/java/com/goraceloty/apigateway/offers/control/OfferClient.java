@@ -36,4 +36,20 @@ public class OfferClient {
                     return Mono.empty();
                 });
     }
+
+    //public Mono<Offer> getOffersById(Long id) {
+    //    return webClient.method(HttpMethod.GET)
+    //            .uri(uriBuilder -> uriBuilder
+    //                    .path("/matching")
+    //                    .queryParam("id", id)
+    //                    .build())
+    //            .retrieve()
+    //            .bodyToMono(Offer[].class)
+    //            .flatMap(offers -> offers.length > 0 ? Mono.just(offers[0]) : Mono.empty())
+    //            .onErrorResume(RuntimeException.class, e -> {
+    //                log.fine("Get offers by id failed: " + e);
+    //                return Mono.empty();
+    //            });
+    //}
+
 }
