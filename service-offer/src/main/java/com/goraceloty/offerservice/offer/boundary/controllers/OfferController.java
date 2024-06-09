@@ -5,13 +5,15 @@ import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.util.Arrays;
 import java.util.List;
-
 
 @RestController
 // todo Dodanie z powrotem offers, hotfix bo front nie działał
@@ -20,6 +22,7 @@ import java.util.List;
 public class OfferController {
 
     private final OfferService offerService;
+    private RabbitTemplate rabbitTemplate;
     @GetMapping
     List<Offer> getOffers(OfferFilter offerFilter) {
         return offerService.getOffers();
@@ -33,6 +36,18 @@ public class OfferController {
     @GetMapping("/hotel")
     Boolean getHotelAvailability(Long id, Integer numOfPeople) {
         return offerService.getHotelAvailability(id, numOfPeople);
+    }
+    @PostMapping("/book/offer")
+    public ResponseEntity<String> bookOffer(@RequestBody Offer offer) {
+        // Process the booking
+        List<String> attributes = Arrays.asList("flightAvailability", "hotelAvailability", "basePrice");  // Example attributes
+
+        Offer updatedOffer = offerService.getRandomOfferDetails(attributes);
+        if (updatedOffer == null) {
+            return ResponseEntity.badRequest().body("No offers available or booking failed.");
+        }
+
+        return ResponseEntity.ok("Booking change ID: " + updatedOffer.getId());
     }
 
     // example

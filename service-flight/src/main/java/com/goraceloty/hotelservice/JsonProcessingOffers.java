@@ -1,3 +1,5 @@
+package com.goraceloty.hotelservice;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -5,7 +7,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.time.format.DateTimeFormatter;
 
 public class JsonProcessingOffers {
 

@@ -8,6 +8,7 @@ import org.springframework.core.io.ResourceLoader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goraceloty.hotelservice.JsonProcessingExample;
 
+
 @Configuration
 public class StartupConfiguration implements ApplicationListener<ApplicationReadyEvent> {
 

@@ -75,6 +75,18 @@ public class TransportService {
         transportRepository.save(transport);
     }
 
+    public void addAvailableSeats(Long flightId, int seatsToAdd) {
+        Transport transport = transportRepository.findById(flightId)
+                .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + flightId));
+
+        int currentSeats = transport.getNumAvailableSeats() + seatsToAdd;
+        transport.setNumTotalSeats(currentSeats + seatsToAdd);
+
+        transportRepository.save(transport);
+
+        //logger.info("Added {} seats to flight ID {}. Total available seats now: {}", seatsToAdd, flightId, flight.getAvailableSeats());
+    }
+
 
 //    public List<Transport> getSeatsByExample(Transport transport) {
 //        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);

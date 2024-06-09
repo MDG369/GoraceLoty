@@ -1,41 +1,52 @@
 package com.goraceloty.offerservice.offer.control;
 
 import com.goraceloty.offerservice.offer.entity.Offer;
+import com.goraceloty.offerservice.offer.entity.OfferChange;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log
 @Service
 public class OfferService {
 
     private final OfferRepository offerRepository;
+    private final OfferChangeRepository offerChangeRepository;
     private final WebClient webClient;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
-    public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository) {
+    List<String> attributes = List.of("flightAvail", "hotelAvail", "basePrice");
+
+    public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository, OfferChangeRepository offerChangeRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
                 .baseUrl("http://saga-orchestrator:8084")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
+        this.offerChangeRepository = offerChangeRepository;
     }
 
     public List<Offer> getOffers() {
@@ -224,6 +235,46 @@ public class OfferService {
                     log.fine("Initiating booking saga failed with error: " + e);
                     return Mono.empty();
                 });
+    }
+    @Transactional
+    public Offer getRandomOfferDetails(List<String> attributes) {
+        System.out.println("Message started");
+        final Logger logger = LoggerFactory.getLogger(OfferService.class);
+        List<Offer> offers = offerRepository.findAll();
+        if (offers.isEmpty()) {
+            return null; // or throw an exception based on your use case
+        }
+
+        // Get a random offer from the list
+        Offer randomOffer = offers.get(new Random().nextInt(offers.size()));
+        //String attributeToModify = attributes.get(new Random().nextInt(attributes.size()));
+        String attributeToModify = "flightAvailability";
+        String logMessage = "Modified ";
+        switch (attributeToModify) {
+            case "flightAvailability":
+                // Toggle flight availability
+                int flightAvailabilityAdjustment = ThreadLocalRandom.current().nextInt(-10, 10);
+                logMessage += "flightAvailability to " + (" for offer ID " + randomOffer.getId());
+                break;
+            case "hotelAvailability":
+                // Toggle hotel availability
+                int hotelAvailabilityAdjustment = ThreadLocalRandom.current().nextInt(-10, 10);
+                logMessage += "hotelAvailability to " + (" for offer ID " + randomOffer.getId());
+                break;
+            case "basePrice":
+                // Randomly adjust the base price by a value between -10 and 10
+                double priceAdjustment = ThreadLocalRandom.current().nextDouble(-100.0, 100.1);
+                logMessage += "basePrice by " + priceAdjustment + " for offer ID " + randomOffer.getId();
+                //send message to
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + attributeToModify);
+        }
+        logger.info(logMessage);
+        OfferChange database_entry = new OfferChange(randomOffer.getId(), logMessage, attributeToModify);
+        offerChangeRepository.save(database_entry);
+        rabbitTemplate.convertAndSend("offer_exchange", "offers.#", logMessage);
+        return randomOffer;
     }
 
 }
