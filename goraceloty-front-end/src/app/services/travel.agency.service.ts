@@ -34,6 +34,10 @@ export class TravelAgencyService {
     return this.http.get<OfferReservation[]>(`${this.apiUrl}/matching`, {params})
   }
 
+  getAllReservations() {
+    return this.http.get<OfferReservation[]>(`${this.apiUrl}/matching`)
+  }
+
   payReservation(reservationID: number) {
     return this.http.post<void>(`${this.apiUrl}/pay`, reservationID)
   }

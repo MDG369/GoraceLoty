@@ -34,8 +34,5 @@ export class AppComponent implements OnDestroy, OnInit {
     this.websocketService.tearDownWebsocketEvents();
   }
 
-  onActivate(elementRef) {
-
-  }
 
 }
