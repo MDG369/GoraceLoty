@@ -5,6 +5,7 @@ import com.goraceloty.travel_agency_service.travel_agency.control.TravelAgencySe
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 
 import java.util.List;
 
@@ -25,18 +26,9 @@ public class OfferReservationController {
 
     @GetMapping("/price")
     public double getAdjustedPrice(
-            @RequestParam int numAdults,
-            @RequestParam int numChildren,
-            @RequestParam long transportId,
-            @RequestParam long hotelId,
-            @RequestParam int duration,
-            @RequestParam int numOfSingleRooms,
-            @RequestParam int numOfDoubleRooms,
-            @RequestParam int numOfTripleRooms,
-            @RequestParam int numOfStudios,
-            @RequestParam int numOfApartments) {
+            @RequestBody PriceObject priceObject) {
 
-        return travelAgencyService.calculatePrice(numAdults, numChildren, transportId, hotelId, duration, numOfSingleRooms, numOfDoubleRooms, numOfTripleRooms, numOfStudios, numOfApartments);
+        return travelAgencyService.calculatePrice(priceObject);
     }
 
     @PostMapping("/pay")
