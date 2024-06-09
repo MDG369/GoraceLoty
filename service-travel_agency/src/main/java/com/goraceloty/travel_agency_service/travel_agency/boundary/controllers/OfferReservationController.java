@@ -14,10 +14,6 @@ import java.util.List;
 public class OfferReservationController {
     private final TravelAgencyService travelAgencyService;
 
-    @GetMapping("/connections")
-    ResponseEntity<String> getEx() {
-        return ResponseEntity.ok().body("\"Connection to hotel service works!\"");
-    }
     @GetMapping("/matching")
     public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
         return travelAgencyService.getOfferReservationByExample(offerReservation);
