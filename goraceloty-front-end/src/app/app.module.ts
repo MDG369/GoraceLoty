@@ -9,7 +9,6 @@ import { OfferDetailsComponent } from './offers_details/offer.details.component'
 import { FormsModule } from '@angular/forms';
 import {TransportDetailsComponent} from "./transport/transport.component";
 import {BookingModalComponent} from "./booking-modal/booking-modal.component";
-import {HotelDetailsComponent} from "./hotel/hotel.component";
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 
@@ -23,7 +22,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     OffersComponent,
     OfferDetailsComponent,
     TransportDetailsComponent,
-    HotelDetailsComponent,
     ReservationTabComponent
   ],
   imports: [
