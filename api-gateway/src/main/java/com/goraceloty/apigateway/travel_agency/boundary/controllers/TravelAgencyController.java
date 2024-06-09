@@ -10,6 +10,7 @@ import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +42,7 @@ public class TravelAgencyController {
     }
 
     @GetMapping("price")
-    public Double getPrice(PriceObject priceObject) {
+    public Double getPrice(@RequestBody PriceObject priceObject) {
         var res = travelAgencyClient.getPrice(priceObject).block(Duration.ofSeconds(BLOCK_TIME));
         return res;
     }

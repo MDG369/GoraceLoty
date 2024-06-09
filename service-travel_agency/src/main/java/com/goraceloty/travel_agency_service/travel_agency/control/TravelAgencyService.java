@@ -2,6 +2,7 @@ package com.goraceloty.travel_agency_service.travel_agency.control;
 
 import com.goraceloty.travel_agency_service.saga.entity.ReservationRequest;
 import com.goraceloty.travel_agency_service.travel_agency.entity.OfferReservation;
+import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 //import com.goraceloty.travel_agency_service.travel_agency.entity.SeatDataDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -24,10 +25,10 @@ import java.util.Optional;
 
 public class TravelAgencyService {
     private final TravelAgencyRepository travelAgencyRepository;
-    //public final String transportServiceUrl = "http://service-flight:8080/transports/";
-    public final String transportServiceUrl = "http://localhost:8082/";
-    //public final String hotelServiceUrl = "http://service-hotel:8080/hotels/";
-    public final String hotelServiceUrl = "http://localhost:8080/";
+    public final String transportServiceUrl = "http://service-flight:8082/";
+    //public final String transportServiceUrl = "http://localhost:8082/";
+    public final String hotelServiceUrl = "http://service-hotel:8080/";
+    //public final String hotelServiceUrl = "http://localhost:8080/";
     private final RestTemplate restTemplate;
 
 
@@ -101,27 +102,26 @@ public class TravelAgencyService {
         return numChildren > 0 ? 0.95 : 1.0;
     }
 
-    public double calculatePrice(int numAdults, int numChildren, long transportId,long hotelId, int duration,
-                                 int numOfSingleRooms, int numOfDoubleRooms, int numOfTripleRooms, int numOfStudios, int numOfApartments) {
+    public double calculatePrice(PriceObject priceObject) {
         //OfferReservation reservation = fetchReservationById(reservationId);
         //if (reservation == null) {
            // throw new IllegalArgumentException("No reservation found with ID: " + reservationId);
        // }
         //Integer numAdults = reservation.getNumAdult();
-        int totalPeople = numChildren + numAdults;
-        double groupDiscount = getGroupDiscount(numAdults, numChildren);;
-        double childrenDiscount = getChildrenDiscount(numChildren);
-        double seatDetails = fetchSeatDetails(transportServiceUrl, transportId);
+        int totalPeople = priceObject.getNumChildren() + priceObject.getNumAdults();
+        double groupDiscount = getGroupDiscount(priceObject.getNumAdults(), priceObject.getNumChildren());;
+        double childrenDiscount = getChildrenDiscount(priceObject.getNumChildren());
+        double seatDetails = fetchSeatDetails(transportServiceUrl, priceObject.getTransportId());
         double transportPrice = calculateTransportPrice(seatDetails);
         double basePrice = 100.0;
-        Integer standard = fetchStandardDetails(hotelServiceUrl, hotelId);
+        Integer standard = fetchStandardDetails(hotelServiceUrl, priceObject.getHotelId());
         double hotelPrice= calculateHotelPrice(standard, totalPeople);
 
         //total price computation
         double totalDiscount = childrenDiscount * groupDiscount;
-        double totalBasePrice = basePrice * duration * totalPeople;
+        double totalBasePrice = basePrice * priceObject.getDuration() * totalPeople;
         double totalTransportPrice = transportPrice * totalPeople;
-        double totalHotelPrice =  totalPeople * duration;
+        double totalHotelPrice =  totalPeople * priceObject.getDuration();
 
         System.out.println("Cena transportu" + transportPrice);
         System.out.println("Cena noclegu" + hotelPrice);

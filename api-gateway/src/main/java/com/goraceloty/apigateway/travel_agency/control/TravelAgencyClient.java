@@ -39,6 +39,7 @@ public class TravelAgencyClient {
     }
 
     public Mono<Double> getPrice(PriceObject priceObject) {
+        System.out.println("getPrice: " + priceObject.getTransportId() + " " + priceObject.getHotelId());
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
                         .path("/price")
                         .build())
