@@ -28,9 +28,6 @@ export class AppComponent implements OnDestroy, OnInit {
 
   showChangesDialog(change: ChangesMessage) {
     this.changesService.addChange(change);
-    this.messageService.add({
-      severity: 'success', summary: 'Success', detail: `Oferta została zarezerwowana: ${change}`
-    })
   }
 
   ngOnDestroy() {

@@ -8,15 +8,15 @@ import {Observable, Subject} from "rxjs";
 export class ChangesService {
 
   changes: ChangesMessage[] = [];
-  private changesSubject: Subject<ChangesMessage[]> = new Subject<ChangesMessage[]>();
+  private changesSubject: Subject<ChangesMessage> = new Subject<ChangesMessage>();
 
 
   addChange(change: ChangesMessage) {
     this.changes.push(change);
-    this.changesSubject.next(this.changes);
+    this.changesSubject.next(change);
   }
 
-  getChangesObservable(): Observable<ChangesMessage[]> {
+  getChangesObservable(): Observable<ChangesMessage> {
     return this.changesSubject.asObservable();
   }
 

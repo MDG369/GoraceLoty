@@ -7,6 +7,9 @@ import { Offer } from '../entity/Offer';
 import {HotelService} from "../services/hotel.service";
 import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
 import { MessageService } from 'primeng/api';
+import {Subscription} from "rxjs";
+import {ChangesMessage} from "../entity/ChangesMessage";
+import {ChangesService} from "../services/changes.service";
 
 @Component({
   selector: 'app-offer-details',
@@ -17,13 +20,16 @@ export class OfferDetailsComponent implements OnInit {
   transport: Transport = new Transport();
   hotel: Hotel = new Hotel(1, "", 1, "" ,"" ,true ,"" );
   isModalOpen: boolean = false;
+  private changesSubscription: Subscription;
+
 
   constructor(
     private route: ActivatedRoute,
     private transportService: TransportService,
     private hotelService: HotelService,
     private offerService: OfferService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private changesService: ChangesService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +43,11 @@ export class OfferDetailsComponent implements OnInit {
         console.error('No ID provided in route parameters');
         // Handle redirection or display error message
       }
+    });
+    this.changesSubscription = this.changesService.getChangesObservable().subscribe(
+      (change: ChangesMessage) =>
+    {
+      this.checkIfCurrentOfferBooked(change);
     });
   }
 
@@ -93,6 +104,14 @@ export class OfferDetailsComponent implements OnInit {
     this.messageService.add({
       severity: 'success', summary: 'Success', detail: 'Oferta zarezerwowana, przejdź do zakładki rezerwacje aby ją opłacić'
     })
+  }
+
+  checkIfCurrentOfferBooked(change) {
+    if (change.offerId == this.offerId) {
+      this.messageService.add({
+        severity: 'secondary', summary: 'Uwaga', detail: 'Obecna oferta zarezerwowana przez innego użytkownika!'
+      })
+    }
   }
 
 }

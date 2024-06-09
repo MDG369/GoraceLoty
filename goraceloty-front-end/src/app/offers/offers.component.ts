@@ -15,7 +15,7 @@ import {ChangesMessage} from "../entity/ChangesMessage";
 export class OffersComponent implements OnInit {
   offers: Offer[] = [];
   filteredOffers: Offer[] = [];
-  cityArrival: string = 'Sal';      // Holds the value of city input
+  cityArrival: string;      // Holds the value of city input
   dateStart?: string; // Holds the value of date start input
   dateEnd?: string;   // Holds the value of date end input
   private changesSubscription: Subscription;
@@ -27,9 +27,8 @@ export class OffersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOffers();
-    this.changesSubscription = this.changesService.getChangesObservable().subscribe((changes: ChangesMessage[]) => {
+    this.changesSubscription = this.changesService.getChangesObservable().subscribe((changes: ChangesMessage) => {
       this.checkOfferPopularity();
-      console.log('Changes array updated:', this.changes);
     });
     this.checkOfferPopularity();
   }
