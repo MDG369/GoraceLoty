@@ -1,7 +1,6 @@
 package com.goraceloty.hotelservice.hotel.config;
 
 
-import com.goraceloty.hotelservice.hotel.control.TransportService;
 import com.goraceloty.hotelservice.saga.control.SagaService;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -9,7 +8,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +48,7 @@ public class RabbitConfig {
     }
 
     @Bean
-    TopicExchange actionExchange() {
+    TopicExchange offerExchange() {
         return new TopicExchange(offerExchangeName);
     }
 
@@ -65,8 +63,8 @@ public class RabbitConfig {
     }
 
     @Bean
-    Binding offersBinding(Queue offersQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(offersQueue).to(exchange).with("offers.#");
+    Binding offersBinding(Queue offersQueue, TopicExchange offerExchange) {
+        return BindingBuilder.bind(offersQueue).to(offerExchange).with("offers.#");
     }
 
     @Bean
@@ -90,26 +88,9 @@ public class RabbitConfig {
     }
 
     @Bean
-    SimpleMessageListenerContainer offersContainer(ConnectionFactory connectionFactory,
-                                                   MessageListenerAdapter offersListenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames("offersQueue");
-        container.setMessageListener(offersListenerAdapter);
-        return container;
-    }
-
-    @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
-        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
-            if (ack) {
-                System.out.println("Message sent successfully");
-            } else {
-                System.out.println("Message sending failed due to " + cause);
-            }
-        });
         return rabbitTemplate;
     }
 }

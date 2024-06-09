@@ -38,7 +38,7 @@ public class OfferController {
         return offerService.getHotelAvailability(id, numOfPeople);
     }
     @PostMapping("/book/offer")
-    public ResponseEntity<String> bookOffer(@RequestBody Offer offer) {
+    public ResponseEntity<String> bookOffer() {
         // Process the booking
         List<String> attributes = Arrays.asList("flightAvailability", "hotelAvailability", "basePrice");  // Example attributes
 
