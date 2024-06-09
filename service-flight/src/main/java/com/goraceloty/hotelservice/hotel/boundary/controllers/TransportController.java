@@ -21,7 +21,7 @@ public class TransportController {
         return ResponseEntity.ok().body("\"Connection to transport service works!\"");
     }
     @GetMapping("/matching")
-    public List<Transport> getTransportByExample(Transport transport) {
+    public List<Transport> getTransportByExample(@RequestBody Transport transport) {
         return transportService.getTransportByExample(transport);
     }
 

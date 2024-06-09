@@ -21,7 +21,7 @@ public class RabbitConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("localhost"); // Set RabbitMQ hostname (same as service name in Docker Compose)
+        connectionFactory.setHost("rabbitmq"); // Set RabbitMQ hostname (same as service name in Docker Compose)
         connectionFactory.setPort(5672); // Set RabbitMQ port
         connectionFactory.setUsername("guest"); // Set RabbitMQ username
         connectionFactory.setPassword("guest"); // Set RabbitMQ password

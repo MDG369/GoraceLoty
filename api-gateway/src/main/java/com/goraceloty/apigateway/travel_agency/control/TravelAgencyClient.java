@@ -1,8 +1,10 @@
 package com.goraceloty.apigateway.travel_agency.control;
 
 import com.goraceloty.apigateway.AppProperties;
+import com.goraceloty.apigateway.hotels.entity.Hotel;
 import com.goraceloty.apigateway.offers.entity.Offer;
 import com.goraceloty.apigateway.travel_agency.entity.OfferReservation;
+import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,6 +34,19 @@ public class TravelAgencyClient {
                 .bodyToMono(OfferReservation[].class)
                 .onErrorResume(RuntimeException.class, e -> {
                     log.fine("Getting list of offer reservations failed with: " + e);
+                    return Mono.empty();
+                });
+    }
+
+    public Mono<Double> getPrice(PriceObject priceObject) {
+        return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
+                        .path("/price")
+                        .build())
+                .body(Mono.just(priceObject), PriceObject.class)
+                .retrieve()
+                .bodyToMono(Double.class)
+                .onErrorResume(RuntimeException.class, e -> {
+                    log.fine("Getting adjusted price failed with: " + e);
                     return Mono.empty();
                 });
     }
