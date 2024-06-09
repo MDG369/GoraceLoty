@@ -52,4 +52,18 @@ public class TravelAgencyClient {
                 });
     }
 
+    public Mono<Boolean> pay(Long reservationID) {
+        System.out.println("pay: " + reservationID);
+        return webClient.method(HttpMethod.POST).uri(uriBuilder -> uriBuilder
+                        .path("/pay")
+                        .build())
+                .body(Mono.just(reservationID), Long.class)
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .onErrorResume(RuntimeException.class, e -> {
+                    log.fine("Payment failed with: " + e);
+                    return Mono.empty();
+                });
+    }
+
 }

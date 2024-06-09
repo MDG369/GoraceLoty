@@ -180,6 +180,7 @@ public class TravelAgencyService {
         return days;
     }
     public void pay(Long reservationId) {
+        System.out.println("pay function triggered");
         OfferReservation reservation = fetchReservationById(reservationId);
         reservation.setIsPaid(true);
         travelAgencyRepository.save(reservation);

@@ -29,6 +29,7 @@ public class OfferReservationController {
 
     @PostMapping("/pay")
     public void pay(@RequestBody Long reservationId) {
+        System.out.println("pay request received");
         travelAgencyService.pay(reservationId);
     }
 //    @PostMapping

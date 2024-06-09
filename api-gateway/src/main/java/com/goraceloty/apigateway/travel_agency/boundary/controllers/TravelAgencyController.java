@@ -46,4 +46,9 @@ public class TravelAgencyController {
         var res = travelAgencyClient.getPrice(priceObject).block(Duration.ofSeconds(BLOCK_TIME));
         return res;
     }
+
+    @GetMapping("pay")
+    public void pay(@RequestBody Long reservationID) {
+        travelAgencyClient.pay(reservationID).block(Duration.ofSeconds(BLOCK_TIME));
+    }
 }
