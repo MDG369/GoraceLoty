@@ -1,9 +1,6 @@
 package com.goraceloty.apigateway.travel_agency.boundary.controllers;
 
 import com.goraceloty.apigateway.AppProperties;
-import com.goraceloty.apigateway.hotels.control.HotelClient;
-import com.goraceloty.apigateway.hotels.entity.Hotel;
-import com.goraceloty.apigateway.saga.entity.ChangeMessage;
 import com.goraceloty.apigateway.travel_agency.control.TravelAgencyClient;
 import com.goraceloty.apigateway.travel_agency.entity.OfferReservation;
 import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -33,7 +29,7 @@ public class TravelAgencyController {
 
     @GetMapping("matching")
     public List<OfferReservation> getAllOfferReservations(OfferReservation offerReservation) {
-        var res = travelAgencyClient.getAllReservations().block(Duration.ofSeconds(BLOCK_TIME));
+        var res = travelAgencyClient.getMatchingReservations(offerReservation).block(Duration.ofSeconds(BLOCK_TIME));
         return Arrays.asList(res);
     }
 

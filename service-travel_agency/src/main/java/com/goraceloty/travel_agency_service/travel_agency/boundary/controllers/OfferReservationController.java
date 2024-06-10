@@ -16,7 +16,7 @@ public class OfferReservationController {
     private final TravelAgencyService travelAgencyService;
 
     @GetMapping("/matching")
-    public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
+    public List<OfferReservation> getOfferReservationByExample(@RequestBody OfferReservation offerReservation) {
         return travelAgencyService.getOfferReservationByExample(offerReservation);
     }
 

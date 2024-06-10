@@ -21,7 +21,7 @@ export class ReservationTabComponent implements OnInit {
 
 
   ngOnInit() {
-    this.travelAgencyService.getUsersReservations(1).subscribe(data => this.reservations = data);
+    this.travelAgencyService.getUsersReservations(parseInt(sessionStorage.getItem('userId')!)).subscribe(data => this.reservations = data);
   }
 
   payReservation(reservationID: number) {
