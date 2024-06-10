@@ -37,11 +37,12 @@ export class BookingModalComponent implements OnInit {
     this.reservationRequest = new ReservationRequest();
     this.reservationRequest.hotelID = this.hotelId;
     this.reservationRequest.transportID = this.transportId;
-    this.reservationRequest.clientID = this.authService.userId;
+    this.reservationRequest.clientID = parseInt(sessionStorage.getItem('userId')!);
     this.reservationRequest.offerID = this.offerId;
     this.reservationRequest.startDate = '2024-06-04';
     console.log(this.reservationRequest);
     console.log(this.transportId);
+
   }
 
   increment(field: NumericKeysOfReservationRequest) {
@@ -83,10 +84,8 @@ export class BookingModalComponent implements OnInit {
 
   confirmBooking():void{
     this.offerService.startSaga(this.reservationRequest).subscribe(data=>{
-
       this.succesfulTransaction.emit();
       this.closeModal.emit();
-
     });
   }
 

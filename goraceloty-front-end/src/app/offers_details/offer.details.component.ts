@@ -107,7 +107,7 @@ export class OfferDetailsComponent implements OnInit {
   }
 
   checkIfCurrentOfferBooked(change) {
-    if (change.offerId == this.offerId && change.clientId != this.authService.userId) {
+    if (change.offerId == this.offerId && change.clientId != sessionStorage.getItem('userId')) {
       this.messageService.add({
         severity: 'secondary', summary: 'Uwaga', detail: 'Obecna oferta zarezerwowana przez innego użytkownika!'
       })

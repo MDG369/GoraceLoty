@@ -8,7 +8,6 @@ import { map } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = '/api';
-  userId: number = 0
   constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string) {
@@ -18,7 +17,7 @@ export class AuthService {
         map(response => {
           if (response && response.token) {
             sessionStorage.setItem('token', response.token);
-            this.userId = response.userId;
+            sessionStorage.setItem('userId', String(response.userId))
             return true;
           }
           return false;

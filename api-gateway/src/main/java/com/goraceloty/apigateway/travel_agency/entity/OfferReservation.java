@@ -1,7 +1,5 @@
 package com.goraceloty.apigateway.travel_agency.entity;
 
-import ch.qos.logback.core.net.server.Client;
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -25,6 +23,6 @@ public class OfferReservation {
     private Long hotelID;
     private Long transportID;
     private Boolean isPaid;
-    private Client client;
+    private Long clientID;
 }
 
