@@ -18,15 +18,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfiguration {
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("rabbitmq"); // Set RabbitMQ hostname (same as service name in Docker Compose)
-        connectionFactory.setPort(5672); // Set RabbitMQ port
-        connectionFactory.setUsername("guest"); // Set RabbitMQ username
-        connectionFactory.setPassword("guest"); // Set RabbitMQ password
-        return connectionFactory;
-    }
     static final String topicExchangeName = "error_exchange";
 
     static final String queueName = "error_queue";
