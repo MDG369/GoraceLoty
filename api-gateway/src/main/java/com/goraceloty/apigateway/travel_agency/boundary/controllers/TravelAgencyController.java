@@ -9,10 +9,7 @@ import com.goraceloty.apigateway.travel_agency.entity.OfferReservation;
 import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -53,7 +50,7 @@ public class TravelAgencyController {
         return res;
     }
 
-    @GetMapping("pay")
+    @PostMapping("pay")
     public void pay(@RequestBody Long reservationID) {
         travelAgencyClient.pay(reservationID).block(Duration.ofSeconds(BLOCK_TIME));
     }

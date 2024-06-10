@@ -25,10 +25,10 @@ import java.util.Optional;
 
 public class TravelAgencyService {
     private final TravelAgencyRepository travelAgencyRepository;
-    public final String transportServiceUrl = "http://service-flight:8082/";
-    //public final String transportServiceUrl = "http://localhost:8082/";
-    public final String hotelServiceUrl = "http://service-hotel:8080/";
-    //public final String hotelServiceUrl = "http://localhost:8080/";
+//    public final String transportServiceUrl = "http://service-flight:8082/";
+    public final String transportServiceUrl = "http://localhost:8082/";
+//    public final String hotelServiceUrl = "http://service-hotel:8080/";
+    public final String hotelServiceUrl = "http://localhost:8080/";
     private final RestTemplate restTemplate;
 
 

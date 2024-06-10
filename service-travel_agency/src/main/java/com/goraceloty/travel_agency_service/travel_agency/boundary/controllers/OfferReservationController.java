@@ -23,7 +23,6 @@ public class OfferReservationController {
     @GetMapping("/price")
     public double getAdjustedPrice(
             @RequestBody PriceObject priceObject) {
-
         return travelAgencyService.calculatePrice(priceObject);
     }
 
