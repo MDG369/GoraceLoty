@@ -7,8 +7,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +23,7 @@ import java.util.Optional;
 @Service
 public class AvailabilityService {
 
+    private final RestTemplate restTemplate;
     @Autowired
     private final AvailabilityRepository availabilityRepository;
 
@@ -102,6 +107,19 @@ public class AvailabilityService {
 
         availabilityRepository.save(availability);
         System.out.println("Hotel availability updated");
+    }
+
+    public String checkAvailability() {
+        String url = "http://localhost:8080/availability";
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    // New PUT request method
+    public String updateAvailability(Object requestData) {
+        String url = "http://localhost:8080/availability";
+        HttpEntity<Object> requestEntity = new HttpEntity<>(requestData);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, String.class);
+        return response.getBody();
     }
 
     private Integer updateRoomAvailability(Integer currentAvailability, int addedValue) {
