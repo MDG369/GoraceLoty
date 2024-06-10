@@ -41,8 +41,14 @@ public class TravelAgencyController {
         return Arrays.asList(res);
     }
 
+    @GetMapping("matching")
+    public List<OfferReservation> getAllOfferReservations(OfferReservation offerReservation) {
+        var res = travelAgencyClient.getAllReservations().block(Duration.ofSeconds(BLOCK_TIME));
+        return Arrays.asList(res);
+    }
+
     @GetMapping("price")
-    public Double getPrice(@RequestBody PriceObject priceObject) {
+    public Double getPrice(PriceObject priceObject) {
         var res = travelAgencyClient.getPrice(priceObject).block(Duration.ofSeconds(BLOCK_TIME));
         return res;
     }

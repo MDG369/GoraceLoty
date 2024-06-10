@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -12,9 +11,9 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(username: string, password: string): Observable<boolean> {
+  login(username: string, password: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { headers })
+    return this.http.post<{ token:string }>(`${this.apiUrl}/login`, { username, password }, { headers })
       .pipe(
         map(response => {
           if (response && response.token) {

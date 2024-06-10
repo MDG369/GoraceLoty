@@ -61,6 +61,18 @@ public class SecurityConfig {
                 .roles("USER")
                 .build();
 
+        UserDetails user4 = User.builder()
+                .username("user4")
+                .password(passwordEncoder().encode("password4"))
+                .roles("USER")
+                .build();
+
+        UserDetails user5 = User.builder()
+                .username("user5")
+                .password(passwordEncoder().encode("password5"))
+                .roles("USER")
+                .build();
+
         return new InMemoryUserDetailsManager(user1, user2, user3);
     }
 

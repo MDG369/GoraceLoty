@@ -2,6 +2,7 @@ package com.goraceloty.apigateway.offers.control;
 
 import com.goraceloty.apigateway.AppProperties;
 import com.goraceloty.apigateway.offers.entity.Offer;
+import com.goraceloty.apigateway.saga.entity.ReservationRequest;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,19 @@ public class OfferClient {
                 .bodyToMono(Offer[].class)
                 .onErrorResume(RuntimeException.class, e -> {
                     log.fine("Getting list of offers by example failed with: " + e);
+                    return Mono.empty();
+                });
+    }
+
+    public Mono<Long> tryBookingOffer(ReservationRequest reservationRequest) {
+        return webClient.method(HttpMethod.POST).uri(uriBuilder -> uriBuilder
+                        .path("/book")
+                        .build())
+                .body(Mono.just(reservationRequest), ReservationRequest.class)
+                .retrieve()
+                .bodyToMono(Long.class)
+                .onErrorResume(RuntimeException.class, e -> {
+                    log.fine("Initiating booking saga failed with error: " + e);
                     return Mono.empty();
                 });
     }

@@ -21,7 +21,6 @@ public class SagaService {
     public String sendChangeMessage(ChangeMessage message) throws JsonProcessingException {
         log.info("Received message: + " + objectMapper.writeValueAsString(message));
         messagingTemplate.convertAndSend("/topic/changes",  message);
-
         return "Request processed";
     }
 
