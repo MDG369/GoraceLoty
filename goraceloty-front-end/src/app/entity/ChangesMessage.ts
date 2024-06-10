@@ -3,4 +3,5 @@ export interface ChangesMessage {
   hotelId: number;
   transportId: number;
   offerId: number;
+  clientId: number;
 }

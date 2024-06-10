@@ -46,7 +46,7 @@ public class OfferPurchaseSaga{
         // Step 3: Reserve flight
             String res3 = (String) rabbitTemplate.convertSendAndReceive("transport_exchange", "transport.action.baz", reservationRequest);
 
-            ChangeMessage changeMessage = new ChangeMessage("Offer booked", reservationRequest.getHotelID(), reservationRequest.getTransportID(), reservationRequest.getOfferID());
+            ChangeMessage changeMessage = new ChangeMessage("Offer booked", reservationRequest.getHotelID(), reservationRequest.getTransportID(), reservationRequest.getOfferID(), reservationRequest.getClientID());
 
             String res4 = (String) rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.baz", changeMessage);
             

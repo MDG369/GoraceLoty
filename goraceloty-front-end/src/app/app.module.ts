@@ -44,7 +44,7 @@ import {LoginComponent} from "./login/login.component";
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
-          return localStorage.getItem('token'); // Provide the function to retrieve the JWT token
+          return sessionStorage.getItem('token'); // Provide the function to retrieve the JWT token
         }
       }
     })
