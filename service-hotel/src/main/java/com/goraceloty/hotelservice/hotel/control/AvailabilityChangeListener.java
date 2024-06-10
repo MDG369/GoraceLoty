@@ -21,7 +21,7 @@ public class AvailabilityChangeListener {
     @Autowired
     private AvailabilityService availabilityService;
 
-    @RabbitListener(queues = "offersQueue")
+    @RabbitListener(queues = "offersHotelQueue")
     public void handleOffer(OfferMessageReceiver message)  throws JsonProcessingException {
         logger.info("Received update: {}", objectMapper.writeValueAsString(message));
         System.out.println("Received update: " + message);
