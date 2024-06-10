@@ -10,4 +10,5 @@ public class ChangeMessage {
     private Long hotelId;
     private Long transportId;
     private Long offerId;
+    private Long clientId;
 }

@@ -30,11 +30,14 @@ export class OffersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOffers();
+
     this.changesSubscription = this.changesService.getChangesObservable().subscribe((changes: ChangesMessage) => {
       this.checkOfferPopularity();
     });
+
     this.checkOfferPopularity();
   }
+
   loadOffers(): void {
       this.offerService.getOffers(this.cityArrival, this.dateStart, this.dateEnd).subscribe({
         next: (offers) => {this.offers = offers;     this.checkOfferPopularity();
