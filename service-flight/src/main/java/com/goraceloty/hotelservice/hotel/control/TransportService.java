@@ -2,6 +2,7 @@ package com.goraceloty.hotelservice.hotel.control;
 
 import com.goraceloty.hotelservice.hotel.entity.Transport;
 import com.goraceloty.hotelservice.saga.entity.ReservationRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,25 @@ public class TransportService {
         return transport.orElse(null);
     }
 
+    public int getAvailableSeats(Long flightId) {
+        Transport transport = findTransportByID(flightId);
+        return transport.getNumAvailableSeats();
+    }
+
+    // Method to get the total number of seats for a given flight ID
+    public int getNumTotalSeats(Long flightId) {
+        Transport transport = findTransportByID(flightId);
+        return transport.getNumTotalSeats();
+    }
+
+    // Method to set the total number of seats for a given flight ID
+    @Transactional
+    public void setTotalSeats(Long flightId, int seats) {
+        Transport transport = findTransportByID(flightId);
+        transport.setNumTotalSeats(seats);
+        transportRepository.save(transport);
+    }
+
     public void bookTransport(ReservationRequest reservationRequest) throws MalformedURLException {
         Transport transport = findTransportByID(reservationRequest.getTransportID());
         Integer seatsToBook =  reservationRequest.getNumOfAdults() + reservationRequest.getNumOfChildren();
@@ -85,6 +105,13 @@ public class TransportService {
         transportRepository.save(transport);
 
         //logger.info("Added {} seats to flight ID {}. Total available seats now: {}", seatsToAdd, flightId, flight.getAvailableSeats());
+    }
+
+    public void adjustPrice(Long flightId, int valueToAdjust) {
+        Transport transport = findTransportByID(flightId);
+        int newPrice = transport.getNumBasePrice() + valueToAdjust;
+        transport.setNumBasePrice(newPrice);
+        transportRepository.save(transport);
     }
 
 

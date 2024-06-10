@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -86,5 +87,25 @@ public class AvailabilityService {
         //System.out.println(start.get().getAvailabilityID());
         //System.out.println(end.get().getAvailabilityID());
         return true;
+    }
+
+    @Transactional
+    public void addHotelAvailability(long id, int value) {
+        Availability availability = availabilityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+
+        availability.setNumOfAvSingleRooms(updateRoomAvailability(availability.getNumOfAvSingleRooms(), value));
+        availability.setNumOfAvDoubleRooms(updateRoomAvailability(availability.getNumOfAvDoubleRooms(), value));
+        availability.setNumOfAvTripleRooms(updateRoomAvailability(availability.getNumOfAvTripleRooms(), value));
+        availability.setNumOfAvStudios(updateRoomAvailability(availability.getNumOfAvStudios(), value));
+        availability.setNumOfAvApartments(updateRoomAvailability(availability.getNumOfAvApartments(), value));
+
+        availabilityRepository.save(availability);
+        System.out.println("Hotel availability updated");
+    }
+
+    private Integer updateRoomAvailability(Integer currentAvailability, int addedValue) {
+        int updatedValue = currentAvailability + addedValue;
+        return Math.max(updatedValue, 0); // Ensures that the value never goes below 0
     }
 }

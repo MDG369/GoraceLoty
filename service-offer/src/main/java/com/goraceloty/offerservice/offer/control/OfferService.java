@@ -2,6 +2,7 @@ package com.goraceloty.offerservice.offer.control;
 
 import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.OfferChange;
+import com.goraceloty.offerservice.offer.entity.OfferMessage;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Example;
@@ -25,8 +26,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Log
 @Service
@@ -37,8 +36,6 @@ public class OfferService {
     private final WebClient webClient;
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
-    List<String> attributes = List.of("flightAvail", "hotelAvail", "basePrice");
 
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository, OfferChangeRepository offerChangeRepository) {
         this.offerRepository = offerRepository;
@@ -61,6 +58,16 @@ public class OfferService {
 
         return results;
     }
+
+    public List<OfferChange> getOffersChangesByExample(OfferChange offerChange) {
+        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        final Example<OfferChange> example = Example.of(offerChange, matcher);
+        List<OfferChange> results;
+        results = offerChangeRepository.findAll(example);
+
+        return results;
+    }
+
 
     private String sendGet(URL url) {
         HttpURLConnection con = null;
@@ -236,45 +243,88 @@ public class OfferService {
                     return Mono.empty();
                 });
     }
-    @Transactional
+    private final Logger logger = LoggerFactory.getLogger(OfferService.class);
+
     public Offer getRandomOfferDetails(List<String> attributes) {
-        System.out.println("Message started");
-        final Logger logger = LoggerFactory.getLogger(OfferService.class);
         List<Offer> offers = offerRepository.findAll();
         if (offers.isEmpty()) {
-            return null; // or throw an exception based on your use case
+            return null; // Alternatively, throw a more specific exception if needed
         }
 
-        // Get a random offer from the list
-        Offer randomOffer = offers.get(new Random().nextInt(offers.size()));
-        //String attributeToModify = attributes.get(new Random().nextInt(attributes.size()));
-        String attributeToModify = "flightAvailability";
+        Offer randomOffer = getRandomOffer(offers);
+        String attributeToModify = getRandomAttribute(attributes);
+        OfferMessage offerMessage = createOfferMessage(randomOffer, attributeToModify);
+
+        logAndSaveOfferChanges(randomOffer, offerMessage, attributeToModify);
+        sendMessage(offerMessage);
+
+        return randomOffer;
+    }
+
+    private Offer getRandomOffer(List<Offer> offers) {
+        return offers.get(new Random().nextInt(offers.size()));
+    }
+
+    private String getRandomAttribute(List<String> attributes) {
+        return attributes.get(new Random().nextInt(attributes.size()));
+    }
+
+    private OfferMessage createOfferMessage(Offer offer, String attributeToModify) {
+        OfferMessage offerMessage = new OfferMessage();
         String logMessage = "Modified ";
+        String messageKey = "";
+        String exchange = "";
+
         switch (attributeToModify) {
             case "flightAvailability":
-                // Toggle flight availability
-                int flightAvailabilityAdjustment = ThreadLocalRandom.current().nextInt(-10, 10);
-                logMessage += "flightAvailability to " + (" for offer ID " + randomOffer.getId());
+                adjustTransportAvailability(offer, offerMessage);
                 break;
             case "hotelAvailability":
-                // Toggle hotel availability
-                int hotelAvailabilityAdjustment = ThreadLocalRandom.current().nextInt(-10, 10);
-                logMessage += "hotelAvailability to " + (" for offer ID " + randomOffer.getId());
+                adjustHotelAvailability(offer, offerMessage);
                 break;
-            case "basePrice":
-                // Randomly adjust the base price by a value between -10 and 10
-                double priceAdjustment = ThreadLocalRandom.current().nextDouble(-100.0, 100.1);
-                logMessage += "basePrice by " + priceAdjustment + " for offer ID " + randomOffer.getId();
-                //send message to
+            case "baseFlightPrice":
+                adjustBaseTransportPrice(offer, offerMessage);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + attributeToModify);
+                throw new IllegalStateException("Unexpected attribute: " + attributeToModify);
         }
-        logger.info(logMessage);
-        OfferChange database_entry = new OfferChange(randomOffer.getId(), logMessage, attributeToModify);
+
+        logger.info(offerMessage.getLogMessage());
+        return offerMessage;
+    }
+
+    private void adjustTransportAvailability(Offer offer, OfferMessage offerMessage) {
+        int adjustment = ThreadLocalRandom.current().nextInt(-10, 10);
+        setOfferMessageDetails(offerMessage, offer.getTransportID(), "transport_offer_exchange", "transport.availability", adjustment);
+        offerMessage.setLogMessage("Modified flight availability for flight " + offer.getTransportID() + " by " + adjustment);
+    }
+
+    private void adjustHotelAvailability(Offer offer, OfferMessage offerMessage) {
+        int adjustment = ThreadLocalRandom.current().nextInt(-5, 5);
+        setOfferMessageDetails(offerMessage, offer.getHotelID(), "hotel_offer_exchange", "hotel.availability", adjustment);
+        offerMessage.setLogMessage("Modified availability for hotel " + offer.getHotelID() + " by " + adjustment);
+    }
+
+    private void adjustBaseTransportPrice(Offer offer, OfferMessage offerMessage) {
+        int adjustment = ThreadLocalRandom.current().nextInt(-100, 100);
+        setOfferMessageDetails(offerMessage, offer.getTransportID(), "transport_offer_exchange", "transport.price", adjustment);
+        offerMessage.setLogMessage("Modified base price for flight " + offer.getTransportID() + " by " + adjustment);
+    }
+
+    private void setOfferMessageDetails(OfferMessage offerMessage, long id, String exchange, String messageKey, int value) {
+        offerMessage.setID(id);
+        offerMessage.setValue(value);
+        offerMessage.setMessageType(messageKey);
+        offerMessage.setExchange(exchange);
+    }
+
+    private void logAndSaveOfferChanges(Offer offer, OfferMessage offerMessage, String attributeToModify) {
+        OfferChange database_entry = new OfferChange(offer.getId(), offerMessage.getLogMessage(), attributeToModify);
         offerChangeRepository.save(database_entry);
-        rabbitTemplate.convertAndSend("offer_exchange", "offers.#", logMessage);
-        return randomOffer;
+    }
+
+    private void sendMessage(OfferMessage offerMessage) {
+        rabbitTemplate.convertAndSend(offerMessage.getExchange(), offerMessage.getMessageType(), offerMessage);
     }
 
 }

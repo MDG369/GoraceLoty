@@ -1,6 +1,7 @@
 package com.goraceloty.hotelservice.config;
 
 
+import com.goraceloty.hotelservice.hotel.control.AvailabilityChangeListener;
 import com.goraceloty.hotelservice.saga.control.SagaService;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -21,9 +22,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
     static final String topicExchangeName = "hotel_exchange";
+    static final String offerExchangeName = "hotel_offer_exchange";
 
     static final String actionQueueName = "hotel_action_queue";
     static final String compensationQueueName = "hotel_compensation_queue";
+    static final String offerQueue = "offersHotelQueue";
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -51,8 +54,18 @@ public class RabbitConfig {
     }
 
     @Bean
+    Queue offersQueue() {
+        return new Queue(offerQueue, false);
+    }
+
+    @Bean
     TopicExchange exchange() {
         return new TopicExchange(topicExchangeName);
+    }
+
+    @Bean
+    TopicExchange offerExchange() {
+        return new TopicExchange(offerExchangeName);
     }
 
     @Bean
@@ -66,6 +79,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    Binding offersBinding(Queue offersQueue, TopicExchange offerExchange) {
+        return BindingBuilder.bind(offersQueue).to(offerExchange).with("hotel.availability");
+    }
+
+    @Bean
     MessageListenerAdapter actionListenerAdapter(SagaService sagaService) {
         return new MessageListenerAdapter(sagaService, "handleAction");
     }
@@ -74,6 +92,11 @@ public class RabbitConfig {
     MessageListenerAdapter compensationListenerAdapter(SagaService sagaService) {
         return new MessageListenerAdapter(sagaService, "handleCompensation");
     }
+
+//    @Bean
+//    MessageListenerAdapter offersListenerAdapter(AvailabilityChangeListener availabilityChangeListener) {
+//        return new MessageListenerAdapter(availabilityChangeListener, "handleOffer");
+//    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter converter) {

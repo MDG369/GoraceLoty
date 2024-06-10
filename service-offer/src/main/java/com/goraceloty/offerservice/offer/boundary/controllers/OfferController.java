@@ -2,6 +2,7 @@ package com.goraceloty.offerservice.offer.boundary.controllers;
 
 import com.goraceloty.offerservice.offer.control.OfferService;
 import com.goraceloty.offerservice.offer.entity.Offer;
+import com.goraceloty.offerservice.offer.entity.OfferChange;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class OfferController {
     @PostMapping("/book/offer")
     public ResponseEntity<String> bookOffer() {
         // Process the booking
-        List<String> attributes = Arrays.asList("flightAvailability", "hotelAvailability", "basePrice");  // Example attributes
+        List<String> attributes = Arrays.asList("flightAvailability", "hotelAvailability", "baseFlightPrice");
 
         Offer updatedOffer = offerService.getRandomOfferDetails(attributes);
         if (updatedOffer == null) {
@@ -70,6 +71,11 @@ public class OfferController {
     @GetMapping("/matching")
     public List<Offer> getOfferByExample(Offer offer) {
         return offerService.getOffersByExample(offer);
+    }
+
+    @GetMapping("/matchingChange")
+    public List<OfferChange> getOfferChangesByExample(OfferChange offerChange) {
+        return offerService.getOffersChangesByExample(offerChange);
     }
 
     @GetMapping("/event")

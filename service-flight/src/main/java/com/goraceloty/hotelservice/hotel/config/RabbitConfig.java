@@ -16,11 +16,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
     static final String topicExchangeName = "transport_exchange";
-    static final String offerExchangeName = "offer_exchange";
+    static final String offerExchangeName = "transport_offer_exchange";
 
     static final String actionQueueName = "transport_action_queue";
     static final String compensationQueueName = "transport_compensation_queue";
-    static final String offerQueue = "offersQueue";
+    static final String offerQueue = "offersTransportQueue";
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -64,7 +64,12 @@ public class RabbitConfig {
 
     @Bean
     Binding offersBinding(Queue offersQueue, TopicExchange offerExchange) {
-        return BindingBuilder.bind(offersQueue).to(offerExchange).with("offers.#");
+        return BindingBuilder.bind(offersQueue).to(offerExchange).with("transport.availability");
+    }
+
+    @Bean
+    Binding offersPriceBinding(Queue offersQueue, TopicExchange offerExchange) {
+        return BindingBuilder.bind(offersQueue).to(offerExchange).with("transport.price");
     }
 
     @Bean
@@ -82,10 +87,10 @@ public class RabbitConfig {
         return new MessageListenerAdapter(sagaService, "handleCompensation");
     }
 
-    @Bean
-    MessageListenerAdapter offersListenerAdapter(AvailabilityChangeListener availabilityChangeListener) {
-        return new MessageListenerAdapter(availabilityChangeListener, "handleOffer");
-    }
+//    @Bean
+//    MessageListenerAdapter offersListenerAdapter(AvailabilityChangeListener availabilityChangeListener) {
+//        return new MessageListenerAdapter(availabilityChangeListener, "handleOffer");
+//    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
