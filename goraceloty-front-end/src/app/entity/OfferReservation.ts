@@ -24,4 +24,17 @@ export class OfferReservation {
   transportID: number;
   isPaid: boolean;
 
+  static countHotelOccurrences(reservations: OfferReservation[]): { [key: number]: number } {
+    return reservations.reduce((acc, reservation) => {
+      acc[reservation.hotelID] = (acc[reservation.hotelID] || 0) + 1;
+      return acc;
+    }, {} as { [key: number]: number });
+  }
+
+  static countTransportOccurrences(reservations: OfferReservation[]): { [key: number]: number } {
+    return reservations.reduce((acc, reservation) => {
+      acc[reservation.transportID] = (acc[reservation.transportID] || 0) + 1;
+      return acc;
+    }, {} as { [key: number]: number });
+  }
 }

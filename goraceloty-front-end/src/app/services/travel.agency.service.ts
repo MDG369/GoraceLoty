@@ -35,7 +35,7 @@ export class TravelAgencyService {
   }
 
   getAllReservations() {
-    return this.http.get<OfferReservation[]>(`${this.apiUrl}`)
+    return this.http.get<OfferReservation[]>(`${this.apiUrl}/matching`)
   }
 
   payReservation(reservationID: number) {
