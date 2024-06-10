@@ -21,17 +21,17 @@ export class AuthHelper {
   }
 
   public logout() {
-    localStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.tokenKey);
     this.router.navigate(['/login']);
   }
 
   public isLoggedIn(): boolean {
-    let token = localStorage.getItem(this.tokenKey);
+    let token = sessionStorage.getItem(this.tokenKey);
     return token!=null && token.length > 0;
   }
 
   public getToken(): string | null {
-    return this.isLoggedIn() ? localStorage.getItem(this.tokenKey):null;
+    return this.isLoggedIn() ? sessionStorage.getItem(this.tokenKey):null;
   }
 
 }

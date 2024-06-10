@@ -3,13 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { TransportService } from '../services/transport.service';
 import { OfferService } from '../services/offer.service';
 import { Transport } from '../entity/Transport';
-import { Offer } from '../entity/Offer';
 import {HotelService} from "../services/hotel.service";
 import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
 import { MessageService } from 'primeng/api';
 import {Subscription} from "rxjs";
 import {ChangesMessage} from "../entity/ChangesMessage";
 import {ChangesService} from "../services/changes.service";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-offer-details',
@@ -29,7 +29,8 @@ export class OfferDetailsComponent implements OnInit {
     private hotelService: HotelService,
     private offerService: OfferService,
     private messageService: MessageService,
-    private changesService: ChangesService
+    private changesService: ChangesService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +73,6 @@ export class OfferDetailsComponent implements OnInit {
   loadMatchingTransport(transportId: number): void {
     this.transportService.getMatchingTransport(transportId).subscribe({
       next: transport => {
-        console.log("Transport details loaded:", transport);
         this.transport = transport;
       },
       error: error => {
@@ -107,7 +107,7 @@ export class OfferDetailsComponent implements OnInit {
   }
 
   checkIfCurrentOfferBooked(change) {
-    if (change.offerId == this.offerId) {
+    if (change.offerId == this.offerId && change.clientId != this.authService.userId) {
       this.messageService.add({
         severity: 'secondary', summary: 'Uwaga', detail: 'Obecna oferta zarezerwowana przez innego użytkownika!'
       })

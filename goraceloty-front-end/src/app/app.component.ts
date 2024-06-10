@@ -4,6 +4,7 @@ import {WebsocketService} from "./services/websocket.service";
 import {Subscription} from "rxjs";
 import {MessageService} from "primeng/api";
 import {ChangesService} from "./services/changes.service";
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent implements OnDestroy, OnInit {
   hotelsString: string = 'none';
   private changesSubscription: Subscription;
 
-  constructor(private websocketService: WebsocketService, private messageService: MessageService,
+  constructor(private websocketService: WebsocketService, private messageService: MessageService, private authService: AuthService,
   private changesService: ChangesService) {
 
   }
@@ -32,6 +33,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.websocketService.tearDownWebsocketEvents();
+    this.authService.logout();
   }
 
 

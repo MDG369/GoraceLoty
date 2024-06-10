@@ -8,16 +8,17 @@ import { map } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = '/api';
-
+  userId: number = 0
   constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<{ token:string }>(`${this.apiUrl}/login`, { username, password }, { headers })
+    return this.http.post<{ token:string, userId: number }>(`${this.apiUrl}/login`, { username, password }, { headers })
       .pipe(
         map(response => {
           if (response && response.token) {
-            localStorage.setItem('token', response.token);
+            sessionStorage.setItem('token', response.token);
+            this.userId = response.userId;
             return true;
           }
           return false;
@@ -26,16 +27,16 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 }
 
