@@ -30,13 +30,13 @@ public class OfferReservation {
     private Long hotelID;
     private Long transportID;
     private Boolean isPaid;
-    @OneToOne
-    private Client client;
+    private Long clientID;
 
     public void createOfferReservationFromReservationRequest(ReservationRequest reservationRequest) {
         this.setHotelID(reservationRequest.getHotelID());
         this.setTransportID(reservationRequest.getTransportID());
         this.setOfferID(reservationRequest.getOfferID());
+        this.setClientID(reservationRequest.getClientID());
         this.setReservationTime(new Timestamp(System.currentTimeMillis()));
         this.setStartDate(reservationRequest.getStartDate());
         this.setNumAdult(reservationRequest.getNumOfAdults());
