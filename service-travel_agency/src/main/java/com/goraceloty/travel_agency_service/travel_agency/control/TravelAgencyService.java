@@ -2,6 +2,7 @@ package com.goraceloty.travel_agency_service.travel_agency.control;
 
 import com.goraceloty.travel_agency_service.saga.entity.ReservationRequest;
 import com.goraceloty.travel_agency_service.travel_agency.entity.OfferReservation;
+import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 //import com.goraceloty.travel_agency_service.travel_agency.entity.SeatDataDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -19,8 +20,15 @@ import java.util.Optional;
 
 public class TravelAgencyService {
     private final TravelAgencyRepository travelAgencyRepository;
+<<<<<<< HEAD
     public final String transportServiceUrl = "http://service-flight:8080/transports/";
     public final String hotelServiceUrl = "http://service-hotel:8080/hotels/";
+=======
+//    public final String transportServiceUrl = "http://service-flight:8082/";
+    public final String transportServiceUrl = "http://localhost:8082/";
+//    public final String hotelServiceUrl = "http://service-hotel:8080/";
+    public final String hotelServiceUrl = "http://localhost:8080/";
+>>>>>>> origin/main
     private final RestTemplate restTemplate;
 
 
@@ -87,6 +95,7 @@ public class TravelAgencyService {
         return numChildren > 0 ? 0.95 : 1.0;
     }
 
+<<<<<<< HEAD
     public double calculatePrice(Long reservationId) {
         OfferReservation reservation = fetchReservationById(reservationId);
         if (reservation == null) {
@@ -101,16 +110,28 @@ public class TravelAgencyService {
         double groupDiscount = getGroupDiscount(numAdults, numChildren);;
         double childrenDiscount = getChildrenDiscount(numChildren);
         Integer seatDetails = fetchSeatDetails(transportServiceUrl, transportId);
+=======
+    public double calculatePrice(PriceObject priceObject) {
+        //OfferReservation reservation = fetchReservationById(reservationId);
+        //if (reservation == null) {
+           // throw new IllegalArgumentException("No reservation found with ID: " + reservationId);
+       // }
+        //Integer numAdults = reservation.getNumAdult();
+        int totalPeople = priceObject.getNumChildren() + priceObject.getNumAdults();
+        double groupDiscount = getGroupDiscount(priceObject.getNumAdults(), priceObject.getNumChildren());;
+        double childrenDiscount = getChildrenDiscount(priceObject.getNumChildren());
+        double seatDetails = fetchSeatDetails(transportServiceUrl, priceObject.getTransportId());
+>>>>>>> origin/main
         double transportPrice = calculateTransportPrice(seatDetails);
         double basePrice = 100.0;
-        Integer standard = fetchStandardDetails(hotelServiceUrl, hotelId);
+        Integer standard = fetchStandardDetails(hotelServiceUrl, priceObject.getHotelId());
         double hotelPrice= calculateHotelPrice(standard, totalPeople);
 
         //total price computation
         double totalDiscount = childrenDiscount * groupDiscount;
-        double totalBasePrice = basePrice * duration * totalPeople;
+        double totalBasePrice = basePrice * priceObject.getDuration() * totalPeople;
         double totalTransportPrice = transportPrice * totalPeople;
-        double totalHotelPrice =  totalPeople * duration;
+        double totalHotelPrice =  totalPeople * priceObject.getDuration();
 
         System.out.println("Cena transportu" + transportPrice);
         System.out.println("Cena noclegu" + hotelPrice);
@@ -154,11 +175,32 @@ public class TravelAgencyService {
         return travelAgencyRepository.findAll(example, Sort.by(Sort.Direction.DESC, "reservationTime")).getFirst();
     }
 
+<<<<<<< HEAD
+=======
+    public static int calculateTripDuration(String dateStart, String dateEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Parse the start and end dates from the given strings
+        LocalDate startDate = LocalDate.parse(dateStart, formatter);
+        LocalDate endDate = LocalDate.parse(dateEnd, formatter);
+
+        // Calculate the number of days between the start and end dates
+        int days = (int) ChronoUnit.DAYS.between(startDate, endDate);
+
+        return days;
+    }
+>>>>>>> origin/main
     public void pay(Long reservationId) {
+        System.out.println("pay function triggered");
         OfferReservation reservation = fetchReservationById(reservationId);
         reservation.setIsPaid(true);
         travelAgencyRepository.save(reservation);
     }
+<<<<<<< HEAD
+=======
+}
+
+>>>>>>> origin/main
     /*public double adjustPriceBasedOnSeats(Long transportId) {
         int availableSeats = getAvailableSeats(transportId);
         double basePrice = 500.0;

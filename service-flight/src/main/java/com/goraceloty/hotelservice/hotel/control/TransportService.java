@@ -13,6 +13,10 @@ import org.springframework.data.domain.ExampleMatcher;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+<<<<<<< HEAD
+=======
+import java.time.LocalDateTime;
+>>>>>>> origin/main
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +53,7 @@ public class TransportService {
         return transport.orElse(null);
     }
 
+<<<<<<< HEAD
     public int getAvailableSeats(Long flightId) {
         Transport transport = findTransportByID(flightId);
         return transport.getNumAvailableSeats();
@@ -68,6 +73,8 @@ public class TransportService {
         transportRepository.save(transport);
     }
 
+=======
+>>>>>>> origin/main
     public void bookTransport(ReservationRequest reservationRequest) throws MalformedURLException {
         Transport transport = findTransportByID(reservationRequest.getTransportID());
         Integer seatsToBook =  reservationRequest.getNumOfAdults() + reservationRequest.getNumOfChildren();
@@ -95,6 +102,7 @@ public class TransportService {
         transportRepository.save(transport);
     }
 
+<<<<<<< HEAD
     public void addAvailableSeats(Long flightId, int seatsToAdd) {
         Transport transport = transportRepository.findById(flightId)
                 .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + flightId));
@@ -115,6 +123,8 @@ public class TransportService {
     }
 
 
+=======
+>>>>>>> origin/main
 //    public List<Transport> getSeatsByExample(Transport transport) {
 //        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 //        final Example<Transport> example = Example.of(transport, matcher);

@@ -15,7 +15,6 @@ export const routes: Routes = [
   { path: 'changes', component: OfferChangesComponent,canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent}
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]

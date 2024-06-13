@@ -28,6 +28,7 @@ public class SagaController {
     private final SagaClient sagaClient;
     private final SimpMessagingTemplate messagingTemplate;
 
+<<<<<<< HEAD
     @GetMapping("health")
     public String healthCheck() {
         // Zostawiam tak żeby można było sprawdzać czy websockety działąją
@@ -35,6 +36,8 @@ public class SagaController {
         return appProperties.getHotel();
     }
 
+=======
+>>>>>>> origin/main
     @PostMapping
     public Long makeBooking(ReservationRequest request) {
         var res = sagaClient.makeBooking(request).block(Duration.ofSeconds(BLOCK_TIME));

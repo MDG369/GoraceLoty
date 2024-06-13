@@ -3,6 +3,7 @@ import { TravelAgencyService } from "../services/travel.agency.service";
 import { ReservationRequest } from "../entity/ReservationRequest";
 import {OfferService} from "../services/offer.service";
 import {MessageService} from "primeng/api";
+import {AuthService} from "../services/auth.service";
 type NumericKeysOfReservationRequest = {
   [Key in keyof ReservationRequest]: ReservationRequest[Key] extends number ? Key : never
 }[keyof ReservationRequest];
@@ -15,15 +16,17 @@ type NumericKeysOfReservationRequest = {
 })
 
 export class BookingModalComponent implements OnInit {
-  @Input()
-  transportId: number = 1;  // Default values as placeholders
-  @Input()
-  hotelId: number = 1;
-  @Input() offerId: number = 1 ;
+  // @ts-ignore
+  @Input() transportId: number = 1;  // Default values as placeholders
+  // @ts-ignore
+  @Input() hotelId: number = 1;
+  // @ts-ignore
+  @Input() offerId: number = 1;
 
   reservationRequest!: ReservationRequest
   constructor(private travelAgency: TravelAgencyService,
               private offerService: OfferService,
+  private authService: AuthService,
   private messageService: MessageService) {}
 
   ngOnInit(): void {
@@ -35,7 +38,7 @@ export class BookingModalComponent implements OnInit {
     this.reservationRequest = new ReservationRequest();
     this.reservationRequest.hotelID = this.hotelId;
     this.reservationRequest.transportID = this.transportId;
-    this.reservationRequest.clientID = 1;
+    this.reservationRequest.clientID = parseInt(sessionStorage.getItem('userId')!);
     this.reservationRequest.offerID = this.offerId;
     this.reservationRequest.startDate = '2024-06-04';
     console.log(this.reservationRequest);
@@ -43,16 +46,14 @@ export class BookingModalComponent implements OnInit {
   }
 
   increment(field: NumericKeysOfReservationRequest) {
+    this.reservationRequest[field]++;
     this.reloadPrice();
-    if (this.reservationRequest[field] !== undefined) {
-      this.reservationRequest[field]++;
-    }
   }
 
   decrement(field: NumericKeysOfReservationRequest) {
-    this.reloadPrice();
-    if (this.reservationRequest[field] !== undefined && this.reservationRequest[field] > 0) {
+    if (this.reservationRequest[field] > 0) {
       this.reservationRequest[field]--;
+      this.reloadPrice();
     }
   }
 
@@ -81,10 +82,8 @@ export class BookingModalComponent implements OnInit {
 
   confirmBooking():void{
     this.offerService.startSaga(this.reservationRequest).subscribe(data=>{
-
       this.succesfulTransaction.emit();
       this.closeModal.emit();
-
     });
   }
 

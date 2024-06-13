@@ -19,11 +19,12 @@ export class WebsocketService {
               ) {
     this.rxStompService.watch('/topic/changes')
       .subscribe((message: any): void => {
-        console.log('Received message:');
         if (!message) {
           return;
         }
         const changesMessage: ChangesMessage = JSON.parse(message.body) as ChangesMessage;
+        console.log(changesMessage);
+
         this.changesSubject.next(changesMessage);
       });
     this.rxStompService.connectionState$.subscribe(next => {

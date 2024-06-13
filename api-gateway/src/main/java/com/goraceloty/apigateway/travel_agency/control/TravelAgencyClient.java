@@ -38,6 +38,22 @@ public class TravelAgencyClient {
                 });
     }
 
+<<<<<<< HEAD
+=======
+    public Mono<OfferReservation[]> getMatchingReservations(OfferReservation offerReservation) {
+        return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
+                        .path("/matching")
+                        .build())
+                .body(Mono.just(offerReservation), OfferReservation.class)
+                .retrieve()
+                .bodyToMono(OfferReservation[].class)
+                .onErrorResume(RuntimeException.class, e -> {
+                    log.fine("Getting list of offer reservations failed with: " + e);
+                    return Mono.empty();
+                });
+    }
+
+>>>>>>> origin/main
     public Mono<Double> getPrice(PriceObject priceObject) {
         System.out.println("getPrice: " + priceObject.getTransportId() + " " + priceObject.getHotelId());
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder

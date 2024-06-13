@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfiguration {
+<<<<<<< HEAD
 //    @Bean
 //    public ConnectionFactory connectionFactory() {
 //        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
@@ -27,6 +28,8 @@ public class RabbitConfiguration {
 //        connectionFactory.setPassword("guest"); // Set RabbitMQ password
 //        return connectionFactory;
 //    }
+=======
+>>>>>>> origin/main
     static final String topicExchangeName = "error_exchange";
 
     static final String queueName = "error_queue";

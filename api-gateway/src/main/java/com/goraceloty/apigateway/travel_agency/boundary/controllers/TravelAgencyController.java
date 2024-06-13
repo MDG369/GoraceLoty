@@ -1,23 +1,33 @@
 package com.goraceloty.apigateway.travel_agency.boundary.controllers;
 
 import com.goraceloty.apigateway.AppProperties;
+<<<<<<< HEAD
 import com.goraceloty.apigateway.hotels.control.HotelClient;
 import com.goraceloty.apigateway.hotels.entity.Hotel;
 import com.goraceloty.apigateway.saga.entity.ChangeMessage;
+=======
+>>>>>>> origin/main
 import com.goraceloty.apigateway.travel_agency.control.TravelAgencyClient;
 import com.goraceloty.apigateway.travel_agency.entity.OfferReservation;
 import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+=======
+import org.springframework.web.bind.annotation.*;
+>>>>>>> origin/main
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.stream.Collectors;
+=======
+>>>>>>> origin/main
 
 @AllArgsConstructor
 @RestController
@@ -28,6 +38,7 @@ public class TravelAgencyController {
     private final TravelAgencyClient travelAgencyClient;
     private final SimpMessagingTemplate messagingTemplate;
 
+<<<<<<< HEAD
     @GetMapping("health")
     public String healthCheck() {
         // Zostawiam tak żeby można było sprawdzać czy websockety działąją
@@ -35,19 +46,36 @@ public class TravelAgencyController {
         return appProperties.getTravelagency();
     }
 
+=======
+>>>>>>> origin/main
     @GetMapping()
     public List<OfferReservation> getAllOfferReservations() {
         var res = travelAgencyClient.getAllReservations().block(Duration.ofSeconds(BLOCK_TIME));
         return Arrays.asList(res);
     }
 
+<<<<<<< HEAD
     @GetMapping("price")
     public Double getPrice(@RequestBody PriceObject priceObject) {
+=======
+    @GetMapping("matching")
+    public List<OfferReservation> getAllOfferReservations(OfferReservation offerReservation) {
+        var res = travelAgencyClient.getMatchingReservations(offerReservation).block(Duration.ofSeconds(BLOCK_TIME));
+        return Arrays.asList(res);
+    }
+
+    @GetMapping("price")
+    public Double getPrice(PriceObject priceObject) {
+>>>>>>> origin/main
         var res = travelAgencyClient.getPrice(priceObject).block(Duration.ofSeconds(BLOCK_TIME));
         return res;
     }
 
+<<<<<<< HEAD
     @GetMapping("pay")
+=======
+    @PostMapping("pay")
+>>>>>>> origin/main
     public void pay(@RequestBody Long reservationID) {
         travelAgencyClient.pay(reservationID).block(Duration.ofSeconds(BLOCK_TIME));
     }

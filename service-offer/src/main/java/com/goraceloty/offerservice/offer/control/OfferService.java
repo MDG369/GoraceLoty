@@ -13,6 +13,30 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+<<<<<<< HEAD
+=======
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import com.goraceloty.offerservice.offer.entity.ReservationRequest;
+import lombok.extern.java.Log;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.json.JSONException;
+import org.springframework.stereotype.Service;
+import com.goraceloty.offerservice.offer.entity.OfferFilter;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+>>>>>>> origin/main
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -37,7 +61,11 @@ public class OfferService {
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository, OfferChangeRepository offerChangeRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
+<<<<<<< HEAD
                 .baseUrl("http://saga-orchestrator:8084")
+=======
+                .baseUrl("http://localhost:8084")
+>>>>>>> origin/main
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
         this.offerChangeRepository = offerChangeRepository;
@@ -48,6 +76,7 @@ public class OfferService {
     }
 
     public List<Offer> getOffersByExample(Offer offer) {
+
         final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         final Example<Offer> example = Example.of(offer, matcher);
         List<Offer> results;
@@ -83,17 +112,16 @@ public class OfferService {
 
                 return response.toString();
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return "fail";
-        }
-        finally {
+        } finally {
             if (con != null) {
                 con.disconnect();
             }
         }
         return "fail";
     }
+
     public Boolean getHotelAvailability(Long id, Integer numOfPeople) {
         Optional<Offer> offer = offerRepository.findById(id);
         if (offer.isEmpty()) {
@@ -114,15 +142,13 @@ public class OfferService {
         String response = sendGet(url);
         System.out.println("Response from hotel availability: " + response);
 
-        if(response.equals("fail")) {
+        if (response.equals("fail")) {
             System.out.println("Request to hotel availability returned fail, perhaps wrong url?");
             return false;
-        }
-        else if (response.equals("false")) {
+        } else if (response.equals("false")) {
             System.out.println("Request to hotel availability returned false");
             return false;
-        }
-        else if (response.equals("true")) {
+        } else if (response.equals("true")) {
             System.out.println("Request to hotel availability returned true");
             return true;
         }
@@ -225,18 +251,19 @@ public class OfferService {
 
     }
 
-    public Mono<String> tryBookingOffer(ReservationRequest reservationRequest) {
+    public Mono<Long> tryBookingOffer(ReservationRequest reservationRequest) {
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
                         .path("/booking")
                         .build())
                 .body(Mono.just(reservationRequest), ReservationRequest.class)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(Long.class)
                 .onErrorResume(RuntimeException.class, e -> {
                     log.fine("Initiating booking saga failed with error: " + e);
                     return Mono.empty();
                 });
     }
+<<<<<<< HEAD
     private final Logger logger = LoggerFactory.getLogger(OfferService.class);
 
     public Offer getRandomOfferDetails(List<String> attributes) {
@@ -334,5 +361,7 @@ public class OfferService {
     private void sendSocketMessage(ChangeMessage changeMessage) {
         rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.#", changeMessage);
     }
+=======
+>>>>>>> origin/main
 
 }

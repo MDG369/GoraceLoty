@@ -22,6 +22,8 @@ export class OffersComponent implements OnInit {
   dateEnd?: string;   // Holds the value of date end input
   private changesSubscription: Subscription;
   changes: ChangesMessage;
+  hotelPopularity:{ [p: number]: number } = [];
+  transportPopularity:{ [p: number]: number } = [];
 
   constructor(private offerService: OfferService,
               private router: Router,
@@ -49,11 +51,14 @@ export class OffersComponent implements OnInit {
   checkOfferPopularity() {
     // setting offers popularity based on number of entries in the database
     let res: OfferReservation[] = [];
-    this.travelAgencyService.getAllReservations().subscribe(data => {res = data;
+    this.travelAgencyService.getAllReservations().subscribe(data => {
+      res = data;
       this.offers.forEach(offer => {
         offer.popularity = res.filter(res => res.offerID == offer.id).length
-      })} );
-
+      });
+      this.hotelPopularity = OfferReservation.countHotelOccurrences(res);
+      this.transportPopularity = OfferReservation.countTransportOccurrences(res);
+    });
   }
 
 

@@ -1,7 +1,7 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {AppComponent} from "./app.component";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "./app-routing.module";
 import {BrowserModule} from "@angular/platform-browser";
 import {OffersComponent} from "./offers/offers.component";
@@ -47,7 +47,7 @@ import {LoginComponent} from "./login/login.component";
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
-          return localStorage.getItem('token'); // Provide the function to retrieve the JWT token
+          return sessionStorage.getItem('token'); // Provide the function to retrieve the JWT token
         }
       }
     })
@@ -68,5 +68,4 @@ import {LoginComponent} from "./login/login.component";
   ],
 
 })
-export class AppModule {
-}
+export class AppModule { }

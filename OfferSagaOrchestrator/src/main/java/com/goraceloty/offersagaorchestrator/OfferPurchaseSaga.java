@@ -1,6 +1,7 @@
 package com.goraceloty.offersagaorchestrator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.goraceloty.offersagaorchestrator.entity.ChangeMessage;
 import com.goraceloty.offersagaorchestrator.entity.ErrorMessage;
 import com.goraceloty.offersagaorchestrator.entity.ErrorType;
 import com.goraceloty.offersagaorchestrator.entity.ReservationRequest;
@@ -36,7 +37,6 @@ public class OfferPurchaseSaga{
             //
             // SagaHotelBookingMessage sagaHotelBookingMessage = new SagaHotelBookingMessage()
             // Step 1: Send to travelAgency to create reservation with status unpaid
-
         //  log.info("Sending " + mapper.writeValueAsString(reservationRequest));
             reservationId = (Long) rabbitTemplate.convertSendAndReceive("reservation_exchange", "reservation.action.baz", reservationRequest);
 
@@ -46,6 +46,10 @@ public class OfferPurchaseSaga{
         // Step 3: Reserve flight
             String res3 = (String) rabbitTemplate.convertSendAndReceive("transport_exchange", "transport.action.baz", reservationRequest);
 
+            ChangeMessage changeMessage = new ChangeMessage("Offer booked", reservationRequest.getHotelID(), reservationRequest.getTransportID(), reservationRequest.getOfferID(), reservationRequest.getClientID());
+
+            String res4 = (String) rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.baz", changeMessage);
+            
         } catch (Exception e) {
             log.info(e.getMessage());
             // Handle failure, initiate compensation

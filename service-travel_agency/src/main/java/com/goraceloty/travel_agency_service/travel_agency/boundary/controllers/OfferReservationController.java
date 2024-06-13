@@ -5,6 +5,7 @@ import com.goraceloty.travel_agency_service.travel_agency.control.TravelAgencySe
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 
 import java.util.List;
 
@@ -14,22 +15,20 @@ import java.util.List;
 public class OfferReservationController {
     private final TravelAgencyService travelAgencyService;
 
-    @GetMapping("/connections")
-    ResponseEntity<String> getEx() {
-        return ResponseEntity.ok().body("\"Connection to hotel service works!\"");
-    }
     @GetMapping("/matching")
-    public List<OfferReservation> getOfferReservationByExample(OfferReservation offerReservation) {
+    public List<OfferReservation> getOfferReservationByExample(@RequestBody OfferReservation offerReservation) {
         return travelAgencyService.getOfferReservationByExample(offerReservation);
     }
 
     @GetMapping("/price")
-    public double getAdjustedPrice(@RequestParam Long reservationId) {
-        return travelAgencyService.calculatePrice(reservationId);
+    public double getAdjustedPrice(
+            @RequestBody PriceObject priceObject) {
+        return travelAgencyService.calculatePrice(priceObject);
     }
 
     @PostMapping("/pay")
-    public void pay(@RequestParam Long reservationId) {
+    public void pay(@RequestBody Long reservationId) {
+        System.out.println("pay request received");
         travelAgencyService.pay(reservationId);
     }
 //    @PostMapping

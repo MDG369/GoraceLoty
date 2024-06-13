@@ -7,15 +7,28 @@ import com.goraceloty.offerservice.offer.entity.OfferChange;
 import com.goraceloty.offerservice.offer.entity.OfferFilter;
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Long.parseLong;
+import java.time.Duration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+
 
 @RestController
 // todo Dodanie z powrotem offers, hotfix bo front nie działał
@@ -71,7 +84,7 @@ public class OfferController {
     }
 
     @GetMapping("/matching")
-    public List<Offer> getOfferByExample(Offer offer) {
+    public List<Offer> getOfferByExample(@RequestBody Offer offer) {
         return offerService.getOffersByExample(offer);
     }
 
@@ -94,13 +107,22 @@ public class OfferController {
         return "event received";
     }
 
-
-    @PostMapping
-    public void startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
+    @PostMapping("book")
+    public Long startOfferBookingSaga(@RequestBody ReservationRequest reservationRequest) {
         // Send HttpRequest (POST) to orchestrator. It contains OfferId, HotelId, TransportId, Number of rooms of each type, date, numAdults, numChildren
         // Orchestrator sends message to Reservation(Travel Agency) service, the reservation is created with status PENDING.
         // Orchestrator sends messages to Transport and Hotel. If there is an error in either compensate Tran, Hotel and Res
         // If paid, Orchestrator sends message to Reservation to change status to paid, if 15 minutes pass remove reservation, compensate hotel and Transport
-        offerService.tryBookingOffer(reservationRequest);
+
+        return offerService.tryBookingOffer(reservationRequest).block();
     }
-}
+
+    // example of valid command
+    // http://localhost:8081/offers/hotel?id=1&numOfPeople=2
+    // getting hotel availability
+    // id - offer if
+    // numOfPeople - number of people 1-3 is a valid input representing single, double and triple room
+    @GetMapping("/hotel")
+    Boolean getHotelAvailability(Long id, Integer numOfPeople) {
+        return offerService.getHotelAvailability(id, numOfPeople);
+    }

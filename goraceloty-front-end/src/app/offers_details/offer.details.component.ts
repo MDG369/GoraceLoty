@@ -10,14 +10,18 @@ import { MessageService } from 'primeng/api';
 import {Subscription} from "rxjs";
 import {ChangesMessage} from "../entity/ChangesMessage";
 import {ChangesService} from "../services/changes.service";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-offer-details',
   templateUrl: './offer.details.component.html'
 })
 export class OfferDetailsComponent implements OnInit {
+  // @ts-ignore
   offerId: number = 0;
+  // @ts-ignore
   transport: Transport = new Transport();
+  // @ts-ignore
   hotel: Hotel = new Hotel(1, "", 1, "" ,"" ,true ,"" );
   isModalOpen: boolean = false;
   private changesSubscription: Subscription;
@@ -29,7 +33,8 @@ export class OfferDetailsComponent implements OnInit {
     private hotelService: HotelService,
     private offerService: OfferService,
     private messageService: MessageService,
-    private changesService: ChangesService
+    private changesService: ChangesService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +77,6 @@ export class OfferDetailsComponent implements OnInit {
   loadMatchingTransport(transportId: number): void {
     this.transportService.getMatchingTransport(transportId).subscribe({
       next: transport => {
-        console.log("Transport details loaded:", transport);
         this.transport = transport;
       },
       error: error => {
@@ -107,7 +111,7 @@ export class OfferDetailsComponent implements OnInit {
   }
 
   checkIfCurrentOfferBooked(change) {
-    if (change.offerId == this.offerId) {
+    if (change.offerId == this.offerId && change.clientId != sessionStorage.getItem('userId')) {
       this.messageService.add({
         severity: 'secondary', summary: 'Uwaga', detail: 'Obecna oferta zarezerwowana przez innego użytkownika!'
       })

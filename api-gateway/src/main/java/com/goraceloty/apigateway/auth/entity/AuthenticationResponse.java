@@ -7,8 +7,9 @@ import lombok.Setter;
 @Setter
 public class AuthenticationResponse {
     private String token;
-
-    public AuthenticationResponse(String token) {
+    private Integer userId;
+    public AuthenticationResponse(String token, Integer userId) {
         this.token = token;
+        this.userId = userId;
     }
 }

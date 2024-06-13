@@ -27,6 +27,7 @@ public class TransportController {
     private final TransportClient transportClient;
     private final SimpMessagingTemplate messagingTemplate;
 
+<<<<<<< HEAD
     @GetMapping("health")
     public String healthCheck() {
         // Zostawiam tak żeby można było sprawdzać czy websockety działąją
@@ -34,6 +35,8 @@ public class TransportController {
         return appProperties.getTransport();
     }
 
+=======
+>>>>>>> origin/main
     @GetMapping
     public List<Transport> getAllTransports() {
         var res = transportClient.getAllTransport().block(Duration.ofSeconds(BLOCK_TIME));

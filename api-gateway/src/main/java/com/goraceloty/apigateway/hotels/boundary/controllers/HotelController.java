@@ -29,7 +29,6 @@ public class HotelController {
     @GetMapping("health")
     public String healthCheck() {
         // Zostawiam tak żeby można było sprawdzać czy websockety działąją
-        messagingTemplate.convertAndSend("/topic/changes",  new ChangeMessage("Test", 1L, 1L, 1L, 1L));
         return appProperties.getHotel();
     }
 
