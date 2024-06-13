@@ -1,10 +1,9 @@
 package com.goraceloty.offerservice.offer.entity;
 
-<<<<<<< HEAD
+
 import java.time.LocalDate;
 import java.util.UUID;
 
-=======
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 
->>>>>>> origin/main
 public class ReservationRequest {
     UUID reservationRequestID = UUID.randomUUID();
     Long offerID;

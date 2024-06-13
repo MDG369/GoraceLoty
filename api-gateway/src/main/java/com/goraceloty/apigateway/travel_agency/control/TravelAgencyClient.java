@@ -38,8 +38,7 @@ public class TravelAgencyClient {
                 });
     }
 
-<<<<<<< HEAD
-=======
+
     public Mono<OfferReservation[]> getMatchingReservations(OfferReservation offerReservation) {
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder
                         .path("/matching")
@@ -53,7 +52,7 @@ public class TravelAgencyClient {
                 });
     }
 
->>>>>>> origin/main
+
     public Mono<Double> getPrice(PriceObject priceObject) {
         System.out.println("getPrice: " + priceObject.getTransportId() + " " + priceObject.getHotelId());
         return webClient.method(HttpMethod.GET).uri(uriBuilder -> uriBuilder

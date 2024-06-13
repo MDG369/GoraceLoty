@@ -61,8 +61,7 @@ public class SecurityConfig {
                 .roles("USER")
                 .build();
 
-<<<<<<< HEAD
-=======
+
         UserDetails user4 = User.builder()
                 .username("user4")
                 .password(passwordEncoder().encode("password4"))
@@ -75,7 +74,7 @@ public class SecurityConfig {
                 .roles("USER")
                 .build();
 
->>>>>>> origin/main
+
         return new InMemoryUserDetailsManager(user1, user2, user3);
     }
 

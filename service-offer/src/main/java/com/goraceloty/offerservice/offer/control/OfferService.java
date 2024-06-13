@@ -13,8 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-<<<<<<< HEAD
-=======
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -36,7 +35,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
->>>>>>> origin/main
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -61,11 +59,10 @@ public class OfferService {
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository, OfferChangeRepository offerChangeRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
-<<<<<<< HEAD
-                .baseUrl("http://saga-orchestrator:8084")
-=======
+ .baseUrl("http://saga-orchestrator:8084")
+
                 .baseUrl("http://localhost:8084")
->>>>>>> origin/main
+
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
         this.offerChangeRepository = offerChangeRepository;
@@ -263,7 +260,7 @@ public class OfferService {
                     return Mono.empty();
                 });
     }
-<<<<<<< HEAD
+
     private final Logger logger = LoggerFactory.getLogger(OfferService.class);
 
     public Offer getRandomOfferDetails(List<String> attributes) {
@@ -361,7 +358,6 @@ public class OfferService {
     private void sendSocketMessage(ChangeMessage changeMessage) {
         rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.#", changeMessage);
     }
-=======
->>>>>>> origin/main
+
 
 }

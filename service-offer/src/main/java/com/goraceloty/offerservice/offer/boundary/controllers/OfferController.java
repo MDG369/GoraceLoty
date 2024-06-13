@@ -39,6 +39,7 @@ public class OfferController {
     private final OfferService offerService;
     private final OfferChangeRepository offerChangeRepository;
     private RabbitTemplate rabbitTemplate;
+
     @GetMapping
     List<Offer> getOffers(OfferFilter offerFilter) {
         return offerService.getOffers();
@@ -53,6 +54,7 @@ public class OfferController {
     Boolean getHotelAvailability(Long id, Integer numOfPeople) {
         return offerService.getHotelAvailability(id, numOfPeople);
     }
+
     @PostMapping("/book/offer")
     public ResponseEntity<String> bookOffer() {
         // Process the booking
@@ -98,7 +100,7 @@ public class OfferController {
 
         System.out.println("event received: " + event + " id: " + id);
 
-        if(event.equals("transportFull")) {
+        if (event.equals("transportFull")) {
             System.out.println("transportFull received");
 
             offerService.handleTransportFull(id);
@@ -116,13 +118,11 @@ public class OfferController {
 
         return offerService.tryBookingOffer(reservationRequest).block();
     }
+}
 
     // example of valid command
     // http://localhost:8081/offers/hotel?id=1&numOfPeople=2
     // getting hotel availability
     // id - offer if
     // numOfPeople - number of people 1-3 is a valid input representing single, double and triple room
-    @GetMapping("/hotel")
-    Boolean getHotelAvailability(Long id, Integer numOfPeople) {
-        return offerService.getHotelAvailability(id, numOfPeople);
-    }
+

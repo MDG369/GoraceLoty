@@ -2,6 +2,7 @@ package com.goraceloty.apigateway.offers.boundary.controllers;
 
 import com.goraceloty.apigateway.offers.control.OfferClient;
 import com.goraceloty.apigateway.offers.entity.Offer;
+import com.goraceloty.apigateway.offers.entity.OfferChange;
 import com.goraceloty.apigateway.saga.entity.ReservationRequest;
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,11 @@ public class OfferController {
     @GetMapping("matching")
     public List<Offer> getOfferByExample(Offer offer) {
         var res = offerClient.getOffersByExample(offer).block(Duration.ofSeconds(BLOCK_TIME));
+        return res != null ? Arrays.stream(res).collect(Collectors.toList()) : null;
+    }
+    @GetMapping("changes")
+    public List<OfferChange> getOfferChangesByExample() {
+        var res = offerClient.getOffersChangesByExample().block(Duration.ofSeconds(BLOCK_TIME));
         return res != null ? Arrays.stream(res).collect(Collectors.toList()) : null;
     }
 

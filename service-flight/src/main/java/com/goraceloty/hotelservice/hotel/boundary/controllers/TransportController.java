@@ -33,17 +33,15 @@ public class TransportController {
         if (transport == null) {
             return ResponseEntity.notFound().build();
         }
-<<<<<<< HEAD
-        Integer seatsDifference = transport.getNumTotalSeats() - transport.getNumAvailableSeats();
-        System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
-=======
+        //Double seatsDifference = double(transport.getNumTotalSeats()) - double(transport.getNumAvailableSeats());
+        //System.out.println("Seats difference for transport ID " + id + ": " + seatsDifference);
+
         double seatsDifferenceRatio = (double) (transport.getNumTotalSeats() - transport.getNumAvailableSeats()) /transport.getNumTotalSeats();
         System.out.println(transport.getNumTotalSeats());
         System.out.println(transport.getNumAvailableSeats());
         System.out.println("Seats difference for transport ID " + id + ": " + seatsDifferenceRatio);
->>>>>>> origin/main
 
-        return ResponseEntity.ok(seatsDifference);
+        return ResponseEntity.ok(seatsDifferenceRatio);
 //        System.out.println(transport.getNumTotalSeats());
 //        SeatDataDTO seatDetails = new SeatDataDTO(transport.getNumTotalSeats(), transport.getNumAvailableSeats());
 //        return ResponseEntity.ok(seatDetails);
