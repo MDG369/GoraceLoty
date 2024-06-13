@@ -46,16 +46,14 @@ export class BookingModalComponent implements OnInit {
   }
 
   increment(field: NumericKeysOfReservationRequest) {
+    this.reservationRequest[field]++;
     this.reloadPrice();
-    if (this.reservationRequest[field] !== undefined) {
-      this.reservationRequest[field]++;
-    }
   }
 
   decrement(field: NumericKeysOfReservationRequest) {
-    this.reloadPrice();
-    if (this.reservationRequest[field] !== undefined && this.reservationRequest[field] > 0) {
+    if (this.reservationRequest[field] > 0) {
       this.reservationRequest[field]--;
+      this.reloadPrice();
     }
   }
 
