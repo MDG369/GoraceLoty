@@ -10,7 +10,4 @@ export class Transport {
   dateDeparture?: Date;
   dateArrival?: Date;
 
-  constructor(init?: Partial<Transport>) {
-    Object.assign(this, init);
-  }
 }

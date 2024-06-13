@@ -1,5 +1,6 @@
 package com.goraceloty.offerservice.offer.boundary.controllers;
 
+import com.goraceloty.offerservice.offer.control.OfferChangeRepository;
 import com.goraceloty.offerservice.offer.control.OfferService;
 import com.goraceloty.offerservice.offer.entity.Offer;
 import com.goraceloty.offerservice.offer.entity.OfferChange;
@@ -23,6 +24,7 @@ import java.util.List;
 public class OfferController {
 
     private final OfferService offerService;
+    private final OfferChangeRepository offerChangeRepository;
     private RabbitTemplate rabbitTemplate;
     @GetMapping
     List<Offer> getOffers(OfferFilter offerFilter) {
@@ -73,9 +75,9 @@ public class OfferController {
         return offerService.getOffersByExample(offer);
     }
 
-    @GetMapping("/matchingChange")
-    public List<OfferChange> getOfferChangesByExample(OfferChange offerChange) {
-        return offerService.getOffersChangesByExample(offerChange);
+    @GetMapping("/changes")
+    public List<OfferChange> getOfferChangesByExample() {
+        return offerChangeRepository.findTop10OByOrderByCreatedAtDesc();
     }
 
     @GetMapping("/event")

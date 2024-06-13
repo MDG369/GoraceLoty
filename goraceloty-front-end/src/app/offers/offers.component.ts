@@ -3,7 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { OfferService} from '../services/offer.service';
 import { Offer } from '../entity/Offer';
 import { Router } from '@angular/router';
-import {filter} from "rxjs";
+import { Subscription } from "rxjs";
+import {ChangesService} from "../services/changes.service";
+import {ChangesMessage} from "../entity/ChangesMessage";
+import {TravelAgencyService} from "../services/travel.agency.service";
+import {OfferReservation} from "../entity/OfferReservation";
 
 @Component({
   selector: 'app-offers',
@@ -13,27 +17,44 @@ import {filter} from "rxjs";
 export class OffersComponent implements OnInit {
   offers: Offer[] = [];
   filteredOffers: Offer[] = [];
-  cityArrival: string = 'Sal';      // Holds the value of city input
+  cityArrival: string;      // Holds the value of city input
   dateStart?: string; // Holds the value of date start input
   dateEnd?: string;   // Holds the value of date end input
+  private changesSubscription: Subscription;
+  changes: ChangesMessage;
 
   constructor(private offerService: OfferService,
-              private router: Router) {}
+              private router: Router,
+              private changesService: ChangesService,
+              private travelAgencyService: TravelAgencyService) {}
 
   ngOnInit(): void {
     this.loadOffers();
+    this.changesSubscription = this.changesService.getChangesObservable().subscribe((changes: ChangesMessage) => {
+      this.checkOfferPopularity();
+    });
+    this.checkOfferPopularity();
   }
   loadOffers(): void {
-    if (this.cityArrival || this.dateStart || this.dateEnd) {  // Only load if any criteria are set
       this.offerService.getOffers(this.cityArrival, this.dateStart, this.dateEnd).subscribe({
-        next: (offers) => this.offers = offers,
+        next: (offers) => {this.offers = offers;     this.checkOfferPopularity();
+        },
         error: (error) => console.error('Failed to load offers', error)
       });
-    } else {
-      this.offers = []; // Clear offers or set to default if no criteria are set
-    }
   }
   navigateToDetails(offerId: number): void {
     this.router.navigate(['/offer-details', offerId]);
   }
+
+  checkOfferPopularity() {
+    // setting offers popularity based on number of entries in the database
+    let res: OfferReservation[] = [];
+    this.travelAgencyService.getAllReservations().subscribe(data => {res = data;
+      this.offers.forEach(offer => {
+        offer.popularity = res.filter(res => res.offerID == offer.id).length
+      })} );
+
+  }
+
+
 }

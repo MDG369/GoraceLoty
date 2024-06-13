@@ -1,34 +1,10 @@
 {
-  "/api/offers/*": {
-    "target": "http://localhost:8081",
+  "/api": {
+    "target": "http://localhost:8085",
     "secure": false,
     "ws": true,
     "pathRewrite": {
-      "^/api/offers": ""
-    }
-  },
-  "/api/hotels/*": {
-    "target": "http://localhost:8080",
-    "secure": false,
-    "ws": true,
-    "pathRewrite": {
-      "^/api/hotels": ""
-    }
-  },
-  "/api/transports/*": {
-    "target": "http://localhost:8082",
-    "secure": false,
-    "ws": true,
-    "pathRewrite": {
-      "^/api/transports": ""
-    }
-  },
-  "/api/OfferReservation/*": {
-    "target": "http://localhost:8083",
-    "secure": false,
-    "ws": true,
-    "pathRewrite": {
-      "^/api/OfferReservation": ""
+      "^/api": ""
     }
   }
 }

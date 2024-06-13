@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { OfferReservation } from '../entity/OfferReservation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TravelAgencyService {
-  private apiUrl = 'api/OfferReservation/price'; // Base URL from environment
+  private apiUrl = '/api/travelagency'; // Base URL from environment
 
   constructor(private http: HttpClient) { }
 
@@ -25,6 +26,19 @@ export class TravelAgencyService {
       .set('numOfApartments', numOfApartments.toString());
 
     // Adjust the endpoint if needed based on your actual API URL setup
-    return this.http.get<number>(`${this.apiUrl}`, { params });
+    return this.http.get<number>(`${this.apiUrl}/price`, { params });
+  }
+
+  getUsersReservations(clientID: number) {
+    let params = new HttpParams().set('clientID', clientID)
+    return this.http.get<OfferReservation[]>(`${this.apiUrl}/matching`, {params})
+  }
+
+  getAllReservations() {
+    return this.http.get<OfferReservation[]>(`${this.apiUrl}`)
+  }
+
+  payReservation(reservationID: number) {
+    return this.http.post<void>(`${this.apiUrl}/pay`, reservationID)
   }
 }

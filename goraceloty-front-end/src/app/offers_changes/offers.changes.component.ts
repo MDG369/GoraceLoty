@@ -1,23 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { OfferService} from '../services/offer.service';
-import { Offer } from '../entity/Offer';
-import { Router } from '@angular/router';
-import {filter, Observable} from "rxjs";
-import {OfferChange} from "../entity/OfferChange";
+import { OfferChangeService } from '../services/offer.changes.service';
+import { OfferChange } from '../entity/OfferChange';
+import {ChangesMessage} from "../entity/ChangesMessage";
+import {ChangesService} from "../services/changes.service";
+import {OfferReservation} from "../entity/OfferReservation";
 
 @Component({
-  selector: 'app-offers',
+  selector: 'app-offer-changes',
   templateUrl: './offers.changes.component.html',
-  standalone: true,
   styleUrls: ['./offers.changes.component.css']
 })
-export class OffersChangesComponent implements OnInit {
-  // @ts-ignore
-  private offerChanges: Observable<OfferChange[]>;
+export class OfferChangesComponent implements OnInit {
+  offerChanges: OfferChange[] = [];
+  private changesSubscription: any;
 
-  constructor(private offerChangeService: OfferService) {}
+  constructor(private offerChangeService: OfferChangeService, private changesService: ChangesService) {}
 
-  ngOnInit() {
-    this.offerChanges = this.offerChangeService.getOfferChanges();
+  ngOnInit(): void {
+    this.changesSubscription = this.changesService.getChangesObservable().subscribe((changes: ChangesMessage) => {
+      this.loadOfferChanges();
+    });
+    this.loadOfferChanges();
+  }
+
+  loadOfferChanges(): void {
+    this.offerChangeService.getOfferChanges().subscribe({
+      next: (changes) => {
+        this.offerChanges = changes;
+      },
+      error: (error) => {
+        console.error('Failed to load offer changes', error);
+      }
+    });
   }
 }

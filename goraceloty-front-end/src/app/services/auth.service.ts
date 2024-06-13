@@ -1,20 +1,42 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
-  public login(username: string, password: string): Observable<string> {
-    let headers = new HttpHeaders().append('Authorization', 'Basic ' + btoa(username + ":" + password));
-    const httpOptions = {
-      headers: headers
-    };
-    return this.http.get<string>(
-      'http://localhost:8080' + '/login',
-      httpOptions
-    );
+  private apiUrl = '/api';
+
+  constructor(private http: HttpClient, private router: Router) {}
+
+  login(username: string, password: string): Observable<boolean> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { headers })
+      .pipe(
+        map(response => {
+          if (response && response.token) {
+            localStorage.setItem('token', response.token);
+            return true;
+          }
+          return false;
+        })
+      );
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }
+

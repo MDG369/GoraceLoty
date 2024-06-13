@@ -6,25 +6,30 @@ import { Transport } from '../entity/Transport';
 import { Offer } from '../entity/Offer';
 import {HotelService} from "../services/hotel.service";
 import {Hotel} from "../entity/Hotel"; // Assuming you have an Offer entity
+import { MessageService } from 'primeng/api';
+import {Subscription} from "rxjs";
+import {ChangesMessage} from "../entity/ChangesMessage";
+import {ChangesService} from "../services/changes.service";
 
 @Component({
   selector: 'app-offer-details',
   templateUrl: './offer.details.component.html'
 })
 export class OfferDetailsComponent implements OnInit {
-  // @ts-ignore
   offerId: number = 0;
-  // @ts-ignore
   transport: Transport = new Transport();
-  // @ts-ignore
   hotel: Hotel = new Hotel(1, "", 1, "" ,"" ,true ,"" );
   isModalOpen: boolean = false;
+  private changesSubscription: Subscription;
+
 
   constructor(
     private route: ActivatedRoute,
     private transportService: TransportService,
     private hotelService: HotelService,
-    private offerService: OfferService
+    private offerService: OfferService,
+    private messageService: MessageService,
+    private changesService: ChangesService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +43,11 @@ export class OfferDetailsComponent implements OnInit {
         console.error('No ID provided in route parameters');
         // Handle redirection or display error message
       }
+    });
+    this.changesSubscription = this.changesService.getChangesObservable().subscribe(
+      (change: ChangesMessage) =>
+    {
+      this.checkIfCurrentOfferBooked(change);
     });
   }
 
@@ -89,6 +99,19 @@ export class OfferDetailsComponent implements OnInit {
 
   closeBookingModal(): void {
     this.isModalOpen = false;  // You can call this method to close the modal
+  }
+  showSuccessfulMessage() {
+    this.messageService.add({
+      severity: 'success', summary: 'Success', detail: 'Oferta zarezerwowana, przejdź do zakładki rezerwacje aby ją opłacić'
+    })
+  }
+
+  checkIfCurrentOfferBooked(change) {
+    if (change.offerId == this.offerId) {
+      this.messageService.add({
+        severity: 'secondary', summary: 'Uwaga', detail: 'Obecna oferta zarezerwowana przez innego użytkownika!'
+      })
+    }
   }
 
 }

@@ -16,7 +16,7 @@ export class AuthHelper {
 
   public login(username: string, password: string): void {
     this.authenticationClient.login(username, password).subscribe((token) => {
-      localStorage.setItem(this.tokenKey, token);
+      //localStorage.setItem(this.tokenKey, token);
       this.router.navigate(['/']);
     });
   }

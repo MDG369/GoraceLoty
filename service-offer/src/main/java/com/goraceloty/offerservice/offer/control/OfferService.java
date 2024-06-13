@@ -1,16 +1,13 @@
 package com.goraceloty.offerservice.offer.control;
 
-import com.goraceloty.offerservice.offer.entity.Offer;
-import com.goraceloty.offerservice.offer.entity.OfferChange;
-import com.goraceloty.offerservice.offer.entity.OfferMessage;
-import com.goraceloty.offerservice.offer.entity.ReservationRequest;
+import com.goraceloty.offerservice.offer.entity.*;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import com.goraceloty.offerservice.offer.entity.OfferFilter;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -59,15 +56,12 @@ public class OfferService {
         return results;
     }
 
-    public List<OfferChange> getOffersChangesByExample(OfferChange offerChange) {
-        final ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-        final Example<OfferChange> example = Example.of(offerChange, matcher);
+    public List<OfferChange> getOffersChangesByExample() {
         List<OfferChange> results;
-        results = offerChangeRepository.findAll(example);
+        results = offerChangeRepository.findAll();
 
         return results;
     }
-
 
     private String sendGet(URL url) {
         HttpURLConnection con = null;
@@ -254,10 +248,13 @@ public class OfferService {
         Offer randomOffer = getRandomOffer(offers);
         String attributeToModify = getRandomAttribute(attributes);
         OfferMessage offerMessage = createOfferMessage(randomOffer, attributeToModify);
+        ChangeMessage changeMessageToSend = new ChangeMessage();
+        ChangeMessage changeMessage = createChangeMessage(randomOffer, changeMessageToSend);
 
         logAndSaveOfferChanges(randomOffer, offerMessage, attributeToModify);
         sendMessage(offerMessage);
-
+        sendSocketMessage(changeMessage);
+        //sendSocketMessage(ChangeMessage changeMessage)
         return randomOffer;
     }
 
@@ -318,13 +315,24 @@ public class OfferService {
         offerMessage.setExchange(exchange);
     }
 
+    private ChangeMessage createChangeMessage (Offer offer, ChangeMessage changeMessage) {
+        changeMessage.setOfferId(offer.getId());
+        changeMessage.setHotelId(offer.getHotelID());
+        changeMessage.setTransportId(offer.getTransportID());
+        changeMessage.setContent("change");
+        return changeMessage;
+    }
+
     private void logAndSaveOfferChanges(Offer offer, OfferMessage offerMessage, String attributeToModify) {
         OfferChange database_entry = new OfferChange(offer.getId(), offerMessage.getLogMessage(), attributeToModify);
         offerChangeRepository.save(database_entry);
     }
 
     private void sendMessage(OfferMessage offerMessage) {
-        rabbitTemplate.convertAndSend(offerMessage.getExchange(), offerMessage.getMessageType(), offerMessage);
+        rabbitTemplate.convertSendAndReceive(offerMessage.getExchange(), offerMessage.getMessageType(), offerMessage);
+    }
+    private void sendSocketMessage(ChangeMessage changeMessage) {
+        rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.#", changeMessage);
     }
 
 }
