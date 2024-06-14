@@ -110,13 +110,13 @@ public class AvailabilityService {
     }
 
     public String checkAvailability() {
-        String url = "http://localhost:8080/availability";
+        String url = "http://service-hotel:8080/availability";
         return restTemplate.getForObject(url, String.class);
     }
 
     // New PUT request method
     public String updateAvailability(Object requestData) {
-        String url = "http://localhost:8080/availability";
+        String url = "http://service-hotel:8080/availability";
         HttpEntity<Object> requestEntity = new HttpEntity<>(requestData);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, String.class);
         return response.getBody();

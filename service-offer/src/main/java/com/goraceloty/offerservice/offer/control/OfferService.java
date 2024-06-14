@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+
 import com.goraceloty.offerservice.offer.entity.ReservationRequest;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Example;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -59,10 +61,8 @@ public class OfferService {
     public OfferService(WebClient.Builder webClientBuilder, OfferRepository offerRepository, OfferChangeRepository offerChangeRepository) {
         this.offerRepository = offerRepository;
         this.webClient = webClientBuilder
- .baseUrl("http://saga-orchestrator:8084")
-
-                .baseUrl("http://localhost:8084")
-
+                .baseUrl("http://saga-orchestrator:8084")
+//                .baseUrl("http://localhost:8084")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
                 .build();
         this.offerChangeRepository = offerChangeRepository;
@@ -176,8 +176,7 @@ public class OfferService {
         try {
             numOfSeats = Integer.valueOf(response);
             System.out.println("getTransportAvailability numOfSeats returned: " + numOfSeats);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.out.println("getTransportAvailability Integer conversion FAILED");
             return false;
         }
@@ -194,12 +193,10 @@ public class OfferService {
         if (offer.isPresent()) {
             System.out.println("Updated offer availability " + id);
             offer.get().setAvailable(false);
-        }
-        else {
+        } else {
             System.out.println("Could not find offer " + id);
         }
     }
-
 
 
     public Boolean getAvailability(Long id, Integer numOfPeople) {
@@ -339,7 +336,7 @@ public class OfferService {
         offerMessage.setExchange(exchange);
     }
 
-    private ChangeMessage createChangeMessage (Offer offer, ChangeMessage changeMessage) {
+    private ChangeMessage createChangeMessage(Offer offer, ChangeMessage changeMessage) {
         changeMessage.setOfferId(offer.getId());
         changeMessage.setHotelId(offer.getHotelID());
         changeMessage.setTransportId(offer.getTransportID());
@@ -355,6 +352,7 @@ public class OfferService {
     private void sendMessage(OfferMessage offerMessage) {
         rabbitTemplate.convertSendAndReceive(offerMessage.getExchange(), offerMessage.getMessageType(), offerMessage);
     }
+
     private void sendSocketMessage(ChangeMessage changeMessage) {
         rabbitTemplate.convertSendAndReceive("changes_exchange", "changes.#", changeMessage);
     }

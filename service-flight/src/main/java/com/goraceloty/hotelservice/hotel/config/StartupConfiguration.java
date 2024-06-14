@@ -26,12 +26,12 @@ public class StartupConfiguration implements ApplicationListener<ApplicationRead
         return () -> {
             try {
 
-                var jsonFile = resourceLoader.getResource("file:data/transport_final_clean.json").getInputStream();
+                var jsonFile = resourceLoader.getResource("file:/app/data/transport_final_clean.json").getInputStream();
                 System.out.println("Got path");
                 var jsonData = objectMapper.readTree(jsonFile);
                 System.out.println("Data loaded");
                 JsonProcessingExample.processJsonData(
-                        "jdbc:postgresql://localhost:5432/svc_flight",
+                        "jdbc:postgresql://db_postgres:5432/svc_flight",
                         jsonData,"INSERT INTO transports(transportid, type_of_transport, num_total_seats, num_available_seats, num_base_price, city_departure, city_arrival, date_departure, date_arrival) " +
                                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                                 "ON CONFLICT (transportid) DO UPDATE SET " +

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { OfferChangeService } from '../services/offer.changes.service';
 import { OfferChange } from '../entity/OfferChange';
+import {Subscription} from "rxjs";
+import {ChangesMessage} from "../entity/ChangesMessage";
+import {ChangesService} from "../services/changes.service";
 
 @Component({
   selector: 'app-offer-changes',
@@ -9,11 +12,16 @@ import { OfferChange } from '../entity/OfferChange';
 })
 export class OfferChangesComponent implements OnInit {
   offerChanges: OfferChange[] = [];
+  private changesSubscription: Subscription;
 
-  constructor(private offerChangeService: OfferChangeService) {}
+  constructor(private offerChangeService: OfferChangeService, private changesService: ChangesService) {}
 
   ngOnInit(): void {
     this.loadOfferChanges();
+    this.changesSubscription = this.changesService.getChangesObservable().subscribe((changes: ChangesMessage) => {
+      this.loadOfferChanges();
+    });
+
   }
 
   loadOfferChanges(): void {

@@ -53,9 +53,11 @@ export class OffersComponent implements OnInit {
     let res: OfferReservation[] = [];
     this.travelAgencyService.getAllReservations().subscribe(data => {
       res = data;
-      this.offers.forEach(offer => {
-        offer.popularity = res.filter(res => res.offerID == offer.id).length
-      });
+      if (this.offers != null) {
+        this.offers.forEach(offer => {
+          offer.popularity = res.filter(res => res.offerID == offer.id).length
+        });
+      }
       this.hotelPopularity = OfferReservation.countHotelOccurrences(res);
       this.transportPopularity = OfferReservation.countTransportOccurrences(res);
     });

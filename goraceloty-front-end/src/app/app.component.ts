@@ -28,6 +28,7 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   showChangesDialog(change: ChangesMessage) {
+    console.log(`Got a message: ${change}`)
     this.changesService.addChange(change);
   }
 

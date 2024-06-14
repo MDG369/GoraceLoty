@@ -10,7 +10,7 @@ import com.goraceloty.apigateway.travel_agency.entity.PriceObject;
 import java.util.List;
 
 @RestController
-@RequestMapping("travelagency")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class OfferReservationController {
     private final TravelAgencyService travelAgencyService;

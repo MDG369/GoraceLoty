@@ -11,10 +11,10 @@ import java.sql.PreparedStatement;
 public class JsonProcessingOffers {
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/svc_offer";
+        String url = "jdbc:postgresql://db_postgres:5432/svc_offer";
         String user = "gl_pg_user";
         String password = "g0r4c3_l0ty";
-        String filePath = "..\\data\\offers.json";
+        String filePath = "..\\data\\offers_2.json";
         String sql = "INSERT INTO offers(id, transportID, hotelID, city_arrival, city_departure, date_start, date_end, available) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET " +

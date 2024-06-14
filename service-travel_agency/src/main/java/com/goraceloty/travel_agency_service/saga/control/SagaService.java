@@ -48,7 +48,7 @@ public class SagaService {
         CompletableFuture.runAsync(() -> {
             try {
                 // Schedule the check for 5 minutes later
-                scheduler.schedule(() -> checkPaidStatus(finalOfferReservation.getReservationID(), reservationRequest), 15, TimeUnit.SECONDS);
+                scheduler.schedule(() -> checkPaidStatus(finalOfferReservation.getReservationID(), reservationRequest), 2, TimeUnit.MINUTES);
             } catch (Exception e) {
                 // Send error message to Orchestrator to cancel the reservation
                 sendErrorMessage(reservationRequest);
